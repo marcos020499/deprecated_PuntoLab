@@ -114,32 +114,38 @@
                         <div class="row">
                             <div class="col-sm-8">
                                 <div class="form-group mb-4">
-                                    <input type="text" class="form-control form-control frm_field" placeholder="Nombre del cliente" name="nombre" required/>
-                                    <small class="form-text text-muted">El titulo será la principal forma de identificar una evidencia</small>
+                                    <input type="text" class="form-control form-control frm_field" placeholder="Nombre completo" name="nombre" required/>
+                                    <small class="form-text text-muted">Busca el nombre del cliente</small>
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group mb-4">
-                                    <input type="text" class="form-control form-control frm_field" placeholder="Telefono" name="telefono"/>
-                                    <small class="form-text text-muted">Número teléfonico</small>
+                                    <input disabled type="text" class="form-control form-control frm_field" placeholder="Telefono" name="telefono"/>
+                                    <small class="form-text text-muted">Número teléfonico del cliente</small>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-5">
                                 <div class="form-group mb-4">
-                                    <input type="text" class="form-control form-control frm_field" placeholder="Dirección" name="direccion" required />
-                                    <small class="form-text text-muted">Dirección</small>
+                                    <input disabled type="text" class="form-control form-control frm_field" placeholder="Dirección" name="direccion" required />
+                                    <small class="form-text text-muted">Dirección del cliente</small>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                                 <div class="form-group mb-4">
-                                    <input type="text" class="form-control form-control frm_field" placeholder="Ciudad / Localidad" name="ciudad" required />
-                                    <small class="form-text text-muted">Ciudad </small>
+                                    <input disabled type="text" class="form-control form-control frm_field" placeholder="Ciudad" name="ciudad" required />
+                                    <small class="form-text text-muted">Ciudad del cliente</small>
                                 </div>
+                            </div>
+                            <div class="col-sm-3">
+                              <div class="form-group mb-4">
+                                <input type="date" class="form-control form-control frm_field" name="fecha" required />
+                                <small class="form-text text-muted">Fecha de vencimiento</small>
+                              </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group mb-4">
-                                    <textarea required class="form-control form-control frm_field" placeholder="Flla" name="descripcion"></textarea>
-                                    <small class="form-text text-muted">Falla</small>
+                                    <textarea required style="height: 130px" class="form-control form-control frm_field" placeholder="Falla" name="descripcion"></textarea>
+                                    <small class="form-text text-muted">Escribe una descripción de la falla</small>
                                 </div>
                             </div>
                         </div>
