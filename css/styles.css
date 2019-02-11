@@ -35,10 +35,8 @@
 }
 
 .main-menu .profile img {
-    width: 120px;
-    border-radius: 50%;
-    border: 3px solid white;
-    margin-left: 40px;
+    width: 95%;
+    margin-top: 10px;
 }
 
 .main-menu .profile p {
