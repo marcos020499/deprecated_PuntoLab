@@ -106,6 +106,7 @@
     box-shadow: 0 1px 1px rgba(0,0,0,.05);
 }
 
+/* header */
 .card .header {
     color: #fff;
     background: #4b5366;
@@ -143,6 +144,118 @@
     float: left
 }
 
+/* formularios */
 .card form{
     margin-top: 25px;
 }
+
+/* filtros */
+.card .table-filter {
+    padding: 5px 0 15px;
+    border-bottom: 1px solid #e9e9e9;
+}
+
+.card .table-filter .filter-group {
+    float: right;
+    margin-left: 15px;
+}
+
+.card .table-filter input {
+    width: 400px;
+    display: inline-block;
+    display: inline-block;
+    margin-left: 5px;
+    height: 34px;
+    border-radius: 3px;
+    border-color: #ddd;
+    box-shadow: none;
+}
+
+.card .table-filter .btn {
+    height: 34px;
+    float: right;
+    margin-left: 10px;
+}
+
+/* tablas */
+.card table {
+   text-align: center;   
+}
+
+.card table i {
+    cursor: pointer;
+    color: #4b5366;
+}
+
+.card table i:hover {
+    cursor: pointer;
+    color: #4b5366;
+    transition: color .2s;
+}
+
+.card table i:hover {
+    color: #ff4842;
+    transition: color .2s;
+}
+
+/* paginator */
+/*
+.card .hint-text {
+    float: left;
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.card .pagination {
+    display: -ms-flexbox;
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: .25rem;
+    float: right;
+    margin: 0 0 5px;
+}
+
+.page-link {
+    position: relative;
+    display: block;
+}
+
+.page-item:first-child .page-link {
+    margin-left: 0;
+}
+
+.page-link:hover {
+    z-index: 2;
+    color: #0056b3;
+    text-decoration: none;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.page-link {
+    color: #999 !important;
+}
+
+.pagination li a {
+    border: none;
+    font-size: 13px;
+    min-width: 30px;
+    min-height: 30px;
+    color: #999;
+    margin: 0 2px;
+    line-height: 30px;
+    border-radius: 2px !important;
+    text-align: center;
+    padding: 0 6px;
+}
+
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    z-index: 1;
+    color: #fff !important;
+}
+*/
