@@ -1,0 +1,27 @@
+{
+  "name": "puntolab",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "./node_modules/.bin/env-cmd ./.env.development nodemon server.js",
+    "test": "./node_modules/.bin/env-cmd ./.env.development node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Malakian75s/PuntoLab.git"
+  },
+  "author": "Malakian thekillah",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Malakian75s/PuntoLab/issues"
+  },
+  "homepage": "https://github.com/Malakian75s/PuntoLab#readme",
+  "dependencies": {
+    "env-cmd": "^8.0.2",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "eslint": "5.12.0"
+  }
+}

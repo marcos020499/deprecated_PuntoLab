@@ -1,0 +1,76 @@
+/* cuerpo */
+.card-container {
+    margin: 0 20px;
+}
+
+.card-wrapper {
+    background: #fff;
+    padding: 20px 25px;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+
+/* header */
+.card .header {
+    color: #fff;
+    background: #4b5366;
+    padding: 14px 25px;
+    margin: -20px -25px 10px;
+    border-radius: 3px 3px 0 0;
+}
+
+.card .header h2 {
+    margin: 5px 0 0;
+    font-size: 24px;
+    display: flex;
+    font-weight: 600;
+}
+
+.card .header h2 span {
+    margin-right: 7px;
+    font-weight: 400;
+}
+
+.card .header .btn {
+    font-size: 13px;
+    border: none;
+    float: right;
+    margin-left: 10px;
+}
+
+.card .header .btn i {
+    float: left;
+    font-size: 21px;
+    margin-right: 5px;
+}
+
+.card .header .btn span {
+    margin-top: 2px;
+    float: left
+}
+
+/* formularios */
+.card form{
+    margin-top: 25px;
+}
+
+/* tablas */
+.card table {
+   text-align: center;   
+}
+
+.card table i {
+    cursor: pointer;
+    color: #4b5366;
+}
+
+.card table i:hover {
+    cursor: pointer;
+    color: #4b5366;
+    transition: color .2s;
+}
+
+.card table i:hover {
+    color: #ff4842;
+    transition: color .2s;
+}
