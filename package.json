@@ -18,8 +18,11 @@
   },
   "homepage": "https://github.com/Malakian75s/PuntoLab#readme",
   "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
     "env-cmd": "^8.0.2",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "mongoose": "^5.4.15"
   },
   "devDependencies": {
     "eslint": "5.12.0"
