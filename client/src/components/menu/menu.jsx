@@ -20,14 +20,8 @@ export default class menu extends Component {
                     <li className="nav-header">Menú principal</li>
                     <li>
                         <Link to="/clientes/ver">
-                            <i className="material-icons"> label_important </i>
-                            <span className="menu-title">Ver clientes</span>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to="/clientes/crear">
-                            <i className="material-icons"> label_important </i>
-                            <span className="menu-title">Crear cliente</span>
+                            <i className="material-icons"> people </i>
+                            <span className="menu-title">Clientes</span>
                         </Link>
                     </li>
                     <li>
@@ -46,7 +40,7 @@ export default class menu extends Component {
                 <li className="nav-header">Configuración</li>
                 <li>
                     <Link to="/password">
-                        <i className="material-icons"> https </i>
+                        <i className="material-icons"> security </i>
                         <span className="menu-title">Cambiar contraseña</span>
                     </Link>
                 </li>

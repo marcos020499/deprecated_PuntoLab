@@ -24,6 +24,7 @@ export default class layout extends Component {
         <Switch>
           <Route exact path="/clientes/ver" component={VerClientes} />
           <Route exact path="/clientes/crear" component={CrearCliente} />
+          <Route exact path="/clientes/editar/:id" component={CrearCliente} />
           <Route exact path="/reportes/ver" component={VerReportes} />
           <Route exact path="/reportes/crear" component={CrearReporte} />
           <Route exact path="/password" component={NewPassword} />

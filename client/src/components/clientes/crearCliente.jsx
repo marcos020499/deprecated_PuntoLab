@@ -1,45 +1,81 @@
 // modules
 import React, { Component } from 'react'
 import axios from "axios";
+import { toast } from "react-toastify";
+import { withRouter } from "react-router-dom";
 
 // components
 import Card from "../card/card";
+import NotFound from "../notFound/notFound"
 
-export default class crearCliente extends Component {
+class crearCliente extends Component {
 
   constructor(props) {
     super(props)
   
     this.state = {
+      _id: undefined,
       nombre: undefined,
       telefono: undefined,
       direccion: undefined,
       ciudad: undefined,
-      comunidad: undefined
+      comunidad: undefined,
+      isEditing: false,
+      notFound: false,
     }
+  }
+
+  componentDidMount(){
+
+    const id = this.props.match.params.id
+
+    if (!id) {
+      return;
+    }
+
+    this.setState({ isEditing: true })
+    axios.get(process.env.REACT_APP_SERVER_IP + "api/clientes/detallar/" + id)
+      .then(res => {
+        const { _id, nombre, telefono, direccion, ciudad, comunidad } = res.data
+
+        this.setState({
+          _id,
+          nombre,
+          telefono,
+          direccion,
+          ciudad,
+          comunidad
+        });
+
+      })
+      .catch(err => {
+        if (err.response.status === 404) {
+          this.setState({ notFound: true })
+        }
+        
+        toast.warn("No se puede mostrar la información - " + err)
+      })
   }
 
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { nombre, telefono, direccion, ciudad, comunidad } = this.state
+    const { _id, nombre, telefono, direccion, ciudad, comunidad, isEditing } = this.state
 
-    axios.post(process.env.REACT_APP_SERVER_IP + "api/clientes/nuevo", { nombre, telefono, direccion, ciudad, comunidad})
+    axios.post(process.env.REACT_APP_SERVER_IP + `api/clientes${isEditing ? "/editar" : "/nuevo"}`, { _id, nombre, telefono, direccion, ciudad, comunidad})
       .then(res => {
         this.setState({
+          _id: undefined,
           nombre: undefined,
           telefono: undefined,
           direccion: undefined,
           ciudad: undefined,
           comunidad: undefined
         });
-        console.log(res);
-        // if 201 ok
+        toast.success(`Cliente ${isEditing ? "editado" : "creado"}`);
+        this.props.history.push("/clientes/ver");
       })
-      .catch(err => {
-        // no se pudo crear
-        console.log(err.response);
-      })
+      .catch(err => toast.warn(`No se pudo ${isEditing ? "editar" : "crear"} el cliente - ${err}`))
   }
 
   onChange = (e) => {
@@ -51,7 +87,11 @@ export default class crearCliente extends Component {
 
   render() {
 
-    const { nombre, telefono, direccion, ciudad, comunidad } = this.state
+    const { nombre, telefono, direccion, ciudad, comunidad, isEditing, notFound } = this.state
+
+    if (notFound) {
+      return <NotFound/>
+    }
 
     return (
       <Card>
@@ -59,11 +99,13 @@ export default class crearCliente extends Component {
           <div className="header">
             <div className="row">
               <div className="col-sm-8">
-                <h2><span>Crear </span>cliente nuevo</h2>
+                {
+                  isEditing ? <h2><span>Editar a </span>{nombre}</h2> : <h2><span>Crear </span>cliente nuevo</h2>
+                }
               </div>
               <div className="col-sm-4">
                 <button type="submit" className="btn btn-success">
-                  <i className="material-icons"> backup </i> <span>Crear</span>
+                  <i className="material-icons"> backup </i> <span>{isEditing ? "Guardar" : "Crear"}</span>
                 </button>
               </div>
             </div>
@@ -110,3 +152,7 @@ export default class crearCliente extends Component {
     )
   }
 }
+
+export default withRouter(
+  crearCliente
+);
