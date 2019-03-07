@@ -41,17 +41,23 @@ app.post("/api/clientes/listar", (req, res) => {
         .catch(err => es.sendStatus(500));
 })
 
-// listar clientes
-app.get("/api/clientes/detallar/:id", (req, res) => {
-    const { id } = req.params
+// detallar cliente
+app.get("/api/clientes/detallar/:_id", (req, res) => {
+    const { _id } = req.params
 
-    Clientes.findOne({ _id: id })
-        .then(cliente => res.status(200).json(cliente))
-        .catch(err => {
-            if (err.name == "CastError") {
-                res.sendStatus(404)
+    Clientes.findById(_id)
+        .then(cliente => {
+            if (!cliente) {
+                return res.sendStatus(404);
             }
-            res.sendStatus(500)
+
+            return res.status(200).json(cliente)
+        })
+        .catch(err => {
+            if (err.name && err.name == "CastError") {
+                return res.sendStatus(404)
+            }
+            return res.sendStatus(500)
         });
 })
 
@@ -62,17 +68,17 @@ app.post("/api/clientes/editar", (req, res) => {
 
     Clientes.findById(_id)
         .then(cliente => {
-            if (cliente) {
-                cliente.nombre = nombre;
-                cliente.telefono = telefono;
-                cliente.direccion = direccion;
-                cliente.comunidad = comunidad;
-                cliente.ciudad = ciudad;
-
-                return cliente.save();
+            if (!cliente) {
+                return Promise.reject(404);
             }
 
-            return Promise.reject(404);
+            cliente.nombre = nombre;
+            cliente.telefono = telefono;
+            cliente.direccion = direccion;
+            cliente.comunidad = comunidad;
+            cliente.ciudad = ciudad;
+
+            return cliente.save()
         })
         .then(cliente_editado => {
             return res.sendStatus(200);
@@ -87,9 +93,9 @@ app.post("/api/clientes/editar", (req, res) => {
 
 // eliminar clientes
 app.post("/api/clientes/eliminar", (req, res) => {
-    const { password, id } = req.body;
+    const { password, _id } = req.body;
 
-    Clientes.findOneAndDelete({ _id: id })
+    Clientes.findOneAndDelete({ _id })
         .then(deleted => res.sendStatus(200))
         .catch(err => res.sendStatus(500))
 })

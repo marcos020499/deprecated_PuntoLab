@@ -87,10 +87,10 @@ export default class verClientes extends Component {
     }
 
     // cuando se pide eliminar un cliente
-    delete = (id) => {
+    delete = (_id) => {
         alertify.prompt('Confirma la eliminación', 'Ingresa la contraseña de administrador para eliminar este elemento', '', (evt, value) => {
             
-            axios.post(process.env.REACT_APP_SERVER_IP + "api/clientes/eliminar", { password: value, id })
+            axios.post(process.env.REACT_APP_SERVER_IP + "api/clientes/eliminar", { password: value, _id })
                 .then(response => {
                     toast.info("Se eliminó el cliente");
                     this.requestData()
@@ -162,14 +162,15 @@ export default class verClientes extends Component {
                     <tbody>
                         {
                             clientes.map(cliente => {
+                                const { _id, nombre, telefono, direccion, comunidad, ciudad } = cliente
                                 return (
-                                    <tr key={cliente._id}>
-                                        <td>{cliente.nombre}</td>
-                                        <td>{cliente.telefono}</td>
-                                        <td>{cliente.direccion}</td>
-                                        <td>{cliente.comunidad ? cliente.comunidad + ", " : ""} {cliente.ciudad}</td>
-                                        <td><Link to={"/clientes/editar/" + cliente._id}><i className="material-icons"> edit </i></Link></td>
-                                        <td onClick={() => this.delete(cliente._id)}><i className="material-icons"> delete </i></td>
+                                    <tr key={_id}>
+                                        <td>{nombre}</td>
+                                        <td>{telefono}</td>
+                                        <td>{direccion}</td>
+                                        <td>{comunidad ? comunidad + ", " : ""} {ciudad}</td>
+                                        <td><Link to={"/clientes/editar/" + _id}><i className="material-icons"> edit </i></Link></td>
+                                        <td onClick={() => this.delete(_id)}><i className="material-icons"> delete </i></td>
                                     </tr>
                                 )
                             })

@@ -6,13 +6,13 @@ import { withRouter } from "react-router-dom";
 
 // components
 import Card from "../card/card";
-import NotFound from "../notFound/notFound"
+import NotFound from "../notFound/ContentNotFound"
 
 class crearCliente extends Component {
 
   constructor(props) {
     super(props)
-  
+
     this.state = {
       _id: undefined,
       nombre: undefined,
@@ -50,7 +50,7 @@ class crearCliente extends Component {
       })
       .catch(err => {
         if (err.response.status === 404) {
-          this.setState({ notFound: true })
+          return this.setState({ notFound: true })
         }
         
         toast.warn("No se puede mostrar la información - " + err)
@@ -64,16 +64,8 @@ class crearCliente extends Component {
 
     axios.post(process.env.REACT_APP_SERVER_IP + `api/clientes${isEditing ? "/editar" : "/nuevo"}`, { _id, nombre, telefono, direccion, ciudad, comunidad})
       .then(res => {
-        this.setState({
-          _id: undefined,
-          nombre: undefined,
-          telefono: undefined,
-          direccion: undefined,
-          ciudad: undefined,
-          comunidad: undefined
-        });
         toast.success(`Cliente ${isEditing ? "editado" : "creado"}`);
-        this.props.history.push("/clientes/ver");
+        this.props.history.push("/clientes");
       })
       .catch(err => toast.warn(`No se pudo ${isEditing ? "editar" : "crear"} el cliente - ${err}`))
   }
@@ -100,7 +92,7 @@ class crearCliente extends Component {
             <div className="row">
               <div className="col-sm-8">
                 {
-                  isEditing ? <h2><span>Editar a </span>{nombre}</h2> : <h2><span>Crear </span>cliente nuevo</h2>
+                  isEditing ? <h2><span>Editar a </span>{nombre}</h2> : <h2><span>Crear </span>cliente</h2>
                 }
               </div>
               <div className="col-sm-4">

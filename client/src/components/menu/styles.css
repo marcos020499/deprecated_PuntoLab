@@ -61,6 +61,16 @@
     transition: background-color .1s;
 }
 
+.main-menu > ul li .selected {
+    background-color: rgba(0,0,0,.15) !important;
+    transition: background-color .1s;
+}
+
+.main-menu > ul li .selected:hover {
+    background-color: rgba(0,0,0,.2) !important;
+    transition: background-color .1s;
+}
+
 .main-menu > ul li a i {
     font-size: 20px;
     margin-right: 7px;
