@@ -68,7 +68,7 @@ export default class menu extends Component {
             <div className="main-menu">
                 <ul>
                     <div className="profile">
-                        <img src={logo} alt="logo" />
+                        <img src={logo + ".sdsd"} alt="logo" />
                         <p>BIENVENIDO</p>
                         <h6>Username</h6>
                     </div>

@@ -1,11 +1,72 @@
 import React, { Component } from 'react'
+import { withRouter } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-export default class login extends Component {
-  render() {
-    return (
-      <div>
-        <h1>LOGIN</h1>
-      </div>
-    )
-  }
+import "./styles.css"
+
+class login extends Component {   
+
+   constructor(props) {
+      super(props)
+
+      this.state = {
+         usuario: "",
+         password: ""
+      }
+   }
+
+   onChange = (e) => {
+      const { name, value } = e.target;
+      this.setState({
+         [name]: value
+      });
+   }
+
+   onSubmit = (e) => {
+      e.preventDefault();
+
+      const { usuario, password } = this.state;
+
+      axios.post(process.env.REACT_APP_SERVER_IP + "api/auth", { usuario, password })
+         .then(response => {
+            if (response.status === 200) {
+               const { token, user } = response.data
+
+               localStorage.setItem('jwtToken', token);
+               //this.props.setCurrentUser(user);
+
+               this.props.history.push("/");
+            }
+         })
+         .catch(err => {
+            if (err.response.status === 404) {
+               return toast.error("Credenciales inválidas")
+            }
+
+            toast.error(err.response.data)
+         });
+
+   }
+
+   render(){
+
+      const { usuario, password } = this.state;
+
+      return(
+         <div className="card-alternative">
+            <div className="wrap">
+               <div className="card-content">
+                  <form className="login-form" onSubmit={this.onSubmit}>
+                     <input onChange={this.onChange} value={usuario} type="text" placeholder="Nombre de usuario" name="usuario" />
+                     <input onChange={this.onChange} value={password} type="password" placeholder="Contraseña" name="password" />
+                     <button>login</button>
+                  </form>
+               </div>
+            </div>
+         </div>
+      )
+   }
 }
+
+export default withRouter(login);
