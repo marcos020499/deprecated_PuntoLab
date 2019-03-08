@@ -4,6 +4,12 @@
     padding: 0;
 }
 
+/* padding text to rigth (a little) pixel perfect */
 .Toastify__toast-body{
     padding-left: 10px !important;
+}
+
+/* prevent bootstrap button focus */
+.btn:focus{
+    box-shadow: none !important;
 }

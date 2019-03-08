@@ -17,16 +17,24 @@ class crear extends Component {
             _id: undefined,
             nombre: undefined,
             usuario: undefined,
+            password: undefined,
             permisos: 0,
             isEditing: false,
             notFound: false
         }
     }
 
+    // genera una nueva contraseña
+    newPassword = () => {
+        this.setState({ password: Math.random().toString(36).substr(2, 8) })
+    }
+
+    // cuando se monta el componente
     componentDidMount(){
         const id = this.props.match.params.id
 
         if (!id) {
+            this.newPassword();
             return;
         }
 
@@ -59,15 +67,15 @@ class crear extends Component {
         });
     }
 
-
+    // enviar el formulario con ajax
     onSubmit = (e) => {
         e.preventDefault();
 
-        const { _id, nombre, usuario, permisos, isEditing } = this.state
+        const { _id, nombre, usuario, password, permisos, isEditing } = this.state
 
-        axios.post(process.env.REACT_APP_SERVER_IP + `api/usuarios${isEditing ? "/editar" : "/nuevo"}`, { _id, nombre, usuario, permisos })
+        axios.post(process.env.REACT_APP_SERVER_IP + `api/usuarios${isEditing ? "/editar" : "/nuevo"}`, { _id, nombre, usuario, password, permisos })
             .then(res => {
-                toast.success(`Se ${isEditing ? "editó" : "creó"} el usuario ` + res.data.usuario);
+                toast.success(`Se ${isEditing ? "editó" : "creó"} el usuario ` + usuario);
                 this.props.history.push("/usuarios");
             })
             .catch(err => {
@@ -80,7 +88,7 @@ class crear extends Component {
 
     render() {
 
-        const { nombre, usuario, permisos, isEditing, notFound } = this.state
+        const { nombre, usuario, password, permisos, isEditing, notFound } = this.state
 
         if (notFound) {
             return <NotFound />
@@ -105,20 +113,27 @@ class crear extends Component {
                     </div>
                     <div className='form-content'>
                         <div className="row">
-                            <div className="col-sm-6">
+                            <div className="col-sm-12">
                                 <div className="form-group mb-4">
                                     <input onChange={this.onChange} value={nombre || ""} type="text" className="form-control form-control frm_field" placeholder="Nombre completo" name="nombre"
                                         required />
                                     <small className="form-text text-muted">* Escribe el nombre del usuario</small>
                                 </div>
                             </div>
-                            <div className="col-sm-3">
+                            <div className="col-sm-4">
                                 <div className="form-group mb-4">
                                     <input maxLength="20" onChange={this.onChange} value={usuario || ""} type="text" required className="form-control form-control frm_field" placeholder="Nombre de usuario" name="usuario" />
                                     <small className="form-text text-muted">* Números y letras</small>
                                 </div>
                             </div>
-                            <div className="col-sm-3">
+                            <div className="col-sm-4">
+                                <div className="form-group mb-4">
+                                    <input value={password || "SIN CAMBIOS"} style={{ width: "auto", display: "inline" }} disabled type="text" required className="form-control form-control frm_field" name="password" />
+                                    <button onClick={this.newPassword} style={{ marginTop: "-3px", border: "none" }} type="button" className="btn btn-primary">{isEditing ? "Reiniciar" : "Generar"}</button>
+                                    <small className="form-text text-muted">Contraseña generada automáticamente</small>
+                                </div>
+                            </div>
+                            <div className="col-sm-4">
                                 <div className="form-group mb-4">
                                     <select onChange={this.onChange} name="permisos" className="form-control form-control frm_field" required value={permisos}>
                                         <option value="0">Administrador</option>

@@ -1,6 +1,7 @@
 // modules
 const express = require("express");
 const app = express.Router();
+const bcrypt = require("bcrypt");
 
 // models
 const Usuarios = require("../../models/Usuarios")
@@ -8,23 +9,24 @@ const Usuarios = require("../../models/Usuarios")
 // listar usuarios
 app.get("/api/usuarios/listar", (req, res) => {
 
-    Usuarios.find({})
+    Usuarios.find({}).select("-password")
         .then(usuarios => res.status(201).json(usuarios))
         .catch(err => res.sendStatus(400))
 })
 
 // crear usuarios
 app.post("/api/usuarios/nuevo", (req, res) => {
-    const { nombre, usuario, permisos } = req.body;
+    const { nombre, usuario, password, permisos } = req.body;
 
     const newUsuario = new Usuarios({
         nombre,
         usuario,
+        password: bcrypt.hashSync(password, 7),
         permisos
     });
 
     newUsuario.save()
-        .then(usuario => res.status(201).json(usuario))
+        .then(usuario => res.sendStatus(201))
         .catch(err => {
             if (err.code && err.code == 11000) {
                 return res.sendStatus(409);
@@ -37,7 +39,7 @@ app.post("/api/usuarios/nuevo", (req, res) => {
 app.get("/api/usuarios/detallar/:_id", (req, res) => {
     const { _id } = req.params
 
-    Usuarios.findById(_id)
+    Usuarios.findById(_id).select("-password")
         .then(usuario => {
             if (!usuario) {
                 return res.sendStatus(404)
@@ -56,7 +58,7 @@ app.get("/api/usuarios/detallar/:_id", (req, res) => {
 // editar usuarios
 app.post("/api/usuarios/editar", (req, res) => {
 
-    const { _id, nombre, usuario, permisos } = req.body;
+    const { _id, nombre, usuario, password, permisos } = req.body;
 
     Usuarios.findById(_id)
         .then(user => {
@@ -67,11 +69,12 @@ app.post("/api/usuarios/editar", (req, res) => {
             user.nombre = nombre,
             user.usuario = usuario,
             user.permisos = permisos
+            password ? user.password = bcrypt.hashSync(password, 7) : null
 
             return user.save();
         })
         .then(saved => {
-            return res.status(200).json(saved)
+            return res.sendStatus(200);
         })
         .catch(err => {
             if (err == 404) {

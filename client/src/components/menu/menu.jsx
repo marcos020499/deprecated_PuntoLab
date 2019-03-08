@@ -11,9 +11,46 @@ export default class menu extends Component {
     constructor(props) {
       super(props)
     
-      this.state = {
-         selected: ""
-      }
+        this.state = {
+            selected: "",
+            menuItems: [
+                {
+                    title: "Menú principal",
+                    items: [
+                        {
+                            name: "Clientes",
+                            icon: "people",
+                            url: "/clientes"
+                        },
+                        {
+                            name: "* Ver reportes",
+                            icon: "label_important",
+                            url: "/reportes/ver"
+                        },
+                        {
+                            name: "* Crear reporte",
+                            icon: "label_important",
+                            url: "/reportes/crear"
+                        },
+                    ]
+                },
+                {
+                    title: "Configuración",
+                    items: [
+                        {
+                            name: "Usuarios",
+                            icon: "people_outline",
+                            url: "/usuarios"
+                        },
+                        {
+                            name: "* Cambiar contraseña",
+                            icon: "security",
+                            url: "/password"
+                        },
+                    ]
+                }
+            ]
+        }
     }
 
     onClick = (item) => {
@@ -25,7 +62,7 @@ export default class menu extends Component {
 
     render() {
 
-        const { selected } = this.state
+        const { selected, menuItems } = this.state
 
         return (
             <div className="main-menu">
@@ -35,40 +72,35 @@ export default class menu extends Component {
                         <p>BIENVENIDO</p>
                         <h6>Username</h6>
                     </div>
-                    <div>
-                        <li className="nav-header">Menú principal</li>
-                        <li onClick={() => this.onClick("Clientes")} >
-                            <Link to="/clientes" className={selected === "Clientes" ? "selected" : ""}>
-                                <i className="material-icons"> people </i>
-                                <span className="menu-title">Clientes</span>
-                            </Link>
-                        </li>
-                        <li onClick={() => this.onClick("")}>
-                            <Link to="/reportes/ver">
-                                <i className="material-icons"> label_important </i>
-                                <span className="menu-title">* Ver reportes</span>
-                            </Link>
-                        </li>
-                        <li onClick={() => this.onClick("")}>
-                            <Link to="/reportes/crear">
-                                <i className="material-icons"> label_important </i>
-                                <span className="menu-title">* Crear reporte</span>
-                            </Link>
-                        </li>
+                    <div className='MenuItemsContainer'>
+                        {
+                            menuItems.map((section, index) => {
+
+                                const items = section.items.map((item, i) => {    
+ 
+                                    return (
+                                        <li key={index + i.toString()} onClick={() => this.onClick(item.name)} >
+                                            <Link to={item.url} className={selected === item.name ? "selected" : ""}>
+                                                <i className="material-icons"> {item.icon} </i>
+                                                <span className="menu-title">{item.name}</span>
+                                            </Link>
+                                        </li>
+                                    )
+                                })
+
+                                if (items.length === 0) {
+                                    return(null);
+                                }
+
+                                return(
+                                    <div key={index}>
+                                        <li className="nav-header">{section.title}</li>
+                                        {items}
+                                    </div>
+                                )
+                            })
+                        }
                     </div>
-                    <li className="nav-header">Configuración</li>
-                    <li onClick={() => this.onClick("Usuarios")}>
-                        <Link to="/usuarios" className={selected === "Usuarios" ? "selected" : ""}>
-                            <i className="material-icons"> people_outline </i>
-                            <span className="menu-title">Usuarios</span>
-                        </Link>
-                    </li>
-                    <li onClick={() => this.onClick("")}>
-                        <Link to="/password">
-                            <i className="material-icons"> security </i>
-                            <span className="menu-title">* Cambiar contraseña</span>
-                        </Link>
-                    </li>
                 </ul>
             </div>
         )

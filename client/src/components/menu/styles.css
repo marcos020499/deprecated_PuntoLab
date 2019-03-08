@@ -80,3 +80,7 @@
 .main-menu > ul > li:last-child {
     margin-bottom: 130px;
 }
+
+.main-menu .MenuItemsContainer{
+    padding-bottom: 100px;
+}
