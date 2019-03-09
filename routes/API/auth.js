@@ -24,8 +24,8 @@ app.post("/api/auth", (req, res) => {
             user.password = undefined; 
 
             // create token
-            const { _id, nombre, usuario } = user;
-            const token = jwt.sign({ _id, nombre, usuario }, JWTKey);
+            const { _id, nombre, usuario, permisos } = user;
+            const token = jwt.sign({ _id, nombre, usuario, permisos }, JWTKey);
 
             return res.status(200).json({ token, user });
         })

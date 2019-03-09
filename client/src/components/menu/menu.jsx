@@ -7,6 +7,7 @@ import React, { Component } from 'react'
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
+
 class menu extends Component {
 
     constructor(props) {
@@ -14,24 +15,27 @@ class menu extends Component {
     
         this.state = {
             selected: "",
-            menuItems: [
+            menu: [
                 {
                     title: "Menú principal",
                     items: [
                         {
                             name: "Clientes",
                             icon: "people",
-                            url: "/clientes"
+                            url: "/clientes",
+                            permisos: [0, 1]
                         },
                         {
                             name: "* Ver reportes",
                             icon: "label_important",
-                            url: "/reportes/ver"
+                            url: "/reportes/ver",
+                            permisos: [0, 1, 2]
                         },
                         {
                             name: "* Crear reporte",
                             icon: "label_important",
-                            url: "/reportes/crear"
+                            url: "/reportes/crear",
+                            permisos: [0, 1]
                         },
                     ]
                 },
@@ -41,12 +45,14 @@ class menu extends Component {
                         {
                             name: "Usuarios",
                             icon: "people_outline",
-                            url: "/usuarios"
+                            url: "/usuarios",
+                            permisos: [0]
                         },
                         {
                             name: "* Cambiar contraseña",
                             icon: "security",
-                            url: "/password"
+                            url: "/password",
+                            permisos: [0, 1, 2]
                         },
                     ]
                 }
@@ -63,7 +69,7 @@ class menu extends Component {
 
     render() {
 
-        const { selected, menuItems } = this.state
+        const { selected, menu } = this.state
         const { session } = this.props;
 
         return (
@@ -76,10 +82,14 @@ class menu extends Component {
                     </div>
                     <div className='MenuItemsContainer'>
                         {
-                            menuItems.map((section, index) => {
+                            menu.map((section, index) => {
 
-                                const items = section.items.map((item, i) => {    
- 
+                                const items = section.items.map((item, i) => {
+
+                                    if (item.permisos.filter(i => i === session.user.permisos).length === 0) {
+                                        return null;
+                                    }
+
                                     return (
                                         <li key={index + i.toString()} onClick={() => this.onClick(item.name)} >
                                             <Link to={item.url} className={selected === item.name ? "selected" : ""}>
@@ -90,11 +100,12 @@ class menu extends Component {
                                     )
                                 })
 
+                                // si la seccion no tiene ningun item retornamos nulo
                                 if (items.length === 0) {
-                                    return(null);
+                                    return null;
                                 }
 
-                                return(
+                                return (
                                     <div key={index}>
                                         <li className="nav-header">{section.title}</li>
                                         {items}
@@ -112,7 +123,7 @@ class menu extends Component {
 const mapStateToProps = (state) => {
 
     const { session } = state;
-
+    
     return {
         session
     }
