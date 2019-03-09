@@ -34,9 +34,32 @@ app.post("/api/auth", (req, res) => {
                 return res.sendStatus(err);
             }
 
-            return res.sendStatus(500);
+            return res.sendStatus(400);
         })
-
 })
+
+// token auth
+app.post("/api/token/validate", (req, res) => {
+
+    const { token } = req.body
+
+    jwt.verify(token, JWTKey, (err, decoded) => {
+        if (err) {
+            res.sendStatus(401);
+        }
+
+        // if valid send data again
+        Usuarios.findById(decoded._id)
+            .then(user => {
+                if (!user) {
+                    return res.sendStatus(404);
+                }
+
+                user.password = undefined;
+                return res.status(200).json(user);
+            })
+            .catch(err => res.sendStatus(400))
+    });
+});
 
 module.exports = app;

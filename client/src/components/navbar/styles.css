@@ -4,3 +4,15 @@
     -webkit-box-shadow: 2px 4px 20px -4px rgba(0,0,0,.1);
     box-shadow: 2px 4px 20px -4px rgba(0,0,0,.1);
 }
+.navbar h5{
+    font-size: 18px;
+    margin-bottom: 0;
+    font-weight: 400;
+    transition: color .2s;
+    color: rgba(0,0,0,.5);
+}
+.navbar h5:hover{
+    transition: color .2s;
+    color: rgba(0,0,0,.6);
+    cursor: pointer;
+}

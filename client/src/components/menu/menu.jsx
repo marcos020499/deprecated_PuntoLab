@@ -5,8 +5,9 @@ import "./styles.css"
 // modules
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-export default class menu extends Component {
+class menu extends Component {
 
     constructor(props) {
       super(props)
@@ -63,6 +64,7 @@ export default class menu extends Component {
     render() {
 
         const { selected, menuItems } = this.state
+        const { session } = this.props;
 
         return (
             <div className="main-menu">
@@ -70,7 +72,7 @@ export default class menu extends Component {
                     <div className="profile">
                         <img src={logo + ".sdsd"} alt="logo" />
                         <p>BIENVENIDO</p>
-                        <h6>Username</h6>
+                        <h6>{ session.user ? session.user.nombre : "" }</h6>
                     </div>
                     <div className='MenuItemsContainer'>
                         {
@@ -106,3 +108,14 @@ export default class menu extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+
+    const { session } = state;
+
+    return {
+        session
+    }
+}
+
+export default connect(mapStateToProps)(menu);

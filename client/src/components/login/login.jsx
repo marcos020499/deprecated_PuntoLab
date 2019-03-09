@@ -1,9 +1,15 @@
+// modules
 import React, { Component } from 'react'
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { connect } from "react-redux";
 
+// utls
 import "./styles.css"
+
+// redux
+import { setCurrentUser } from "../../redux/actions/sessionActions";
 
 class login extends Component {   
 
@@ -34,8 +40,7 @@ class login extends Component {
                const { token, user } = response.data
 
                localStorage.setItem('jwtToken', token);
-               //this.props.setCurrentUser(user);
-
+               this.props.setCurrentUser(user);
                this.props.history.push("/");
             }
          })
@@ -46,7 +51,6 @@ class login extends Component {
 
             toast.error(err.response.data)
          });
-
    }
 
    render(){
@@ -68,5 +72,11 @@ class login extends Component {
       )
    }
 }
+ 
+const mapDispatchToProps = {
+   setCurrentUser
+}
 
-export default withRouter(login);
+export default withRouter (
+   connect(null, mapDispatchToProps)(login)
+);
