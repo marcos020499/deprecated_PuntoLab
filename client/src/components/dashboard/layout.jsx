@@ -17,6 +17,9 @@ import NotFound from "../notFound/ContentNotFound"
 import VerUsuarios from "../usuarios/listar";
 import CrearEditarUsuarios from "../usuarios/crear"
 
+// rutas con permisos
+import ProtectedRoute from "../common/protectedRoute";
+
 export default class layout extends Component {
   render() {
     return (
@@ -24,15 +27,15 @@ export default class layout extends Component {
         <Navbar />
         <Menu />
         <Switch>
-          <Route exact path="/clientes" component={VerClientes} />
-          <Route exact path="/clientes/crear" component={CrearEditarCliente} />
-          <Route exact path="/clientes/editar/:id" component={CrearEditarCliente} />
-          <Route exact path="/reportes/ver" component={VerReportes} />
-          <Route exact path="/reportes/crear" component={CrearReporte} />
-          <Route exact path="/usuarios" component={VerUsuarios} />
-          <Route exact path="/usuarios/crear" component={CrearEditarUsuarios} />
-          <Route exact path="/usuarios/editar/:id" component={CrearEditarUsuarios} />
-          <Route exact path="/password" component={NewPassword} />
+          <ProtectedRoute permisos={[0, 1]} exact path="/clientes" component={VerClientes} />
+          <ProtectedRoute permisos={[0, 1]} exact path="/clientes/crear" component={CrearEditarCliente} />
+          <ProtectedRoute permisos={[0, 1]} exact path="/clientes/editar/:id" component={CrearEditarCliente} />
+          <ProtectedRoute permisos={[0, 1, 2]} exact path="/reportes/ver" component={VerReportes} />
+          <ProtectedRoute permisos={[0, 1]} exact path="/reportes/crear" component={CrearReporte} />
+          <ProtectedRoute permisos={[0]} exact path="/usuarios" component={VerUsuarios} />
+          <ProtectedRoute permisos={[0]} exact path="/usuarios/crear" component={CrearEditarUsuarios} />
+          <ProtectedRoute permisos={[0]} exact path="/usuarios/editar/:id" component={CrearEditarUsuarios} />
+          <ProtectedRoute permisos={[0, 1, 2]} exact path="/password" component={NewPassword} />
           <Route component={NotFound} />
         </Switch>
       </div>

@@ -52,6 +52,24 @@ if (localStorage.jwtToken) {
 
 class App extends Component {
 
+  componentDidMount() {
+
+    // hide DOM Loader
+    const element = document.getElementById('ipl-progress-indicator')
+    if (element) {
+      setTimeout(() => {
+        // when ready fade out afer 500ms
+        element.classList.add('available')
+
+        setTimeout(() => {
+          // remove from dom afer 2sec
+          element.outerHTML = ''
+        }, 2000)
+
+      }, 500)
+    }
+  }
+
   render() {
 
     return (

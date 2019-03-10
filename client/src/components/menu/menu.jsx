@@ -49,7 +49,7 @@ class menu extends Component {
                             permisos: [0]
                         },
                         {
-                            name: "* Cambiar contraseña",
+                            name: "Cambiar contraseña",
                             icon: "security",
                             url: "/password",
                             permisos: [0, 1, 2]

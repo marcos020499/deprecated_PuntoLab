@@ -115,7 +115,7 @@ class crear extends Component {
                         <div className="row">
                             <div className="col-sm-12">
                                 <div className="form-group mb-4">
-                                    <input onChange={this.onChange} value={nombre || ""} type="text" className="form-control form-control frm_field" placeholder="Nombre completo" name="nombre"
+                                    <input maxLength="35" onChange={this.onChange} value={nombre || ""} type="text" className="form-control form-control frm_field" placeholder="Nombre completo" name="nombre"
                                         required />
                                     <small className="form-text text-muted">* Escribe el nombre del usuario</small>
                                 </div>

@@ -1,18 +1,21 @@
 // modules
 import React, { Component } from 'react'
+import { toast } from "react-toastify";
+import axios from "axios";
+import { connect } from "react-redux";
 
 // components
 import Card from "../card/card"
 
-export default class password extends Component {
+class password extends Component {
 
     constructor(props) {
         super(props)
 
         this.state = {
-            old_password: undefined,
-            new_password: undefined,
-            conf_password: undefined
+            old_password: "",
+            new_password: "",
+            conf_password: ""
         }
     }
 
@@ -27,15 +30,27 @@ export default class password extends Component {
         e.preventDefault();
 
         const { old_password, new_password, conf_password } = this.state;
-
-        console.log(this.state);
+        const { _id } = this.props.session.user;
     
         if (new_password !== conf_password) {
-            // no coinciden
-            return;
+            return toast.warn("Las contraseñas no coinciden");
         }
 
-        // enviar
+        axios.post(process.env.REACT_APP_SERVER_IP + "api/password/new", { _id, old_password, new_password })
+            .then(data => {
+                this.setState({
+                    old_password: "",
+                    new_password: "",
+                    conf_password: ""
+                })
+                return toast.success("Se cambió tu contraseña");
+            })
+            .catch(err => {
+                if (err.response.status === 400) {
+                    return toast.warn("La contraseña actual es incorrecta");
+                }
+                return toast.warn(err.response.data);
+            })
     }
     
 
@@ -62,19 +77,19 @@ export default class password extends Component {
                         <div className="row">
                             <div className="col-sm-4">
                                 <div className="form-group mb-4">
-                                    <input value={old_password || ""} onChange={this.onChange} type="password" className="form-control form-control frm_field" placeholder="Contraseña actual" name="old_password" required />
+                                    <input value={old_password} onChange={this.onChange} type="password" className="form-control form-control frm_field" placeholder="Contraseña actual" name="old_password" required />
                                     <small className="form-text text-muted">Para validad tu identidad</small>
                                 </div>
                             </div>
                             <div className="col-sm-4">
                                 <div className="form-group mb-4">
-                                    <input value={new_password || ""} onChange={this.onChange} type="password" className="form-control form-control frm_field" placeholder="Nueva contraseña" name="new_password" required/>
+                                    <input value={new_password} onChange={this.onChange} type="password" className="form-control form-control frm_field" placeholder="Nueva contraseña" name="new_password" required/>
                                     <small className="form-text text-muted">Escribe la nueva contraseña</small>
                                 </div>
                             </div>
                             <div className="col-sm-4">
                                 <div className="form-group mb-4">
-                                    <input value={conf_password || ""} onChange={this.onChange} type="password" className="form-control form-control frm_field" placeholder="Confirma la contraseña" name="conf_password" required />
+                                    <input value={conf_password} onChange={this.onChange} type="password" className="form-control form-control frm_field" placeholder="Confirma la contraseña" name="conf_password" required />
                                     <small className="form-text text-muted">Repite la contraseña</small>
                                 </div>
                             </div>
@@ -85,3 +100,15 @@ export default class password extends Component {
         )
     }
 }
+
+
+const mapStateToProps = (state) => {
+
+    const { session } = state;
+
+    return {
+        session
+    }
+}
+
+export default connect(mapStateToProps)(password);

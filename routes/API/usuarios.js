@@ -97,4 +97,33 @@ app.post("/api/usuarios/eliminar", (req, res) => {
         .catch(err => res.sendStatus(500))
 })
 
+// cambiar la contraseña
+app.post("/api/password/new", (req, res) => {
+    const { _id, old_password, new_password } = req.body;
+
+    Usuarios.findById(_id)
+        .then(user => {
+            if (!user) {
+                return Promise.reject(404);
+            }
+
+            if (!bcrypt.compareSync(old_password, user.password)) {
+                return Promise.reject(400);
+            }
+
+            user.password = bcrypt.hashSync(new_password, 7);
+            return user.save();
+        })
+        .then(saved => {
+            return res.sendStatus(200);
+        })
+        .catch(err => {
+            if (err == 404 || err == 400) {
+                return res.sendStatus(err);
+            }
+
+            return res.sendStatus(500);
+        })
+})
+
 module.exports = app;
