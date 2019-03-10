@@ -2,6 +2,7 @@
 const express = require("express");
 const app = express.Router();
 const bcrypt = require("bcrypt");
+const adminPermisos = require("../permisosAdministrativos")
 
 // models
 const Usuarios = require("../../models/Usuarios")
@@ -92,9 +93,22 @@ app.post("/api/usuarios/editar", (req, res) => {
 app.post("/api/usuarios/eliminar", (req, res) => {
     const { password, _id } = req.body;
 
-    Usuarios.findOneAndDelete({ _id })
+    adminPermisos.validar(password)
+        .then(admin => {
+            if (!admin) {
+                return Promise.reject(404);
+            }
+
+            return Usuarios.findOneAndDelete({ _id });
+        })
         .then(deleted => res.sendStatus(200))
-        .catch(err => res.sendStatus(500))
+        .catch(err => {
+            if (err == 404) {
+                return res.sendStatus(err);
+            }
+
+            return res.sendStatus(500);
+        })
 })
 
 // cambiar la contraseña

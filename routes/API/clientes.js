@@ -1,6 +1,7 @@
 // modules
 const express = require("express");
 const app = express.Router();
+const permisoAdmin = require("../permisosAdministrativos")
 
 // models
 const Clientes = require("../../models/Clientes")
@@ -94,10 +95,25 @@ app.post("/api/clientes/editar", (req, res) => {
 // eliminar clientes
 app.post("/api/clientes/eliminar", (req, res) => {
     const { password, _id } = req.body;
+    let admin = {};
 
-    Clientes.findOneAndDelete({ _id })
-        .then(deleted => res.sendStatus(200))
-        .catch(err => res.sendStatus(500))
+    permisoAdmin.validar(password)
+        .then(_admin => {
+            if (!_admin) {
+                return Promise.reject(401);
+            }
+            
+            admin = _admin.usuario;
+            return Clientes.findOneAndDelete({ _id });
+        })
+        .then(deleted => res.status(200).json({ admin }))
+        .catch(err => {
+            if (err == 401) {
+                return res.sendStatus(err)
+            }
+            return res.sendStatus(500);
+        })
 })
+
 
 module.exports = app;

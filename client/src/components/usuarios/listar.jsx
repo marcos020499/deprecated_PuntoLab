@@ -39,15 +39,21 @@ export default class listar extends Component {
     }
 
     // cuando se queire eliminar un usuario
-    delete = (_id) => {
-        alertify.prompt('Confirma la eliminación', 'Ingresa la contraseña de administrador para eliminar este elemento', '', (evt, value) => {
+    delete = (_id, nombre) => {
+        alertify.prompt('Confirma la eliminación', 'Ingresa tu contraseña para eliminar a ' + nombre, '', (evt, value) => {
 
             axios.post(process.env.REACT_APP_SERVER_IP + "api/usuarios/eliminar", { password: value, _id })
                 .then(response => {
                     toast.info("Se eliminó el usuario");
                     this.requestData()
                 })
-                .catch(err => toast.error("No se pudo eliminar el cliente - " + err))
+                .catch(err => {
+                    if (err.response.status === 404) {
+                        return toast.warn("La contraseña es incorrecta.");
+                    }
+
+                    return toast.error("No se pudo eliminar el cliente - " + err)
+                })
 
         }, () => { }).set('type', 'password');
     }
@@ -91,7 +97,7 @@ export default class listar extends Component {
                                         <td>{usuario}</td>
                                         <td>{permisos === 0 ? "Administrador" : permisos === 1 ? "Asistente" : permisos === 2 ? "Técnico" : ""}</td>
                                         <td><Link to={"/usuarios/editar/" + _id}><i className="material-icons"> edit </i></Link></td>
-                                        <td onClick={() => this.delete(_id)}><i className="material-icons"> delete </i></td>
+                                        <td onClick={() => this.delete(_id, nombre)}><i className="material-icons"> delete </i></td>
                                     </tr>
                                 )
                             })

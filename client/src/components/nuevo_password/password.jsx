@@ -49,7 +49,7 @@ class password extends Component {
                 if (err.response.status === 400) {
                     return toast.warn("La contraseña actual es incorrecta");
                 }
-                return toast.warn(err.response.data);
+                return toast.warn("No se pudo cambiar tu contraseña - " + err);
             })
     }
     

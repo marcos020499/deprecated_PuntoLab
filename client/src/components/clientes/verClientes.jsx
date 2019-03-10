@@ -4,11 +4,12 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import alertify from 'alertifyjs';
 import { toast } from "react-toastify";
+import { connect } from "react-redux";
 
 // components
 import Card from "../card/card";
 
-export default class verClientes extends Component {
+class verClientes extends Component {
 
     constructor(props) {
       super(props)
@@ -87,15 +88,24 @@ export default class verClientes extends Component {
     }
 
     // cuando se pide eliminar un cliente
-    delete = (_id) => {
-        alertify.prompt('Confirma la eliminación', 'Ingresa la contraseña de administrador para eliminar este elemento', '', (evt, value) => {
+    delete = (_id, nombre) => {
+
+        const { permisos } = this.props.session.user;
+
+        alertify.prompt('Confirma la eliminación', `Ingresa ${permisos === 0 ? "tu contraseña" : "una contraseña de administrador"} para eliminar a ${nombre}`, '', (evt, value) => {
             
             axios.post(process.env.REACT_APP_SERVER_IP + "api/clientes/eliminar", { password: value, _id })
                 .then(response => {
-                    toast.info("Se eliminó el cliente");
+                    toast.info(`Se eliminó el cliente${permisos === 0 ? "." : " con autorización de " + response.data.admin}`);
                     this.requestData()
                 })
-                .catch(err => toast.error("No se pudo eliminar el cliente - " + err))
+                .catch(err => {
+                    if (err.response.status === 401) {
+                        return toast.warn(`La contraseña${permisos === 0 ? "" : " de administrador" } es incorrecta.`)
+                    }
+
+                    return toast.error("No se pudo eliminar el cliente - " + err)
+                })
 
         }, () => { }).set('type', 'password');
     }
@@ -170,7 +180,7 @@ export default class verClientes extends Component {
                                         <td>{direccion}</td>
                                         <td>{comunidad ? comunidad + ", " : ""} {ciudad}</td>
                                         <td><Link to={"/clientes/editar/" + _id}><i className="material-icons"> edit </i></Link></td>
-                                        <td onClick={() => this.delete(_id)}><i className="material-icons"> delete </i></td>
+                                        <td onClick={() => this.delete(_id, nombre)}><i className="material-icons"> delete </i></td>
                                     </tr>
                                 )
                             })
@@ -196,3 +206,14 @@ export default class verClientes extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+
+    const { session } = state;
+
+    return {
+        session
+    }
+}
+
+export default connect(mapStateToProps)(verClientes);
