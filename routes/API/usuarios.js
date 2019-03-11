@@ -99,7 +99,7 @@ app.post("/api/usuarios/eliminar", (req, res) => {
                 return Promise.reject(404);
             }
 
-            return Usuarios.findOneAndDelete({ _id });
+            return Usuarios.findByIdAndDelete(_id)
         })
         .then(deleted => res.sendStatus(200))
         .catch(err => {

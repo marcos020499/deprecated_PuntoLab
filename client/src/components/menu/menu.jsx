@@ -49,6 +49,17 @@ class menu extends Component {
                             permisos: [0]
                         },
                         {
+                            name: "Servicios",
+                            icon: "attach_money",
+                            url: "/servicios",
+                            permisos: [0]
+                        },
+                    ]
+                },
+                {
+                    title: "Cuenta",
+                    items: [
+                        {
                             name: "Cambiar contraseña",
                             icon: "security",
                             url: "/password",

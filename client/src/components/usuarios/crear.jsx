@@ -121,20 +121,20 @@ class crear extends Component {
                                 </div>
                             </div>
                             <div className="col-sm-4">
-                                <div className="form-group mb-4">
+                                <div className="form-group mb-2">
                                     <input maxLength="20" onChange={this.onChange} value={usuario || ""} type="text" required className="form-control form-control frm_field" placeholder="Nombre de usuario" name="usuario" />
                                     <small className="form-text text-muted">* Números y letras</small>
                                 </div>
                             </div>
                             <div className="col-sm-4">
-                                <div className="form-group mb-4">
+                                <div className="form-group mb-2">
                                     <input value={password || "SIN CAMBIOS"} style={{ width: "auto", display: "inline" }} disabled type="text" required className="form-control form-control frm_field" name="password" />
                                     <button onClick={this.newPassword} style={{ marginTop: "-3px", border: "none" }} type="button" className="btn btn-primary">{isEditing ? "Reiniciar" : "Generar"}</button>
                                     <small className="form-text text-muted">Contraseña generada automáticamente</small>
                                 </div>
                             </div>
                             <div className="col-sm-4">
-                                <div className="form-group mb-4">
+                                <div className="form-group mb-2">
                                     <select onChange={this.onChange} name="permisos" className="form-control form-control frm_field" required value={permisos}>
                                         <option value="0">Administrador</option>
                                         <option value="1">Asistente</option>

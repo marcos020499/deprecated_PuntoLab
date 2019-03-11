@@ -16,6 +16,8 @@ import NewPassword from "../nuevo_password/password"
 import NotFound from "../notFound/ContentNotFound"
 import VerUsuarios from "../usuarios/listar";
 import CrearEditarUsuarios from "../usuarios/crear"
+import VerServicios from "../servicios/servicios";
+import CrearEditarServicios from "../servicios/AgregarEditar";
 
 // rutas con permisos
 import ProtectedRoute from "../common/protectedRoute";
@@ -32,6 +34,9 @@ export default class layout extends Component {
           <ProtectedRoute permisos={[0, 1]} exact path="/clientes/editar/:id" component={CrearEditarCliente} />
           <ProtectedRoute permisos={[0, 1, 2]} exact path="/reportes/ver" component={VerReportes} />
           <ProtectedRoute permisos={[0, 1]} exact path="/reportes/crear" component={CrearReporte} />
+          <ProtectedRoute permisos={[0]} exact path="/servicios" component={VerServicios} />
+          <ProtectedRoute permisos={[0]} exact path="/servicios/crear" component={CrearEditarServicios} />
+          <ProtectedRoute permisos={[0]} exact path="/servicios/editar/:id" component={CrearEditarServicios} />
           <ProtectedRoute permisos={[0]} exact path="/usuarios" component={VerUsuarios} />
           <ProtectedRoute permisos={[0]} exact path="/usuarios/crear" component={CrearEditarUsuarios} />
           <ProtectedRoute permisos={[0]} exact path="/usuarios/editar/:id" component={CrearEditarUsuarios} />

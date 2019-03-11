@@ -57,6 +57,7 @@
 /* tablas */
 .card table {
    text-align: center;   
+   margin-bottom: 0 !important;
 }
 
 .card table i {

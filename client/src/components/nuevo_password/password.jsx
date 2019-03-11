@@ -76,19 +76,19 @@ class password extends Component {
                     <div className='form-content'>
                         <div className="row">
                             <div className="col-sm-4">
-                                <div className="form-group mb-4">
+                                <div className="form-group mb-2">
                                     <input value={old_password} onChange={this.onChange} type="password" className="form-control form-control frm_field" placeholder="Contraseña actual" name="old_password" required />
                                     <small className="form-text text-muted">Para validad tu identidad</small>
                                 </div>
                             </div>
                             <div className="col-sm-4">
-                                <div className="form-group mb-4">
+                                <div className="form-group mb-2">
                                     <input value={new_password} onChange={this.onChange} type="password" className="form-control form-control frm_field" placeholder="Nueva contraseña" name="new_password" required/>
                                     <small className="form-text text-muted">Escribe la nueva contraseña</small>
                                 </div>
                             </div>
                             <div className="col-sm-4">
-                                <div className="form-group mb-4">
+                                <div className="form-group mb-2">
                                     <input value={conf_password} onChange={this.onChange} type="password" className="form-control form-control frm_field" placeholder="Confirma la contraseña" name="conf_password" required />
                                     <small className="form-text text-muted">Repite la contraseña</small>
                                 </div>

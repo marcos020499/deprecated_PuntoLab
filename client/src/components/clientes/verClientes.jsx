@@ -187,7 +187,7 @@ class verClientes extends Component {
                         }
                     </tbody>
                 </table>
-                <div className="clearfix">
+                <div className="clearfix mt-2">
                     <div className="hint-text">
                         Mostrando <b>{salto > totalItems ? totalItems : salto}</b> de <b>{totalItems}</b> entradas
                     </div>

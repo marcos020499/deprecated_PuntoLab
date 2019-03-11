@@ -118,21 +118,21 @@ class crearCliente extends Component {
                 </div>
               </div>
               <div className="col-sm-5">
-                <div className="form-group mb-4">
+                <div className="form-group mb-2">
                   <input onChange={this.onChange} value={direccion || ""} type="text" className="form-control form-control frm_field" placeholder="Dirección" name="direccion"
                     required />
                   <small className="form-text text-muted">* Dirección del cliente</small>
                 </div>
               </div>
               <div className="col-sm-3">
-                <div className="form-group mb-4">
+                <div className="form-group mb-2">
                   <input onChange={this.onChange} value={ciudad || ""} type="text" className="form-control form-control frm_field" placeholder="Ciudad" name="ciudad"
                     required />
                   <small className="form-text text-muted">* Ciudad del cliente</small>
                 </div>
               </div>
               <div className="col-sm-4">
-                <div className="form-group mb-4">
+                <div className="form-group mb-2">
                   <input onChange={this.onChange} value={comunidad || ""} type="text" className="form-control form-control frm_field" placeholder="Comunidad" name="comunidad" />
                   <small className="form-text text-muted">Comunidad del cliente</small>
                 </div>
