@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import alertify from "alertifyjs";
+import { Helmet } from "react-helmet";
+import { app_name } from "../../config/strings";
 
 // components
 import Card from "../card/card";
@@ -61,6 +63,9 @@ export default class servicios extends Component {
 
         return (
             <Card>
+                <Helmet>
+                    <title>Servicios | {app_name}</title>
+                </Helmet>
                 <div className="header" style={{ marginBottom: "0px" }}>
                     <div className="row">
                         <div className="col-sm-8">

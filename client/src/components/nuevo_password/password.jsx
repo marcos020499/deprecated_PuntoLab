@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import { toast } from "react-toastify";
 import axios from "axios";
 import { connect } from "react-redux";
+import { Helmet } from "react-helmet";
+import { app_name } from "../../config/strings";
 
 // components
 import Card from "../card/card"
@@ -52,7 +54,6 @@ class password extends Component {
                 return toast.warn("No se pudo cambiar tu contraseña - " + err);
             })
     }
-    
 
     render() {
 
@@ -60,6 +61,9 @@ class password extends Component {
 
         return (
             <Card>
+                <Helmet>
+                    <title>Nueva contraseña | {app_name}</title>
+                </Helmet>
                 <form onSubmit={this.onSubmit}>
                     <div className="header">
                         <div className="row">

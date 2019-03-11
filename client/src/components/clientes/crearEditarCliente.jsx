@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import axios from "axios";
 import { toast } from "react-toastify";
 import { withRouter } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import { app_name } from "../../config/strings";
 
 // components
 import Card from "../card/card";
@@ -87,6 +89,9 @@ class crearCliente extends Component {
 
     return (
       <Card>
+        <Helmet>
+          <title>{isEditing ? "Editar" : "Crear"} cliente | {app_name}</title>
+        </Helmet>
         <form onSubmit={this.onSubmit}>
           <div className="header">
             <div className="row">

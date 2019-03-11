@@ -4,6 +4,8 @@ import { withRouter } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { connect } from "react-redux";
+import { Helmet } from "react-helmet";
+import { app_name } from "../../config/strings"
 
 // utls
 import "./styles.css"
@@ -21,7 +23,7 @@ class login extends Component {
          password: ""
       }
    }
-
+   
    onChange = (e) => {
       const { name, value } = e.target;
       this.setState({
@@ -58,14 +60,19 @@ class login extends Component {
       const { usuario, password } = this.state;
 
       return(
-         <div className="card-alternative">
-            <div className="wrap">
-               <div className="card-content">
-                  <form className="login-form" onSubmit={this.onSubmit}>
-                     <input onChange={this.onChange} value={usuario} type="text" placeholder="Nombre de usuario" name="usuario" />
-                     <input onChange={this.onChange} value={password} type="password" placeholder="Contraseña" name="password" />
-                     <button>login</button>
-                  </form>
+         <div>
+            <Helmet>
+               <title>Login | {app_name}</title>
+            </Helmet>
+            <div className="card-alternative">
+               <div className="wrap">
+                  <div className="card-content">
+                     <form className="login-form" onSubmit={this.onSubmit}>
+                        <input onChange={this.onChange} value={usuario} type="text" placeholder="Nombre de usuario" name="usuario" />
+                        <input onChange={this.onChange} value={password} type="password" placeholder="Contraseña" name="password" />
+                        <button>login</button>
+                     </form>
+                  </div>
                </div>
             </div>
          </div>

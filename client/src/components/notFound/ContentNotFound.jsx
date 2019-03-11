@@ -1,5 +1,7 @@
 // modules
 import React, { Component } from 'react'
+import { Helmet } from "react-helmet";
+import { app_name } from "../../config/strings";
 
 // Components
 import Card from "../card/card";
@@ -24,6 +26,9 @@ export default class not_found extends Component {
 
     return (
       <Card>
+        <Helmet>
+          <title>{statusCode === 404 ? "404" : "401"} | {app_name}</title>
+        </Helmet>
         <h4>{ statusCode === 404 ? notFound.title : unautorized.title }</h4>
         <p style={{ marginTop: "20px", fontWeight: "300" }}>{statusCode === 404 ? notFound.details : unautorized.details }</p>
       </Card>

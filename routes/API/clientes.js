@@ -36,7 +36,7 @@ app.post("/api/clientes/listar", (req, res) => {
     Clientes.find(criterio).skip(Number(salto)).limit(Number(itemsToShow))
         .then(_clientes => {
             clientes = _clientes;
-            return Clientes.find(criterio)
+            return Clientes.find(criterio).select("_id");
         })
         .then(data => res.status(200).json({ clientes, totalItems: data.length }))
         .catch(err => es.sendStatus(500));

@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import alertify from 'alertifyjs';
 import { toast } from "react-toastify";
+import { Helmet } from "react-helmet";
+import { app_name } from "../../config/strings";
 
 // components
 import Card from "../card/card";
@@ -65,6 +67,9 @@ export default class listar extends Component {
         
         return (
             <Card>
+                <Helmet>
+                    <title>Usuarios | {app_name}</title>
+                </Helmet>
                 <div className="header" style={{marginBottom: "0px"}}>
                     <div className="row">
                         <div className="col-sm-8">

@@ -5,6 +5,8 @@ import axios from "axios";
 import alertify from 'alertifyjs';
 import { toast } from "react-toastify";
 import { connect } from "react-redux";
+import { Helmet } from "react-helmet";
+import { app_name } from "../../config/strings";
 
 // components
 import Card from "../card/card";
@@ -118,6 +120,9 @@ class verClientes extends Component {
 
         return (
             <Card>
+                <Helmet>
+                    <title>Clientes | {app_name}</title>
+                </Helmet>
                 <div className="header">
                     <div className="row">
                         <div className="col-sm-8">
