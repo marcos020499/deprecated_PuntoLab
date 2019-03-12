@@ -1,6 +1,7 @@
 // assets
 import logo from "./logo.png"
 import "./styles.css"
+import menuItems from "./items.json";
 
 // modules
 import React, { Component } from 'react'
@@ -14,60 +15,7 @@ class menu extends Component {
       super(props)
     
         this.state = {
-            selected: "",
-            menu: [
-                {
-                    title: "Menú principal",
-                    items: [
-                        {
-                            name: "Clientes",
-                            icon: "people",
-                            url: "/clientes",
-                            permisos: [0, 1]
-                        },
-                        {
-                            name: "* Ver reportes",
-                            icon: "label_important",
-                            url: "/reportes/ver",
-                            permisos: [0, 1, 2]
-                        },
-                        {
-                            name: "* Crear reporte",
-                            icon: "label_important",
-                            url: "/reportes/crear",
-                            permisos: [0, 1]
-                        },
-                    ]
-                },
-                {
-                    title: "Configuración",
-                    items: [
-                        {
-                            name: "Usuarios",
-                            icon: "people_outline",
-                            url: "/usuarios",
-                            permisos: [0]
-                        },
-                        {
-                            name: "Servicios",
-                            icon: "attach_money",
-                            url: "/servicios",
-                            permisos: [0]
-                        },
-                    ]
-                },
-                {
-                    title: "Cuenta",
-                    items: [
-                        {
-                            name: "Cambiar contraseña",
-                            icon: "security",
-                            url: "/password",
-                            permisos: [0, 1, 2]
-                        },
-                    ]
-                }
-            ]
+            menu: menuItems.menu
         }
     }
 

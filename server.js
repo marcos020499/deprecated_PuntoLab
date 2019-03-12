@@ -23,7 +23,6 @@ process.env.DEPLOY_TYPE == "DEV" ? app.use(cors()) : null
 app.use(require("./routes/API/auth"));
 app.use(require("./routes/API/clientes"));
 app.use(require("./routes/API/usuarios"));
-app.use(require("./routes/API/servicios"));
 
 // servir la app con express
 app.use(express.static(path.join(__dirname, 'client/build')));

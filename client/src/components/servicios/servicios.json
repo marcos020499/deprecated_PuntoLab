@@ -1,0 +1,32 @@
+{
+    "servicios": [
+        {
+            "id": "0",
+            "descripcion": "cero"
+        },
+        {
+            "id": "1",
+            "descripcion": "uno"
+        },
+        {
+            "id": "2",
+            "descripcion": "dos"
+        },
+        {
+            "id": "3",
+            "descripcion": "tres"
+        },
+        {
+            "id": "4",
+            "descripcion": "cuatro"
+        },
+        {
+            "id": "5",
+            "descripcion": "cinco"
+        },
+        {
+            "id": "6",
+            "descripcion": "seis"
+        }
+    ]
+}

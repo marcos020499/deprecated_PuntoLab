@@ -1,0 +1,50 @@
+{
+    "menu": [
+        {
+            "title": "Menú principal",
+            "items": [
+                {
+                    "name": "Clientes",
+                    "icon": "people",
+                    "url": "/clientes",
+                    "permisos": [0, 1]
+                },
+                {
+                    "name": "Servicios",
+                    "icon": "settings",
+                    "url": "/servicios",
+                    "permisos": [0, 1, 2]
+                },
+                {
+                    "name": "* Servicios prov",
+                    "icon": "label_important",
+                    "url": "/reportes/ver",
+                    "permisos": [0, 1, 2]
+                },
+                {
+                    "name": "* Nuevo servicio prov",
+                    "icon": "label_important",
+                    "url": "/reportes/crear",
+                    "permisos": [0, 1]
+                }
+            ]
+        },
+        {
+            "title": "Cuenta",
+            "items": [
+                {
+                    "name": "Usuarios",
+                    "icon": "people_outline",
+                    "url": "/usuarios",
+                    "permisos": [0]
+                },
+                {
+                    "name": "Cambiar contraseña",
+                    "icon": "security",
+                    "url": "/password",
+                    "permisos": [0, 1, 2]
+                }
+            ]
+        }
+    ]
+}
