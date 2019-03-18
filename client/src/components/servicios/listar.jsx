@@ -21,7 +21,9 @@ export default class servicios extends Component {
                         </div>
                     </div>
                 </div>
-                <table className="table">
+                {
+                    /*
+                        <table className="table">
                     <thead className="thead-light">
                         <tr>
                             <th scope="col">Vencimiento</th>
@@ -43,6 +45,9 @@ export default class servicios extends Component {
                         </tr>
                     </tbody>
                 </table>
+                    */
+                }
+                
             </Card>
         )
     }

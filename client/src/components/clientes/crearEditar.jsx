@@ -111,7 +111,7 @@ class crearCliente extends Component {
             <div className="row">
               <div className="col-sm-8">
                 <div className="form-group mb-4">
-                  <input onChange={this.onChange} value={nombre || ""} type="text" className="form-control form-control frm_field" placeholder="Nombre completo" name="nombre"
+                  <input onChange={this.onChange} value={nombre || ""} type="text" className="form-control form-control frm_field" placeholder="Nombre(s), Apellidos" name="nombre"
                     required />
                   <small className="form-text text-muted">* Escribe el nombre del cliente</small>
                 </div>

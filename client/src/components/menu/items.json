@@ -14,18 +14,6 @@
                     "icon": "settings",
                     "url": "/servicios",
                     "permisos": [0, 1, 2]
-                },
-                {
-                    "name": "* Servicios prov",
-                    "icon": "label_important",
-                    "url": "/reportes/ver",
-                    "permisos": [0, 1, 2]
-                },
-                {
-                    "name": "* Nuevo servicio prov",
-                    "icon": "label_important",
-                    "url": "/reportes/crear",
-                    "permisos": [0, 1]
                 }
             ]
         },

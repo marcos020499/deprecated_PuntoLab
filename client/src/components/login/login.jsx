@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { connect } from "react-redux";
 import { Helmet } from "react-helmet";
 import { app_name } from "../../config/strings"
+import menuItems from "../menu/items.json";
 
 // utls
 import "./styles.css"
@@ -41,9 +42,30 @@ class login extends Component {
             if (response.status === 200) {
                const { token, user } = response.data
 
+               // guardar en local storage el token y en redux el usuario
                localStorage.setItem('jwtToken', token);
                this.props.setCurrentUser(user);
-               this.props.history.push("/");
+
+               // se arma un nuevo arreglo con las URL permitidas para este usuario
+               const redirect = menuItems.menu.reduce((_acumulador, section) => {
+                  const results = section.items.reduce((acumulador, item) => {
+                     if (item.permisos.filter(i => i === user.permisos).length > 0) {
+                        return [...acumulador, item.url]
+                     }
+                     return [...acumulador];
+                  }, [])
+
+                  return [..._acumulador, ...results]
+               }, [])
+
+               // si tiene al menos una url
+               if (redirect.length > 0) {
+                  // se redirecciona a la primera url
+                  return this.props.history.push(redirect[0]);
+               }
+               
+               // si no se manda a raiz
+               return this.props.history.push("/");
             }
          })
          .catch(err => {

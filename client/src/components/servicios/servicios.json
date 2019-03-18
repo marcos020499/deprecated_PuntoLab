@@ -2,31 +2,23 @@
     "servicios": [
         {
             "id": "0",
-            "descripcion": "cero"
+            "descripcion": "Instalación de internet"
         },
         {
             "id": "1",
-            "descripcion": "uno"
+            "descripcion": "Instalación de cámaras de seguridad"
         },
         {
             "id": "2",
-            "descripcion": "dos"
+            "descripcion": "Diseño de páginas web"
         },
         {
             "id": "3",
-            "descripcion": "tres"
+            "descripcion": "Soporte y mantenimiento a equipos de cómputo"
         },
         {
             "id": "4",
-            "descripcion": "cuatro"
-        },
-        {
-            "id": "5",
-            "descripcion": "cinco"
-        },
-        {
-            "id": "6",
-            "descripcion": "seis"
+            "descripcion": "Venta de software"
         }
     ]
 }

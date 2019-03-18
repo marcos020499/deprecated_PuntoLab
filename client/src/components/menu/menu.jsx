@@ -19,23 +19,16 @@ class menu extends Component {
         }
     }
 
-    onClick = (item) => {
-
-        this.setState({
-            selected: item
-        })
-    }
-
     render() {
 
-        const { selected, menu } = this.state
+        const { menu } = this.state
         const { session } = this.props;
 
         return (
             <div className="main-menu">
                 <ul>
                     <div className="profile">
-                        <img src={logo + ".sdsd"} alt="logo" />
+                        <img src={logo} alt="logo" />
                         <p>BIENVENIDO</p>
                         <h6>{ session.user ? session.user.nombre : "" }</h6>
                     </div>
@@ -50,8 +43,8 @@ class menu extends Component {
                                     }
 
                                     return (
-                                        <li key={index + i.toString()} onClick={() => this.onClick(item.name)} >
-                                            <Link to={item.url} className={selected === item.name ? "selected" : ""}>
+                                        <li key={index + i.toString()} >
+                                            <Link to={item.url}>
                                                 <i className="material-icons"> {item.icon} </i>
                                                 <span className="menu-title">{item.name}</span>
                                             </Link>
