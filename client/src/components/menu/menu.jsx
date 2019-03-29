@@ -28,7 +28,7 @@ class menu extends Component {
             <div className="main-menu">
                 <ul>
                     <div className="profile">
-                        <img src={logo + "s"} alt="logo" />
+                        <img src={logo} alt="logo" />
                         <p>BIENVENIDO</p>
                         <h6>{ session.user ? session.user.nombre : "" }</h6>
                     </div>
