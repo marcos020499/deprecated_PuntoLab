@@ -2,16 +2,24 @@
 import React, { Component } from 'react'
 import axios from "axios";
 import { toast } from "react-toastify";
+import { connect } from "react-redux";
+import { Helmet } from "react-helmet";
+import { app_name } from "../../config/strings";
+import { withRouter } from "react-router-dom";
 
 // components
 import Card from "../card/card";
 import serviciosList from "./servicios";
 import Suggestions from "./suggestions/clientes";
+import NotFound from "../notFound/ContentNotFound";
 
 // servicios
 import InstalacionInternet from "./instalacionInternet/internetForm";
 import InstalacionCamaras from "./instalacionCamaras/camarasForm";
 import Soporte from "./soporte/soporte";
+
+// redux
+import { setServiceDetails } from "../../redux/actions/servicioDetalleActions";
 
 // moment
 import momentbussines from "moment-business-days";
@@ -24,26 +32,20 @@ momentbussines.updateLocale("es", {
     workingWeekdays: [1, 2, 3, 4, 5]
 });
 
-export default class servicios extends Component {
+class servicios extends Component {
     
     constructor(props) {
         super(props)
 
         this.state = {
+            _id: undefined,
             tecnicos: [],
             cliente: undefined,
-            servicio: 0,
-            serviceData: undefined,
-            tecnico: ""
+            servicio: "0",
+            tecnico: "",
+            isEditing: false,
+            notFound: false
         }
-    }
-
-    // actualiza el estado de acuerdo a los datos que vienen
-    // del formulario de detalle de servicio
-    updateServiceData = (serviceData) => {
-        console.log(serviceData);
-        
-        this.setState({ serviceData });
     }
 
     // actualiza el cliente en el estado de acuerdo a los
@@ -60,8 +62,34 @@ export default class servicios extends Component {
        });
     }
 
-    // lista los tecnicos dados de alta en el sistema
-    componentDidMount(){
+    // enviar los datos al servidor
+    onSubmit = (e) => {
+        e.preventDefault();
+
+        const { _id, cliente, servicio, tecnico, isEditing } = this.state;
+        const { serviceData } = this.props;
+        
+        if (!cliente) {
+            return toast.warn("No tienes un cliente seleccionado")
+        }
+
+        const fechaTentativa = moment(momentbussines().businessAdd(6)._d).format()
+        const fechaSolicitud = moment().format();
+        const ip = isEditing === false ? "api/servicios/" + servicio + "/nuevo" : "api/servicios/" + servicio + "/editar"
+
+        axios.post(process.env.REACT_APP_SERVER_IP + ip, { _id, cliente: cliente._id, data: serviceData.data, tecnico, tipo: servicio, fechaTentativa, fechaSolicitud })
+            .then(res => {
+                if (res.status === 201) {
+                    this.props.history.push("/servicios");
+                    toast.success(`Se ${isEditing === true ? "guardó" : "creó"} el elemento`);
+                }
+            })
+            .catch(err => toast.error("No se pudo realizar la acción - " + err))
+    }
+
+    componentDidMount() {
+
+        // carga la información necesaria para llenar los select list
         axios.get(process.env.REACT_APP_SERVER_IP + "api/usuarios/listar")
             .then(res => {
                 if (!res.data) {
@@ -72,43 +100,64 @@ export default class servicios extends Component {
                 this.setState({ tecnicos, tecnico: tecnicos[0]._id });
             })
             .catch(err => toast.warn("No se pueden listar los técnicos - " + err))
-    }
 
-    // enviar los datos al servidor
-    onSubmit = (e) => {
-        e.preventDefault();
-
-        const { cliente, servicio, serviceData, tecnico } = this.state;
-        if (!cliente || !serviceData) {
-            return toast.warn("Completa la información necesaria")
+        // si no hay ID significa que no se está editando, entonces se detiene hasta aqui. 
+        const id = this.props.match.params.id;   
+        if (!id) {
+            return;
         }
 
-        const fechaTentativa = moment(momentbussines().businessAdd(6)._d).format('L')
-
-        axios.post(process.env.REACT_APP_SERVER_IP + "api/servicios/" + servicio + "/nuevo", { cliente: cliente._id, data: serviceData, tecnico, tipo: servicio, fechaTentativa })
+        // como si hay ID el estado cambia a editando
+        this.setState({ isEditing: true })
+        axios.get(process.env.REACT_APP_SERVER_IP + "api/servicios/detallar/" + id)
             .then(res => {
-                if (res.status === 201) {
-                    toast.success("Se creó el elemento")
-                }
+                
+                // se actualiza el estado con la info del servicio
+                const { _id, cliente, tipo, tecnico } = res.data.service
+                this.setState({
+                    _id,
+                    cliente,
+                    servicio: tipo,
+                    tecnico
+                });
+                
+                // se manda a redux el detalle del servicio y se cambia tambien a editando
+                this.props.setServiceDetails({
+                    isEditing: true,
+                    data: res.data.details
+                })
             })
-            .catch(err => toast.err("No se pudo realizar la acción - " + err))
+            .catch(err => {
+                if (err.response.status === 404) {
+                    return this.setState({ notFound: true })
+                }
+
+                return toast.warn("No se puede mostrar la información - " + err)
+            })
     }
 
     render() {
 
-        const { cliente, servicio, tecnicos, tecnico } = this.state;
+        const { cliente, servicio, tecnicos, tecnico, notFound, isEditing } = this.state;
+
+        if (notFound) {
+            return <NotFound />
+        }
 
         return (
             <Card>
+                <Helmet>
+                    <title>{isEditing === true ? "Editar" : "Crear"} servicio | {app_name}</title>
+                </Helmet>
                 <form onSubmit={this.onSubmit}>
                     <div className="header">
                         <div className="row">
                             <div className="col-sm-8">
-                                <h2><span>Nuevo </span>servicio</h2>
+                                <h2><span>{isEditing === true ? "Editar" : "Nuevo"} </span>servicio</h2>
                             </div>
                             <div className="col-sm-4">
                                 <button id="btn_send" className="btn btn-success">
-                                    <i className="material-icons"> backup </i> <span>Guardar</span>
+                                    <i className="material-icons"> backup </i> <span>{isEditing === true ? "Guardar" : "Crear"}</span>
                                 </button>
                             </div>
                         </div>
@@ -117,13 +166,16 @@ export default class servicios extends Component {
                         <div className="row">
                             <div className="col-sm-7">
                                 <div className="form-group mb-4">
-                                    <Suggestions updateCliente={this.updateCliente} updateClientesStatus={this.updateClientesStatus} />
+                                    {
+                                        isEditing ? <input disabled type="text" className="form-control form-control frm_field" value={cliente ? cliente.nombre : ""} />
+                                        : <Suggestions updateCliente={this.updateCliente} updateClientesStatus={this.updateClientesStatus} />
+                                    }
                                     <small className="form-text text-muted">Busqueda por nombre</small>
                                 </div>
                             </div>
                             <div className="col-sm-5">
                                 <div className="form-group mb-4">
-                                    <select onChange={this.onChange} name="servicio" className="form-control form-control frm_field" required>
+                                    <select onChange={this.onChange} value={servicio} name="servicio" className="form-control form-control frm_field" required disabled={isEditing}>
                                         {
                                             serviciosList.map(servicio => {
                                                 return(
@@ -155,10 +207,10 @@ export default class servicios extends Component {
                             </div>
                             <div className='col-sm-7'>
                                 {
-                                    serviciosList[servicio].id === "0" ? <InstalacionInternet updateServiceData={this.updateServiceData} /> :
-                                    serviciosList[servicio].id === "1" ? <InstalacionCamaras updateServiceData={this.updateServiceData} /> :
-                                    serviciosList[servicio].id === "2" ? <Soporte updateServiceData={this.updateServiceData}/> :
-                                    serviciosList[servicio].id === "3" ? <Soporte updateServiceData={this.updateServiceData}/> :
+                                    serviciosList[servicio].id === "0" ? <InstalacionInternet /> :
+                                    serviciosList[servicio].id === "1" ? <InstalacionCamaras /> :
+                                    serviciosList[servicio].id === "2" ? <Soporte /> :
+                                    serviciosList[servicio].id === "3" ? <Soporte /> :
                                     null
                                 }
                             </div>
@@ -181,3 +233,18 @@ export default class servicios extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    const { serviceDetails } = state;
+    return {
+        serviceData: serviceDetails
+    };
+}
+ 
+const mapDispatchToProps = {
+    setServiceDetails
+}
+
+export default withRouter(
+    connect(mapStateToProps, mapDispatchToProps)(servicios)
+)

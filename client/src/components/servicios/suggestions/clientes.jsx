@@ -2,8 +2,11 @@
 import React, { Component } from 'react'
 import "./styles.css"
 import Autosuggest from 'react-autosuggest';
-import axios from "axios";
 import { toast } from "react-toastify";
+
+import axios from "axios";
+const CancelToken = axios.CancelToken;
+let cancel;
 
 // When suggestion is clicked, Autosuggest needs to populate the input
 // based on the clicked suggestion. Teach Autosuggest how to calculate the
@@ -40,15 +43,24 @@ export default class SuggestClientes extends Component {
         const inputValue = value.trim().toLowerCase();
         const inputLength = inputValue.length;
 
-        return inputLength === 0 ? [] : clientes.filter(cliente =>
-            cliente.nombre.toLowerCase().slice(0, inputLength) === inputValue
-        );
+        return inputLength === 0 ? [] : clientes.filter(cliente => cliente.nombre.toLowerCase().includes(inputValue.toLowerCase()));
     };
+
+    componentWillUnmount(){
+        cancel("cantFill");
+    }
 
     componentDidMount(){
 
-        axios.post(process.env.REACT_APP_SERVER_IP + "api/clientes/listar", { itemsToShow: undefined, filtro: undefined, salto: 0 })
-            .then(res => {
+        axios({
+            method: "post",
+            url: process.env.REACT_APP_SERVER_IP + "api/clientes/listar",
+            data: { itemsToShow: undefined, filtro: undefined, salto: 0 },
+            cancelToken: new CancelToken(function executor(c) {
+                // An executor function receives a cancel function as a parameter
+                cancel = c;
+            })
+        }).then(res => {
                 if (!res.data) {
                     return;
                 }
@@ -60,7 +72,11 @@ export default class SuggestClientes extends Component {
                 });
 
             })
-            .catch(err => toast.warn("No se pueden listar los clientes - " + err))
+            .catch(err => {
+                if (err.message && err.message !== "cantFill") {
+                    toast.warn("No se pueden listar los clientes - " + err)
+                }
+            })
     }
 
     onChange = (event, { newValue }) => {

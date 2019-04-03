@@ -1,7 +1,8 @@
 import { type as sessionTypes } from "../actions/sessionActions";
 
 const initialState = {
-    isAuth: false
+    isAuth: false,
+    user: null
 }
 
 export default (state = initialState, { type, payload }) => {
@@ -15,10 +16,7 @@ export default (state = initialState, { type, payload }) => {
     
     case sessionTypes.remove:
         localStorage.removeItem('jwtToken');
-        return {
-            isAuth: false,
-            user: undefined
-        }
+        return initialState
 
     default:
         return state

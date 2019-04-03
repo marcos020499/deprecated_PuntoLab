@@ -28,12 +28,12 @@ if (localStorage.jwtToken) {
     // se manda el contenido del token a redux
     // y se crea una sesion temporal
     const decoded = jwt_decode(localStorage.jwtToken);
-    Store.dispatch(setCurrentUser(decoded));
+    Store.dispatch(setCurrentUser(decoded.user));
 
     // se manda el token a validar al servidor
     axios.post(process.env.REACT_APP_SERVER_IP + "api/token/validate", { token: localStorage.jwtToken })
       .then(response => {
-        if (!response.data && !response.data._id) {
+        if (!response.data || !response.data.user) {
           return; 
         }
 

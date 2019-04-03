@@ -1,7 +1,14 @@
 // modules
 import React, { Component } from 'react'
+import { connect } from "react-redux";
 
-export default class camarasForm extends Component {
+// utl
+import formasPago from "../formasDePago";
+
+// redux
+import { setServiceDetails } from "../../../redux/actions/servicioDetalleActions";
+
+class camarasForm extends Component {
 
     constructor(props) {
         super(props)
@@ -13,19 +20,41 @@ export default class camarasForm extends Component {
         }
     }
 
-    componentDidMount = () => {
-        const { updateServiceData } = this.props;
-        updateServiceData(this.state);
+    // cuando se monta el componente se manda el estado inicial a redux
+    componentDidMount() {
+        this.props.setServiceDetails({
+            data: this.state
+        });
     }
 
+    // si llegan propiedades signfica que se esta editando
+    // entonces se iguala el estado actual
     onChange = (e) => {
-        const { updateServiceData } = this.props;
         const { name, value } = e.target;
         this.setState({
             [name]: value
         }, () => {
-            updateServiceData(this.state)
+            this.props.setServiceDetails({
+                data: this.state
+            });
         });
+    }
+
+    // cada vez que un elemento cambia su valor se manda el estado actualizado a redux
+    componentWillReceiveProps(props) {
+        if (props.serviceData && props.serviceData.isEditing === true && props.serviceData.data) {
+            const { camaras, costo, tipoPago } = props.serviceData.data;
+            this.setState({
+                costo,
+                camaras,
+                tipoPago
+            })
+        }
+    }
+
+    // cuando el componente se destruye se borra la info existente de redux
+    componentWillUnmount() {
+        this.props.setServiceDetails(null);
     }
 
     render() {
@@ -48,9 +77,12 @@ export default class camarasForm extends Component {
                 </div>
                 <div className="col-sm-5">
                     <div className="form-group mb-4">
-                        <select className="form-control form-control frm_field" value={tipoPago} name="tipoPago" required onChange={this.onChange}>
-                            <option value="Efectivo">Efectivo</option>
-                            <option value="Transferencia">Transferencia</option>
+                        <select className="form-control form-control frm_field" value={tipoPago} onChange={this.onChange} name="tipoPago" required >
+                            {
+                                formasPago.map(tipo => {
+                                    return <option key={tipo.id} value={tipo.id}>{tipo.nombre}</option>
+                                })
+                            }
                         </select>
                         <small className="form-text text-muted">Forma de pago</small>
                     </div>
@@ -59,3 +91,16 @@ export default class camarasForm extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    const { serviceDetails } = state;
+    return {
+        serviceData: serviceDetails
+    };
+}
+ 
+const mapDispatchToProps = {
+    setServiceDetails
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(camarasForm);

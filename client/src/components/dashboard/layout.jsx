@@ -30,11 +30,15 @@ export default class layout extends Component {
           <ProtectedRoute permisos={[0, 1]} exact path="/clientes" component={VerClientes} />
           <ProtectedRoute permisos={[0, 1]} exact path="/clientes/crear" component={CrearEditarCliente} />
           <ProtectedRoute permisos={[0, 1]} exact path="/clientes/editar/:id" component={CrearEditarCliente} />
+
           <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios" component={VerServicios} />
           <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/crear" component={CrearServicios} />
+          <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/editar/:id" component={CrearServicios} />
+
           <ProtectedRoute permisos={[0]} exact path="/usuarios" component={VerUsuarios} />
           <ProtectedRoute permisos={[0]} exact path="/usuarios/crear" component={CrearEditarUsuarios} />
           <ProtectedRoute permisos={[0]} exact path="/usuarios/editar/:id" component={CrearEditarUsuarios} />
+          
           <ProtectedRoute permisos={[0, 1, 2]} exact path="/password" component={NewPassword} />
           <Route component={NotFound} />
         </Switch>

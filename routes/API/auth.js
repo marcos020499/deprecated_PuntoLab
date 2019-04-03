@@ -20,12 +20,11 @@ app.post("/api/auth", (req, res) => {
                 return Promise.reject(404);
             }
 
-            // hidde password in token ;)
-            user.password = undefined; 
+            // hidding password to place it in token ;)
+            user.password = undefined;
 
             // create token
-            const { _id, nombre, usuario, permisos } = user;
-            const token = jwt.sign({ _id, nombre, usuario, permisos }, JWTKey);
+            const token = jwt.sign({ user }, JWTKey);
 
             return res.status(200).json({ token, user });
         })
@@ -49,13 +48,14 @@ app.post("/api/token/validate", (req, res) => {
         }
 
         // if valid send data again
-        Usuarios.findById(decoded._id)
+        Usuarios.findById(decoded.user._id)
             .then(user => {
                 if (!user) {
                     return res.sendStatus(404);
                 }
 
                 user.password = undefined;
+                
                 return res.status(200).json(user);
             })
             .catch(err => res.sendStatus(400))

@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 
-export default class soporte extends Component {
+import { connect } from "react-redux";
+
+// redux
+import { setServiceDetails } from "../../../redux/actions/servicioDetalleActions";
+
+class soporte extends Component {
 
     constructor(props) {
         super(props)
@@ -10,21 +15,40 @@ export default class soporte extends Component {
         }
     }
 
+    // cuando se monta el componente se manda el estado inicial a redux
+    componentDidMount(){
+        this.props.setServiceDetails({
+            data: this.state
+        });
+    }
+
+    // si llegan propiedades signfica que se esta editando
+    // entonces se iguala el estado actual
+    componentWillReceiveProps(props) {
+        if (props.serviceData && props.serviceData.isEditing === true && props.serviceData.data) {
+            const { problema } = props.serviceData.data;
+            this.setState({
+                problema
+            })
+        }
+    }
+
+    // cada vez que un elemento cambia su valor se manda el estado actualizado a redux
     onChange = (e) => {
-        const { updateServiceData } = this.props;
         const { name, value } = e.target;
         this.setState({
             [name]: value
         }, () => {
-            updateServiceData(this.state)
+            this.props.setServiceDetails({
+                data: this.state
+            });
         });
     }
 
-    componentDidMount = () => {
-        const { updateServiceData } = this.props;
-        updateServiceData(this.state);
+    // cuando el componente se destruye se borra la info existente de redux
+    componentWillUnmount() {
+        this.props.setServiceDetails(null);
     }
-    
 
     render() {
 
@@ -42,3 +66,16 @@ export default class soporte extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    const { serviceDetails } = state;
+    return {
+        serviceData: serviceDetails
+    };
+}
+
+const mapDispatchToProps = {
+    setServiceDetails
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(soporte);

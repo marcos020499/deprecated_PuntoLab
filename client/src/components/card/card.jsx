@@ -8,7 +8,7 @@ export default class card extends Component {
   render() {
     return (
         <div id="main">
-            <div className="container">
+            <div className="container pb-4">
                 <div className="card">
                     <div className="card-wrapper">
                         {this.props.children}

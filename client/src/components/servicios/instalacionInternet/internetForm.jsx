@@ -1,11 +1,15 @@
 // modules
 import React, { Component } from 'react'
+import { connect } from "react-redux";
 
 // utl
 import tiposPaquetes from "./paquetes";
 import formasPago from "../formasDePago";
 
-export default class internetForm extends Component {
+// redux
+import { setServiceDetails } from "../../../redux/actions/servicioDetalleActions";
+
+class internetForm extends Component {
 
     constructor(props) {
         super(props)
@@ -18,19 +22,42 @@ export default class internetForm extends Component {
         }
     }
 
-    componentDidMount = () => {
-        const { updateServiceData } = this.props;
-        updateServiceData(this.state);
+    // cuando se monta el componente se manda el estado inicial a redux
+    componentDidMount(){
+        this.props.setServiceDetails({
+            data: this.state
+        });
     }
 
+    // si llegan propiedades signfica que se esta editando
+    // entonces se iguala el estado actual
+    componentWillReceiveProps(props){
+        if (props.serviceData && props.serviceData.isEditing === true && props.serviceData.data) {
+            const { costo, netflix, paquete, tipoPago } = props.serviceData.data;
+            this.setState({
+                costo,
+                netflix,
+                paquete,
+                tipoPago
+            })
+        }
+    }
+
+    // cada vez que un elemento cambia su valor se manda el estado actualizado a redux
     onChange = (e) => {
-        const { updateServiceData } = this.props;
         const { name, value } = e.target;
         this.setState({
             [name]: value
         }, () => {
-            updateServiceData(this.state)
+            this.props.setServiceDetails({
+                data: this.state
+            });
         });
+    }
+
+    // cuando el componente se destruye se borra la info existente de redux
+    componentWillUnmount() {
+        this.props.setServiceDetails(null);
     }
     
     render() {
@@ -82,3 +109,17 @@ export default class internetForm extends Component {
         )
     }
 }
+
+
+const mapStateToProps = (state) => {
+    const { serviceDetails } = state;
+    return {
+        serviceData: serviceDetails
+    };
+}
+
+const mapDispatchToProps = {
+    setServiceDetails
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(internetForm);
