@@ -144,8 +144,10 @@ class servicios extends Component {
                             <th scope="col">Vencimiento</th>
                             <th scope="col">Servicio</th>
                             <th scope="col">Ciudad</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Visita</th>
                             <th scope="col">Editar</th>
-                            <th scope="col">Eliminar</th>
+                            <th scope="col">Borrar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -156,7 +158,9 @@ class servicios extends Component {
                                         <td>{moment(servicio.fechaTentativa, "YYYYMMDD").format("MMMM DD [de] [']YY")}</td>
                                         <td>{serviciosList.filter(service => service.id === servicio.tipo)[0].descripcion}</td>
                                         <td>{servicio.cliente.comunidad ? servicio.cliente.comunidad + ", " : ""}{servicio.cliente.ciudad}</td>
-                                        <td><Link to={"/servicios/editar/" + servicio._id}><i className="material-icons"> edit </i></Link></td>
+                                        <td>{servicio.sc === false ? <i className="material-icons"> access_time </i> : <i className="material-icons"> done </i>}</td>
+                                        <td>{servicio.sc === false ? <Link to={"/servicios/" + servicio.tipo + "/visita/" + servicio._id}><i className="material-icons"> home </i></Link> : null }</td>
+                                        <td>{servicio.sc === false ? <Link to={"/servicios/editar/" + servicio._id}><i className="material-icons"> edit </i></Link> : null }</td>
                                         <td onClick={() => this.delete(servicio._id, servicio.tipo)}><i className="material-icons"> delete </i> </td>
                                     </tr>
                                 )

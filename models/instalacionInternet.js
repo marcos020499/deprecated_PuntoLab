@@ -6,7 +6,10 @@ const instInternetSchema = new Schema({
     paquete: { type: String, required: [true, "El paquete es requerido"] },
     costo: { type: String, required: [true, "El costo es requerido"] },
     netflix: { type: Boolean, default: false },
-    tipoPago: { type: String, required: [true, "El tipo de pago es requerido"] }
+    tipoPago: { type: String, required: [true, "El tipo de pago es requerido"] },
+    material: { type: String },
+    mastil: { type: String },
+    sector: { type: String }
 });
 
 module.exports = mongoose.model("instalacionInternet", instInternetSchema);

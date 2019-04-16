@@ -24,6 +24,10 @@ app.use(require("./routes/API/auth"));
 app.use(require("./routes/API/clientes"));
 app.use(require("./routes/API/usuarios"));
 app.use(require("./routes/API/servicios"));
+app.use(require("./routes/API/servicios/servicio0"));
+app.use(require("./routes/API/servicios/servicio1"));
+app.use(require("./routes/API/servicios/servicio2"));
+app.use(require("./routes/API/servicios/servicio3"));
 
 // servir la app con express
 app.use(express.static(path.join(__dirname, 'client/build')));

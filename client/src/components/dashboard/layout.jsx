@@ -12,6 +12,9 @@ import VerClientes from "../clientes/listar"
 import CrearEditarCliente from "../clientes/crearEditar"
 import VerServicios from "../servicios/listar";
 import CrearServicios from "../servicios/crearEditar";
+import ServicioCamarasVisita from "../servicios/instalacionCamaras/visitaTecnico";
+import ServicioInternetVisita from "../servicios/instalacionInternet/visitaTecnico";
+
 import VerUsuarios from "../usuarios/listar";
 import CrearEditarUsuarios from "../usuarios/crearEditar";
 import NewPassword from "../nuevo_password/password"
@@ -32,8 +35,10 @@ export default class layout extends Component {
           <ProtectedRoute permisos={[0, 1]} exact path="/clientes/editar/:id" component={CrearEditarCliente} />
 
           <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios" component={VerServicios} />
-          <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/crear" component={CrearServicios} />
-          <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/editar/:id" component={CrearServicios} />
+          <ProtectedRoute permisos={[0, 1]} exact path="/servicios/crear" component={CrearServicios} />
+          <ProtectedRoute permisos={[0, 1]} exact path="/servicios/editar/:id" component={CrearServicios} />
+          <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/0/visita/:id" component={ServicioInternetVisita} />
+          <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/1/visita/:id" component={ServicioCamarasVisita} />
 
           <ProtectedRoute permisos={[0]} exact path="/usuarios" component={VerUsuarios} />
           <ProtectedRoute permisos={[0]} exact path="/usuarios/crear" component={CrearEditarUsuarios} />

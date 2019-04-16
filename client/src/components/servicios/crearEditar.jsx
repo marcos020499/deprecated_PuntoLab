@@ -15,6 +15,7 @@ import NotFound from "../notFound/ContentNotFound";
 
 // servicios
 import InstalacionInternet from "./instalacionInternet/internetForm";
+import VisitaInstalacionInternet from "./instalacionInternet/visitaTecnico";
 import InstalacionCamaras from "./instalacionCamaras/camarasForm";
 import Soporte from "./soporte/soporte";
 
@@ -226,6 +227,10 @@ class servicios extends Component {
                                     <small className="form-text text-muted">Técnico</small>
                                 </div>
                             </div>
+                            {
+                                serviciosList[servicio].id === "0" ? <VisitaInstalacionInternet /> :
+                                null
+                            }
                         </div>
                     </div>
                 </form>
