@@ -15,7 +15,6 @@ import NotFound from "../notFound/ContentNotFound";
 
 // servicios
 import InstalacionInternet from "./instalacionInternet/internetForm";
-import VisitaInstalacionInternet from "./instalacionInternet/visitaTecnico";
 import InstalacionCamaras from "./instalacionCamaras/camarasForm";
 import Soporte from "./soporte/soporte";
 
@@ -81,8 +80,14 @@ class servicios extends Component {
         axios.post(process.env.REACT_APP_SERVER_IP + ip, { _id, cliente: cliente._id, data: serviceData.data, tecnico, tipo: servicio, fechaTentativa, fechaSolicitud })
             .then(res => {
                 if (res.status === 201) {
-                    this.props.history.push("/servicios");
+
                     toast.success(`Se ${isEditing === true ? "guardó" : "creó"} el elemento`);
+
+                    if (isEditing) {
+                        this.props.history.push("/servicios/" + res.data.tipo + "/ver/" + res.data._id);
+                    } else {
+                        this.props.history.push("/servicios");
+                    }
                 }
             })
             .catch(err => toast.error("No se pudo realizar la acción - " + err))
@@ -119,7 +124,7 @@ class servicios extends Component {
                     _id,
                     cliente,
                     servicio: tipo,
-                    tecnico
+                    tecnico: tecnico._id
                 });
                 
                 // se manda a redux el detalle del servicio y se cambia tambien a editando
@@ -165,16 +170,17 @@ class servicios extends Component {
                     </div>
                     <div className='form-content'>
                         <div className="row">
-                            <div className="col-sm-7">
-                                <div className="form-group mb-4">
-                                    {
-                                        isEditing ? <input disabled type="text" className="form-control form-control frm_field" value={cliente ? cliente.nombre : ""} />
-                                        : <Suggestions updateCliente={this.updateCliente} updateClientesStatus={this.updateClientesStatus} />
-                                    }
-                                    <small className="form-text text-muted">Busqueda por nombre</small>
-                                </div>
-                            </div>
-                            <div className="col-sm-5">
+                            {
+                                isEditing === false ?
+                                    <div className="col-sm-7">
+                                        <div className="form-group mb-4">
+                                            <Suggestions updateCliente={this.updateCliente} updateClientesStatus={this.updateClientesStatus} />
+                                            <small className="form-text text-muted">Busqueda por nombre</small>
+                                        </div>
+                                    </div>
+                                : null
+                            }
+                            <div className="col-sm-5" hidden={isEditing}>
                                 <div className="form-group mb-4">
                                     <select onChange={this.onChange} value={servicio} name="servicio" className="form-control form-control frm_field" required disabled={isEditing}>
                                         {
@@ -188,24 +194,36 @@ class servicios extends Component {
                                     <small className="form-text text-muted">Tipo de servicio</small>
                                 </div>
                             </div>
-                            <div className="col-sm-3">
-                                <div className="form-group mb-4">
-                                    <input disabled type="text" className="form-control form-control frm_field" value={cliente ? (cliente.telefono ? cliente.telefono : "") : ""} />
-                                    <small className="form-text text-muted">Número teléfonico</small>
+                            {
+                                isEditing === false ?
+                                    <div className="col-sm-3">
+                                        <div className="form-group mb-4">
+                                            <input disabled type="text" className="form-control form-control frm_field" value={cliente ? (cliente.telefono ? cliente.telefono : "") : ""} />
+                                            <small className="form-text text-muted">Número teléfonico</small>
+                                        </div>
+                                    </div>
+                                : null
+                            }
+                            {
+                                isEditing === false ?
+                                    <div className="col-sm-4">
+                                        <div className="form-group mb-4">
+                                            <input disabled type="text" className="form-control form-control frm_field" value={cliente ? (cliente.direccion ? cliente.direccion : "") : ""} />
+                                            <small className="form-text text-muted">Dirección</small>
+                                        </div>
+                                    </div>
+                                : null
+                            }
+                            {
+                                isEditing === false ?
+                                <div className="col-sm-5">
+                                    <div className="form-group mb-4">
+                                        <input disabled type="text" className="form-control form-control frm_field" value={cliente ? (cliente.comunidad ? cliente.comunidad + ", " + cliente.ciudad : cliente.ciudad) : ""} />
+                                        <small className="form-text text-muted">Localidad / Ciudad</small>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-sm-4">
-                                <div className="form-group mb-4">
-                                    <input disabled type="text" className="form-control form-control frm_field" value={cliente ? (cliente.direccion ? cliente.direccion : "") : ""}/>
-                                    <small className="form-text text-muted">Dirección</small>
-                                </div>
-                            </div>
-                            <div className="col-sm-5">
-                                <div className="form-group mb-4">
-                                    <input disabled type="text" className="form-control form-control frm_field" value={cliente ? (cliente.comunidad ? cliente.comunidad + ", " + cliente.ciudad : cliente.ciudad) : "" } />
-                                    <small className="form-text text-muted">Localidad / Ciudad</small>
-                                </div>
-                            </div>
+                                : null
+                            }
                             <div className='col-sm-7'>
                                 {
                                     serviciosList[servicio].id === "0" ? <InstalacionInternet /> :
@@ -227,10 +245,6 @@ class servicios extends Component {
                                     <small className="form-text text-muted">Técnico</small>
                                 </div>
                             </div>
-                            {
-                                serviciosList[servicio].id === "0" ? <VisitaInstalacionInternet /> :
-                                null
-                            }
                         </div>
                     </div>
                 </form>

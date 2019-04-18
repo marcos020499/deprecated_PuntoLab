@@ -17,9 +17,9 @@ app.post("/api/servicios/listar", (req, res) => {
 
     let totalItems;
 
-    Servicios.find({}).select("_id")
+    Servicios.countDocuments()
         .then(_totalItems => {
-            totalItems = _totalItems.length;
+            totalItems = _totalItems;
             return Servicios.find({}).sort({ fechaSolicitud: 'desc' }).skip(Number(salto)).limit(Number(itemsToShow)).populate("cliente");
         })
         .then(servicios => res.status(200).json({ servicios, totalItems }))
@@ -32,10 +32,10 @@ app.get("/api/servicios/detallar/:id", (req, res) => {
     const { id } = req.params;
     let _service;
 
-    Servicios.findById(id).populate("cliente")
+    Servicios.findById(id).populate("cliente tecnico")
         .then(service => {
             if (!service) {
-              return res.sendStatus(404);
+              return Promise.reject(404);
             }
 
             _service = service;
@@ -57,7 +57,7 @@ app.get("/api/servicios/detallar/:id", (req, res) => {
             return res.status(200).json({ service: _service, details });
         })
         .catch(err => {
-            if (err.name && err.name == "CastError") {
+            if (err == 404 || err.name && err.name == "CastError") {
                 return res.sendStatus(404)
             }
             return res.sendStatus(500)

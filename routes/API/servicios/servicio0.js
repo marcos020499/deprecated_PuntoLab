@@ -40,6 +40,7 @@ app.post("/api/servicios/0/nuevo", (req, res) => {
 app.post("/api/servicios/0/editar", (req, res) => {
 
     const { _id, tecnico, data } = req.body;
+    let _service
 
     Servicios.findById(_id)
         .then(service => {
@@ -51,6 +52,7 @@ app.post("/api/servicios/0/editar", (req, res) => {
             return service.save();
         })
         .then(done => {
+            _service = done;
             return InstInternet.findOne({ servicio: _id })
         })
         .then(detalle => {
@@ -61,7 +63,7 @@ app.post("/api/servicios/0/editar", (req, res) => {
             detalle.tipoPago = tipoPago;
             return detalle.save();
         })
-        .then(edited => res.sendStatus(201))
+        .then(edited => res.status(201).json(_service))
         .catch(err => {
             if (err == 404) {
                 return res.sendStatus(err)
@@ -70,9 +72,11 @@ app.post("/api/servicios/0/editar", (req, res) => {
         })
 })
 
+// finalizar servicio
 app.post("/api/servicios/0/visita", (req, res) => {
 
     const { id, material, mastil, sector } = req.body;
+    let _service;
      
     Servicios.findById(id)
         .then(service => {
@@ -83,7 +87,10 @@ app.post("/api/servicios/0/visita", (req, res) => {
             service.sc = true;
             return service.save();
         })
-        .then(saved => InstInternet.findOne({ servicio: id }))
+        .then(saved => {
+            _service = saved;
+            return InstInternet.findOne({ servicio: id })
+        })
         .then(service => {
             service.material = material;
             service.mastil = mastil;
@@ -91,7 +98,7 @@ app.post("/api/servicios/0/visita", (req, res) => {
 
             return service.save();
         })
-        .then(saved => res.sendStatus(200))
+        .then(saved => res.status(200).json(_service))
         .catch(err => {
             if (err === 404 || err.name && err.name === "CastError") {
                 res.sendStatus(404);

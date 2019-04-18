@@ -3,8 +3,6 @@ import React, { Component } from 'react'
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import alertify from "alertifyjs";
-import { connect } from "react-redux";
 import { Helmet } from "react-helmet";
 import { app_name } from "../../config/strings";
 
@@ -19,7 +17,7 @@ import moment from "moment";
 import "moment/locale/es";
 moment.locale("es");
 
-class servicios extends Component {
+export default class servicios extends Component {
 
     constructor(props) {
         super(props)
@@ -40,6 +38,9 @@ class servicios extends Component {
                 if (!res.data) {
                     return;
                 }
+
+                console.log(res.data);
+                
 
                 const { servicios, totalItems } = res.data;
                 this.setState({ servicios, totalItems });
@@ -72,29 +73,6 @@ class servicios extends Component {
     
     componentDidMount(){
         this.requestData();
-    }
-
-    // cuando se pide eliminar un cliente
-    delete = (id, type) => {
-
-        const { permisos } = this.props.session.user;
-
-        alertify.prompt('Confirma la eliminación', `Ingresa ${permisos === 0 ? "tu contraseña" : "una contraseña de administrador"} para eliminar el servicio`, '', (evt, value) => {
-
-            axios.post(process.env.REACT_APP_SERVER_IP + "api/servicios/eliminar", { password: value, id, type })
-                .then(response => {
-                    toast.info(`Se eliminó el servicio${permisos === 0 ? "." : " con autorización de " + response.data.admin}`);
-                    this.requestData()
-                })
-                .catch(err => {
-                    if (err.response.status === 401) {
-                        return toast.warn(`La contraseña${permisos === 0 ? "" : " de administrador"} es incorrecta.`)
-                    }
-
-                    return toast.error("No se pudo eliminar el servicio - " + err)
-                })
-
-        }, () => { }).set('type', 'password');
     }
 
     render() {
@@ -143,11 +121,9 @@ class servicios extends Component {
                         <tr>
                             <th scope="col">Vencimiento</th>
                             <th scope="col">Servicio</th>
+                            <th scope="col">Cliente</th>
                             <th scope="col">Ciudad</th>
                             <th scope="col">Estado</th>
-                            <th scope="col">Visita</th>
-                            <th scope="col">Editar</th>
-                            <th scope="col">Borrar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -157,11 +133,9 @@ class servicios extends Component {
                                     <tr key={servicio._id}>
                                         <td>{moment(servicio.fechaTentativa, "YYYYMMDD").format("MMMM DD [de] [']YY")}</td>
                                         <td>{serviciosList.filter(service => service.id === servicio.tipo)[0].descripcion}</td>
+                                        <td>{servicio.cliente.nombre}</td>
                                         <td>{servicio.cliente.comunidad ? servicio.cliente.comunidad + ", " : ""}{servicio.cliente.ciudad}</td>
-                                        <td>{servicio.sc === false ? <i className="material-icons"> access_time </i> : <i className="material-icons"> done </i>}</td>
-                                        <td>{servicio.sc === false ? <Link to={"/servicios/" + servicio.tipo + "/visita/" + servicio._id}><i className="material-icons"> home </i></Link> : null }</td>
-                                        <td>{servicio.sc === false ? <Link to={"/servicios/editar/" + servicio._id}><i className="material-icons"> edit </i></Link> : null }</td>
-                                        <td onClick={() => this.delete(servicio._id, servicio.tipo)}><i className="material-icons"> delete </i> </td>
+                                        <td><Link to={"/servicios/" + servicio.tipo + "/ver/" + servicio._id}>{servicio.sc === false ? <i className="material-icons"> access_time </i> : <i className="material-icons"> done </i>}</Link></td>
                                     </tr>
                                 )
                             })
@@ -188,13 +162,3 @@ class servicios extends Component {
         )
     }
 }
-
-const mapStateToProps = (state) => {
-    const { session } = state;
-
-    return {
-        session
-    }
-}
-
-export default connect(mapStateToProps)(servicios);

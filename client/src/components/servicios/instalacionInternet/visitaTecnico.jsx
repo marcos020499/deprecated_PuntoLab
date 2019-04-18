@@ -38,7 +38,7 @@ class visitaTecnico extends Component {
         axios.post(process.env.REACT_APP_SERVER_IP + "api/servicios/0/visita", { id, material, mastil, sector })
             .then(res => {
                 if (res.status && res.status === 200) {
-                    this.props.history.push("/servicios");
+                    this.props.history.replace("/servicios/" + res.data.tipo + "/ver/" + res.data._id);
                     return toast.success("Se guardó la información")
                 }
             })
@@ -61,7 +61,7 @@ class visitaTecnico extends Component {
                     <div className="header">
                         <div className="row">
                             <div className="col-sm-8">
-                                <h2><span>Finalizar </span>servicio 2</h2>
+                                <h2><span>Finalizar </span>servicio</h2>
                             </div>
                             <div className="col-sm-4">
                                 <button type="submit" className="btn btn-success">
@@ -74,21 +74,21 @@ class visitaTecnico extends Component {
                         <div className="row">
                             <div className="col-sm-12">
                                 <div className="form-group mb-4">
-                                    <textarea onChange={this.onChange} value={material} type="text" className="form-control form-control frm_field" placeholder="Materiales" name="material"
+                                    <textarea rows="4" onChange={this.onChange} value={material} type="text" className="form-control form-control frm_field" placeholder="Materiales" name="material"
                                         required />
-                                    <small className="form-text text-muted">* Material utilizado</small>
+                                    <small className="form-text text-muted">Material utilizado</small>
                                 </div>
                             </div>
-                            <div className="col-sm-12">
+                            <div className="col-sm-6">
                                 <div className="form-group mb-4">
                                     <input onChange={this.onChange} value={mastil} type="text" required className="form-control form-control frm_field" placeholder="Mástil" name="mastil" />
-                                    <small className="form-text text-muted">* Mástil</small>
+                                    <small className="form-text text-muted">Mástil</small>
                                 </div>
                             </div>
-                            <div className="col-sm-12">
+                            <div className="col-sm-6">
                                 <div className="form-group mb-2">
                                     <input onChange={this.onChange} value={sector} type="text" required className="form-control form-control frm_field" placeholder="Sector" name="sector" />
-                                    <small className="form-text text-muted">* Sector</small>
+                                    <small className="form-text text-muted">Sector</small>
                                 </div>
                             </div>
                         </div>
