@@ -67,7 +67,7 @@ class internetForm extends Component {
         return (
             <div className='row'>
                 <div className="col-sm-3">
-                    <div className="form-group mb-4">
+                    <div className="form-group mb-2">
                         <select className="form-control form-control frm_field" value={paquete} onChange={this.onChange} name="paquete" required >
                             {
                                 tiposPaquetes.map(paquete => {
@@ -79,13 +79,13 @@ class internetForm extends Component {
                     </div>
                 </div>
                 <div className="col-sm-3">
-                    <div className="form-group mb-4">
+                    <div className="form-group mb-2">
                         <input type="number" className="form-control form-control frm_field" value={costo} onChange={this.onChange} min="1" name="costo" required />
                         <small className="form-text text-muted">Costo de inst.</small>
                     </div>
                 </div>
                 <div className="col-sm-2">
-                    <div className="form-group mb-4">
+                    <div className="form-group mb-2">
                         <select className="form-control form-control frm_field" value={netflix} onChange={this.onChange} name="netflix" required>
                             <option value="false">No</option>
                             <option value="true">Sí</option>
@@ -94,7 +94,7 @@ class internetForm extends Component {
                     </div>
                 </div>
                 <div className="col-sm-4">
-                    <div className="form-group mb-4">
+                    <div className="form-group mb-2">
                         <select className="form-control form-control frm_field" value={tipoPago} onChange={this.onChange} name="tipoPago" required >
                             {
                                 formasPago.map(tipo => {

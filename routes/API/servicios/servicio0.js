@@ -29,11 +29,7 @@ app.post("/api/servicios/0/nuevo", (req, res) => {
             return instInternet.save()
         })
         .then(saved => res.sendStatus(201))
-        .catch(err => {
-            console.log(err);
-
-            res.sendStatus(400);
-        })
+        .catch(err => res.sendStatus(400))
 })
 
 // Editar servicio 0

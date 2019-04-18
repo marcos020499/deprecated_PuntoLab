@@ -234,7 +234,7 @@ class servicios extends Component {
                                 }
                             </div>
                             <div className="col-sm-5">
-                                <div className="form-group mb-4">
+                                <div className="form-group mb-2">
                                     <select className="form-control form-control frm_field" value={tecnico} onChange={this.onChange} name="tecnico" required >
                                         {
                                             tecnicos.map(tecnico => {

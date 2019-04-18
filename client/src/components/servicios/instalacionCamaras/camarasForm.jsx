@@ -64,19 +64,19 @@ class camarasForm extends Component {
         return (
             <div className='row'>
                 <div className="col-sm-3">
-                    <div className="form-group mb-4">
+                    <div className="form-group mb-2">
                         <input type="number" className="form-control form-control frm_field" min="1" value={camaras} name="camaras" required onChange={this.onChange}/>
                         <small className="form-text text-muted">Cámaras</small>
                     </div>
                 </div>
                 <div className="col-sm-4">
-                    <div className="form-group mb-4">
+                    <div className="form-group mb-2">
                         <input type="number" className="form-control form-control frm_field" value={costo} name="costo" min="1" required onChange={this.onChange}/>
                         <small className="form-text text-muted">Costo de instalación</small>
                     </div>
                 </div>
                 <div className="col-sm-5">
-                    <div className="form-group mb-4">
+                    <div className="form-group mb-2">
                         <select className="form-control form-control frm_field" value={tipoPago} onChange={this.onChange} name="tipoPago" required >
                             {
                                 formasPago.map(tipo => {

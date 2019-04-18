@@ -38,10 +38,6 @@ export default class servicios extends Component {
                 if (!res.data) {
                     return;
                 }
-
-                console.log(res.data);
-                
-
                 const { servicios, totalItems } = res.data;
                 this.setState({ servicios, totalItems });
             })

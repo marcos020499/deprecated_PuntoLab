@@ -15,6 +15,7 @@ import CrearEditarCliente from "../clientes/crearEditar"
 import VerServicios from "../servicios/listar";
 import CrearEditarServicios from "../servicios/crearEditar";
 import DetalleServicioInternet from "../servicios/instalacionInternet/detalle";
+import DetalleServicioCamaras from "../servicios/instalacionCamaras/detalle";
 
 import ServicioCamarasVisita from "../servicios/instalacionCamaras/visitaTecnico";
 import ServicioInternetVisita from "../servicios/instalacionInternet/visitaTecnico";
@@ -34,23 +35,33 @@ export default class layout extends Component {
                 <Navbar />
                 <Menu />
                 <Switch>
+                    {/* Clientes */}
                     <ProtectedRoute permisos={[0, 1]} exact path="/clientes" component={VerClientes} />
                     <ProtectedRoute permisos={[0, 1]} exact path="/clientes/crear" component={CrearEditarCliente} />
                     <ProtectedRoute permisos={[0, 1]} exact path="/clientes/editar/:id" component={CrearEditarCliente} />
 
+                    {/* Servicios */}
                     <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios" component={VerServicios} />
                     <ProtectedRoute permisos={[0, 1]} exact path="/servicios/crear" component={CrearEditarServicios} />
                     <ProtectedRoute permisos={[0, 1]} exact path="/servicios/editar/:id" component={CrearEditarServicios} />
+                    
+                    {/* Ver detalle de los servicios */}
+                    <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/0/ver/:id" component={DetalleServicioInternet} />
+                    <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/1/ver/:id" component={DetalleServicioCamaras} />
+
+                    {/* Finalizar servicios */}
                     <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/0/visita/:id" component={ServicioInternetVisita} />
                     <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/1/visita/:id" component={ServicioCamarasVisita} />
                     
-                    <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/0/ver/:id" component={DetalleServicioInternet} />
-
+                    {/* Usuarios */}
                     <ProtectedRoute permisos={[0]} exact path="/usuarios" component={VerUsuarios} />
                     <ProtectedRoute permisos={[0]} exact path="/usuarios/crear" component={CrearEditarUsuarios} />
                     <ProtectedRoute permisos={[0]} exact path="/usuarios/editar/:id" component={CrearEditarUsuarios} />
                     
+                    {/* Configuracion */}
                     <ProtectedRoute permisos={[0, 1, 2]} exact path="/password" component={NewPassword} />
+                    
+                    {/* Utl */}
                     <Route component={NotFound} />
                 </Switch>
             </div>

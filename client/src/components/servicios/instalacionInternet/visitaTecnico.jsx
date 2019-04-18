@@ -80,7 +80,7 @@ class visitaTecnico extends Component {
                                 </div>
                             </div>
                             <div className="col-sm-6">
-                                <div className="form-group mb-4">
+                                <div className="form-group mb-2">
                                     <input onChange={this.onChange} value={mastil} type="text" required className="form-control form-control frm_field" placeholder="Mástil" name="mastil" />
                                     <small className="form-text text-muted">Mástil</small>
                                 </div>
