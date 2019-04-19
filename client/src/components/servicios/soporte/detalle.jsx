@@ -9,7 +9,6 @@ import { connect } from "react-redux";
 // components
 import Card from "../../card/card";
 import serviciosList from "../servicios";
-import tiposPagoList from "../formasDePago";
 
 // utl
 import NotFound from "../../notFound/ContentNotFound";
@@ -21,27 +20,23 @@ class detalle extends Component {
 
     constructor(props) {
         super(props)
-        
+
         this.state = {
-            notFound: false,
             _id: "",
             sc: true,
             cliente: {},
-            tipo: "",
             tecnico: "",
-            camaras: "",
-            costo: "",
-            mastil: "",
-            material: "",
-            sector: "",
-            tipoPago: "",
+            tipo: "",
+            problema: "",
+            problemaReal: "",
+            notFound: false,
             fechaSolicitud: undefined,
             fechaTentativa: undefined,
             fechaConclusion: undefined
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
 
         const id = this.props.match.params.id;
         if (!id) {
@@ -55,24 +50,17 @@ class detalle extends Component {
                     return;
                 }
 
-                console.log(res.data);
-                
-                
                 // se actualiza el estado con la info del servicio
-                const { costo, mastil, material, camaras, sector, tipoPago } = res.data.details
+                const { problema, problemaReal } = res.data.details
                 const { _id, cliente, tipo, tecnico, sc, fechaSolicitud, fechaTentativa, fechaConclusion } = res.data.service
                 this.setState({
                     _id,
                     sc,
                     cliente,
-                    tipo,
                     tecnico: tecnico.nombre,
-                    costo,
-                    mastil,
-                    material,
-                    camaras,
-                    sector,
-                    tipoPago,
+                    tipo,
+                    problema,
+                    problemaReal,
                     fechaSolicitud,
                     fechaTentativa,
                     fechaConclusion
@@ -114,9 +102,8 @@ class detalle extends Component {
 
     render() {
 
-        const { _id, sc, cliente, tecnico, tipo, costo, mastil, material, camaras, sector, tipoPago, notFound, fechaSolicitud, fechaTentativa, fechaConclusion } = this.state;
+        const { _id, sc, cliente, tecnico, tipo, problema, problemaReal, notFound, fechaSolicitud, fechaTentativa, fechaConclusion } = this.state;
         const tipoName = serviciosList.filter(item => item.id === tipo)[0]
-        const tipoPagoName = tiposPagoList.filter(item => item.id === tipoPago)[0]
 
         if (notFound) {
             return <NotFound />
@@ -135,17 +122,17 @@ class detalle extends Component {
                             </button>
                             {
                                 sc === false ?
-                                <Link to={"/servicios/editar/" + _id} className="btn btn-info">
-                                    <i className="material-icons"> edit </i> <span>Editar</span>
-                                </Link>
-                                : null
+                                    <Link to={"/servicios/editar/" + _id} className="btn btn-info">
+                                        <i className="material-icons"> edit </i> <span>Editar</span>
+                                    </Link>
+                                    : null
                             }
                             {
                                 sc === false ?
-                                <Link to={"/servicios/" + tipo + "/visita/" + _id} className="btn btn-success">
-                                    <i className="material-icons"> done_all </i> <span>Finalizar servicio</span>
-                                </Link>
-                                : null
+                                    <Link to={"/servicios/" + tipo + "/visita/" + _id} className="btn btn-success">
+                                        <i className="material-icons"> done_all </i> <span>Finalizar servicio</span>
+                                    </Link>
+                                    : null
                             }
                         </div>
                     </div>
@@ -153,16 +140,16 @@ class detalle extends Component {
                 {
                     sc === true ?
                         <span className="badge badge-success">Finalizado el {moment.utc(fechaConclusion, "YYYYMMDD").local().format("DD [de] MMMM [de] YYYY") || ""}</span>
-                    : <span className="badge badge-warning">Pendiente</span>
+                        : <span className="badge badge-warning">Pendiente</span>
                 }
                 <span className="badge badge-primary">Solicitado el {moment.utc(fechaSolicitud, "YYYYMMDD").local().format("DD [de] MMMM [de] YYYY") || ""}</span>
                 <span className="badge badge-primary">Se vence el {moment(fechaTentativa, "YYYYMMDD").local().format("DD [de] MMMM [de] YYYY") || ""}</span>
 
-                <div className='form-content' style={{marginTop: "20px"}}>
+                <div className='form-content' style={{ marginTop: "20px" }}>
                     <div className='row'>
                         <div className="col-sm-7">
                             <div className="form-group mb-4">
-                                <input type="text" value={cliente.nombre || ""} readOnly={true} className="form-control form-control frm_field"/>
+                                <input type="text" value={cliente.nombre || ""} readOnly={true} className="form-control form-control frm_field" />
                                 <small className="form-text text-muted">Nombre</small>
                             </div>
                         </div>
@@ -186,31 +173,14 @@ class detalle extends Component {
                         </div>
                         <div className="col-sm-5">
                             <div className="form-group mb-4">
-                                <input type="text" readOnly={true} className="form-control form-control frm_field" value={(cliente.comunidad ? cliente.comunidad + ", " + cliente.ciudad : cliente.ciudad ) || ""} />
+                                <input type="text" readOnly={true} className="form-control form-control frm_field" value={(cliente.comunidad ? cliente.comunidad + ", " + cliente.ciudad : cliente.ciudad) || ""} />
                                 <small className="form-text text-muted">Localidad / Ciudad</small>
                             </div>
                         </div>
                         <div className="col-sm-7">
-                            <div className='row'>
-                                <div className="col-sm-3">
-                                    <div className="form-group mb-4">
-                                        <input type="text" value={camaras} readOnly={true} className="form-control form-control frm_field" />
-                                        <small className="form-text text-muted">Cámaras</small>
-                                    </div>
-                                </div>
-                                <div className="col-sm-4">
-                                    <div className="form-group mb-4">
-                                        <input type="text" value={costo} readOnly={true} className="form-control form-control frm_field" />
-                                        <small className="form-text text-muted">Costo de instalación</small>
-                                    </div>
-                                </div>
-                                
-                                <div className="col-sm-5">
-                                    <div className="form-group mb-4">
-                                        <input type="text" value={tipoPagoName ? tipoPagoName.nombre : ""} readOnly={true} className="form-control form-control frm_field" />
-                                        <small className="form-text text-muted">Forma de pago</small>
-                                    </div>
-                                </div>
+                            <div className="form-group mb-4">
+                                <input type="text" value={problema} readOnly={true} className="form-control form-control frm_field" />
+                                <small className="form-text text-muted">Problema reportado</small>
                             </div>
                         </div>
                         <div className="col-sm-5">
@@ -219,30 +189,12 @@ class detalle extends Component {
                                 <small className="form-text text-muted">Técnico</small>
                             </div>
                         </div>
-                        <div className="col-sm-7">
+                        <div className="col-sm-12">
                             <div className="form-group mb-2">
-                                <textarea value={material || ""} readOnly={true} style={{height: "123px"}} type="text" className="form-control form-control frm_field" name="material"
-                                    required />
-                                <small className="form-text text-muted">Material utilizado</small>
+                                <input value={problemaReal} readOnly={true} type="text" required className="form-control form-control frm_field" />
+                                <small className="form-text text-muted">Problema real</small>
                             </div>
                         </div>
-                        <div className="col-sm-5">
-                            <div className='row'>
-                                <div className="col-sm-12">
-                                    <div className="form-group mb-4">
-                                        <input value={mastil || ""} readOnly={true} type="text" required className="form-control form-control frm_field" name="mastil" />
-                                        <small className="form-text text-muted">Mástil</small>
-                                    </div>
-                                </div>
-                                <div className="col-sm-12">
-                                    <div className="form-group mb-2">
-                                        <input value={sector || ""} readOnly={true} type="text" required className="form-control form-control frm_field" name="sector" />
-                                        <small className="form-text text-muted">Sector</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
                     </div>
                 </div>
             </Card>

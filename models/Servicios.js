@@ -7,7 +7,8 @@ const serviciosSchema = new Schema({
     tipo: { type: String, required: [true, "El tipo de servicio es requerido"] },
     fechaTentativa: { type: Date, required: [true, "La fecha tentativa es requerida"]},
     fechaSolicitud: { type: Date, required: [true, "La fecha de atención es requerida"]},
-    sc: { type: Boolean, default: false }
+    sc: { type: Boolean, default: false },
+    fechaConclusion: { type: Date }
 });
 
 module.exports = mongoose.model("servicios", serviciosSchema);

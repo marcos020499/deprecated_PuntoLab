@@ -69,7 +69,7 @@ app.post("/api/servicios/1/editar", (req, res) => {
 // finalizar servicio
 app.post("/api/servicios/1/visita", (req, res) => {
 
-    const { id, material, mastil, sector } = req.body;
+    const { id, material, mastil, sector, fecha } = req.body;
     let _service;
 
     Servicios.findById(id)
@@ -78,6 +78,7 @@ app.post("/api/servicios/1/visita", (req, res) => {
                 return Promise.reject(404);
             }
 
+            service.fechaConclusion = fecha;
             service.sc = true;
             return service.save();
         })

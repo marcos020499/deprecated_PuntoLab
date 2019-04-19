@@ -127,7 +127,7 @@ export default class servicios extends Component {
                             servicios.map(servicio => {
                                 return(
                                     <tr key={servicio._id}>
-                                        <td>{moment(servicio.fechaTentativa, "YYYYMMDD").format("MMMM DD [de] [']YY")}</td>
+                                        <td>{moment(servicio.fechaTentativa, "YYYYMMDD").local().format("MMMM DD [de] [']YY")}</td>
                                         <td>{serviciosList.filter(service => service.id === servicio.tipo)[0].descripcion}</td>
                                         <td>{servicio.cliente.nombre}</td>
                                         <td>{servicio.cliente.comunidad ? servicio.cliente.comunidad + ", " : ""}{servicio.cliente.ciudad}</td>

@@ -17,8 +17,6 @@ import NotFound from "../../notFound/ContentNotFound";
 
 // moment
 import moment from "moment";
-import "moment/locale/es";
-moment.locale("es");
 
 class detalle extends Component {
 
@@ -40,7 +38,8 @@ class detalle extends Component {
             sector: "",
             tipoPago: "",
             fechaSolicitud: undefined,
-            fechaTentativa: undefined
+            fechaTentativa: undefined,
+            fechaConclusion: undefined
         }
     }
 
@@ -60,7 +59,7 @@ class detalle extends Component {
                 
                 // se actualiza el estado con la info del servicio
                 const { costo, mastil, material, netflix, paquete, sector, tipoPago } = res.data.details
-                const { _id, cliente, tipo, tecnico, sc, fechaSolicitud, fechaTentativa } = res.data.service
+                const { _id, cliente, tipo, tecnico, sc, fechaSolicitud, fechaTentativa, fechaConclusion } = res.data.service
                 this.setState({
                     _id,
                     sc,
@@ -75,7 +74,8 @@ class detalle extends Component {
                     sector,
                     tipoPago,
                     fechaSolicitud,
-                    fechaTentativa
+                    fechaTentativa,
+                    fechaConclusion
                 });
             })
             .catch(err => {
@@ -114,7 +114,7 @@ class detalle extends Component {
 
     render() {
 
-        const { _id, sc, cliente, tecnico, tipo, costo, mastil, material, netflix, paquete, sector, tipoPago, notFound, fechaSolicitud, fechaTentativa } = this.state;
+        const { _id, sc, cliente, tecnico, tipo, costo, mastil, material, netflix, paquete, sector, tipoPago, notFound, fechaSolicitud, fechaTentativa, fechaConclusion } = this.state;
         const tipoName = serviciosList.filter(item => item.id === tipo)[0]
         const paqueteName = paquetesList.filter(item => item.id === paquete)[0]
         const tipoPagoName = tiposPagoList.filter(item => item.id === tipoPago)[0]
@@ -153,11 +153,11 @@ class detalle extends Component {
                 </div>
                 {
                     sc === true ?
-                    <span className="badge badge-success">Finalizado el UNDEFINED</span>
+                        <span className="badge badge-success">Finalizado el {moment.utc(fechaConclusion, "YYYYMMDD").local().format("DD [de] MMMM [de] YYYY") || ""}</span>
                     : <span className="badge badge-warning">Pendiente</span>
                 }
-                <span className="badge badge-primary">Solicitado el {moment(fechaSolicitud, "YYYYMMDD").format("DD [de] MMMM [de] YYYY") || ""}</span>
-                <span className="badge badge-primary">Se vence el {moment(fechaTentativa, "YYYYMMDD").format("DD [de] MMMM [de] YYYY") || ""}</span>
+                <span className="badge badge-primary">Solicitado el {moment.utc(fechaSolicitud, "YYYYMMDD").local().format("DD [de] MMMM [de] YYYY") || ""}</span>
+                <span className="badge badge-primary">Se vence el {moment(fechaTentativa, "YYYYMMDD").local().format("DD [de] MMMM [de] YYYY") || ""}</span>
 
                 <div className='form-content' style={{marginTop: "20px"}}>
                     <div className='row'>

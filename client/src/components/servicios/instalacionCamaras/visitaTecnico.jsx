@@ -6,6 +6,11 @@ import { withRouter } from "react-router-dom";
 // components
 import Card from "../../card/card";
 
+// moment
+import moment from "moment";
+import "moment/locale/es";
+moment.locale("es");
+
 class visitaTecnico extends Component {
 
     constructor(props) {
@@ -33,9 +38,10 @@ class visitaTecnico extends Component {
             return;
         }
 
+        const fecha = moment().format();
         const { material, mastil, sector } = this.state;
 
-        axios.post(process.env.REACT_APP_SERVER_IP + "api/servicios/1/visita", { id, material, mastil, sector })
+        axios.post(process.env.REACT_APP_SERVER_IP + "api/servicios/1/visita", { id, material, mastil, sector, fecha })
             .then(res => {
                 if (res.status && res.status === 200) {
                     this.props.history.replace("/servicios/" + res.data.tipo + "/ver/" + res.data._id);

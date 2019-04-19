@@ -32,6 +32,7 @@ app.post("/api/servicios/3/nuevo", (req, res) => {
 app.post("/api/servicios/3/editar", (req, res) => {
 
     const { _id, tecnico, data } = req.body;
+    let _service;
 
     Servicios.findById(_id)
         .then(service => {
@@ -43,6 +44,7 @@ app.post("/api/servicios/3/editar", (req, res) => {
             return service.save();
         })
         .then(done => {
+            _service = done;
             return SoporteInternet.findOne({ servicio: _id })
         })
         .then(detalle => {
@@ -50,12 +52,47 @@ app.post("/api/servicios/3/editar", (req, res) => {
             detalle.problema = problema;
             return detalle.save();
         })
-        .then(edited => res.sendStatus(201))
+        .then(edited => res.status(201).json(_service))
         .catch(err => {
             if (err == 404) {
                 return res.sendStatus(err)
             }
             return res.sendStatus(500);
+        })
+})
+
+// finalizar servicio
+app.post("/api/servicios/3/visita", (req, res) => {
+
+    const { id, problemaReal, fecha } = req.body;
+    let _service;
+
+    Servicios.findById(id)
+        .then(service => {
+            if (!service) {
+                return Promise.reject(404);
+            }
+
+            service.fechaConclusion = fecha;
+            service.sc = true;
+            return service.save();
+        })
+        .then(saved => {
+            _service = saved;
+            return SoporteInternet.findOne({ servicio: id })
+        })
+        .then(service => {
+            service.problemaReal = problemaReal;
+
+            return service.save();
+        })
+        .then(saved => res.status(200).json(_service))
+        .catch(err => {
+            if (err === 404 || err.name && err.name === "CastError") {
+                res.sendStatus(404);
+            }
+
+            res.sendStatus(500);
         })
 })
 

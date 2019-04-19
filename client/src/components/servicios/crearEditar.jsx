@@ -75,6 +75,7 @@ class servicios extends Component {
 
         const fechaTentativa = moment(momentbussines().businessAdd(6)._d).format()
         const fechaSolicitud = moment().format();
+        
         const ip = isEditing === false ? "api/servicios/" + servicio + "/nuevo" : "api/servicios/" + servicio + "/editar"
 
         axios.post(process.env.REACT_APP_SERVER_IP + ip, { _id, cliente: cliente._id, data: serviceData.data, tecnico, tipo: servicio, fechaTentativa, fechaSolicitud })

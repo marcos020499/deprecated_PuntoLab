@@ -15,19 +15,17 @@ class visitaTecnico extends Component {
 
     constructor(props) {
         super(props)
-        
+
         this.state = {
-            material: "",
-            mastil: "",
-            sector: ""
+            problemaReal: ""
         }
     }
 
     onChange = (e) => {
-       const { name, value } = e.target;
-       this.setState({
-           [name]: value
-       });
+        const { name, value } = e.target;
+        this.setState({
+            [name]: value
+        });
     }
 
     onSubmit = (e) => {
@@ -38,10 +36,17 @@ class visitaTecnico extends Component {
             return;
         }
 
-        const fecha = moment().format();
-        const { material, mastil, sector } = this.state;
+        let tipo;
+        if (this.props.match.path === "/servicios/2/visita/:id") {
+            tipo = 2;
+        } else if (this.props.match.path === "/servicios/3/visita/:id"){
+            tipo = 3;
+        }
 
-        axios.post(process.env.REACT_APP_SERVER_IP + "api/servicios/0/visita", { id, material, mastil, sector, fecha })
+        const fecha = moment().format();
+        const { problemaReal } = this.state;
+
+        axios.post(process.env.REACT_APP_SERVER_IP + "api/servicios/" + tipo + "/visita", { id, problemaReal, fecha })
             .then(res => {
                 if (res.status && res.status === 200) {
                     this.props.history.replace("/servicios/" + res.data.tipo + "/ver/" + res.data._id);
@@ -59,7 +64,7 @@ class visitaTecnico extends Component {
 
     render() {
 
-        const { material, mastil, sector } = this.state;
+        const { problemaReal } = this.state;
 
         return (
             <Card>
@@ -79,22 +84,10 @@ class visitaTecnico extends Component {
                     <div className='form-content'>
                         <div className="row">
                             <div className="col-sm-12">
-                                <div className="form-group mb-4">
-                                    <textarea rows="4" onChange={this.onChange} value={material} type="text" className="form-control form-control frm_field" placeholder="Materiales" name="material"
+                                <div className="form-group mb-2">
+                                    <textarea rows="4" onChange={this.onChange} value={problemaReal} type="text" className="form-control form-control frm_field" placeholder="Problema" name="problemaReal"
                                         required />
-                                    <small className="form-text text-muted">Material utilizado</small>
-                                </div>
-                            </div>
-                            <div className="col-sm-6">
-                                <div className="form-group mb-2">
-                                    <input onChange={this.onChange} value={mastil} type="text" required className="form-control form-control frm_field" placeholder="Mástil" name="mastil" />
-                                    <small className="form-text text-muted">Mástil</small>
-                                </div>
-                            </div>
-                            <div className="col-sm-6">
-                                <div className="form-group mb-2">
-                                    <input onChange={this.onChange} value={sector} type="text" required className="form-control form-control frm_field" placeholder="Sector" name="sector" />
-                                    <small className="form-text text-muted">Sector</small>
+                                    <small className="form-text text-muted">Problema real</small>
                                 </div>
                             </div>
                         </div>

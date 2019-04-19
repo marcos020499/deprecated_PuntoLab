@@ -16,9 +16,11 @@ import VerServicios from "../servicios/listar";
 import CrearEditarServicios from "../servicios/crearEditar";
 import DetalleServicioInternet from "../servicios/instalacionInternet/detalle";
 import DetalleServicioCamaras from "../servicios/instalacionCamaras/detalle";
+import DetalleServicioSoporte from "../servicios/soporte/detalle";
 
-import ServicioCamarasVisita from "../servicios/instalacionCamaras/visitaTecnico";
 import ServicioInternetVisita from "../servicios/instalacionInternet/visitaTecnico";
+import ServicioCamarasVisita from "../servicios/instalacionCamaras/visitaTecnico";
+import ServicioSoporteVisita from "../servicios/soporte/visitaTecnico";
 
 import VerUsuarios from "../usuarios/listar";
 import CrearEditarUsuarios from "../usuarios/crearEditar";
@@ -48,10 +50,14 @@ export default class layout extends Component {
                     {/* Ver detalle de los servicios */}
                     <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/0/ver/:id" component={DetalleServicioInternet} />
                     <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/1/ver/:id" component={DetalleServicioCamaras} />
+                    <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/2/ver/:id" component={DetalleServicioSoporte} />
+                    <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/3/ver/:id" component={DetalleServicioSoporte} />
 
                     {/* Finalizar servicios */}
                     <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/0/visita/:id" component={ServicioInternetVisita} />
                     <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/1/visita/:id" component={ServicioCamarasVisita} />
+                    <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/2/visita/:id" component={ServicioSoporteVisita} />
+                    <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/3/visita/:id" component={ServicioSoporteVisita} />
                     
                     {/* Usuarios */}
                     <ProtectedRoute permisos={[0]} exact path="/usuarios" component={VerUsuarios} />
