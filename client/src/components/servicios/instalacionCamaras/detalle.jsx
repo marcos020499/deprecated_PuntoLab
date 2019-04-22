@@ -37,6 +37,7 @@ class detalle extends Component {
             tipoPago: "",
             fechaSolicitud: undefined,
             fechaTentativa: undefined,
+            fechaReagendado: undefined,
             fechaConclusion: undefined
         }
     }
@@ -60,7 +61,7 @@ class detalle extends Component {
                 
                 // se actualiza el estado con la info del servicio
                 const { costo, mastil, material, camaras, sector, tipoPago } = res.data.details
-                const { _id, cliente, tipo, tecnico, sc, fechaSolicitud, fechaTentativa, fechaConclusion } = res.data.service
+                const { _id, cliente, tipo, tecnico, sc, fechaSolicitud, fechaTentativa, fechaConclusion, fechaReagendado } = res.data.service
                 this.setState({
                     _id,
                     sc,
@@ -75,6 +76,7 @@ class detalle extends Component {
                     tipoPago,
                     fechaSolicitud,
                     fechaTentativa,
+                    fechaReagendado,
                     fechaConclusion
                 });
             })
@@ -111,10 +113,48 @@ class detalle extends Component {
         }, () => { }).set('type', 'password');
     }
 
+    // cuando el cliente estuvo ausente
+    reagendar = () => {
+        alertify.prompt('Cliente ausente', "Ingresa la fecha de la próxima visita", '', (evt, value) => {
+
+            const fecha = moment.utc().format();
+            const nuevaFecha = moment.utc(value).format();
+
+            if (nuevaFecha === "Invalid date") {
+                return;
+            }
+
+            const { _id } = this.state;
+
+            axios.post(process.env.REACT_APP_SERVER_IP + "api/servicios/reagendar", { _id, fecha, nuevaFecha })
+                .then(response => {
+                    if (response || response.data) {
+
+                        const { fechaTentativa, fechaReagendado } = response.data;
+
+                        this.setState({
+                            fechaTentativa,
+                            fechaReagendado
+                        })
+
+                        return toast.info("Se reagendó la visita")
+                    }
+                })
+                .catch(err => {
+                    if (err && err.response.status === 404) {
+                        return toast.error("El servicio no existe")
+                    }
+
+                    return toast.error("No se guardar la información - " + err)
+                })
+
+        }, () => { }).set('type', 'date');
+    }
+
 
     render() {
 
-        const { _id, sc, cliente, tecnico, tipo, costo, mastil, material, camaras, sector, tipoPago, notFound, fechaSolicitud, fechaTentativa, fechaConclusion } = this.state;
+        const { _id, sc, cliente, tecnico, tipo, costo, mastil, material, camaras, sector, tipoPago, notFound, fechaSolicitud, fechaTentativa, fechaConclusion, fechaReagendado } = this.state;
         const tipoName = serviciosList.filter(item => item.id === tipo)[0]
         const tipoPagoName = tiposPagoList.filter(item => item.id === tipoPago)[0]
 
@@ -126,10 +166,10 @@ class detalle extends Component {
             <Card>
                 <div className="header">
                     <div className="row">
-                        <div className="col-sm-6">
+                        <div className="col-sm-4">
                             <h2><span>Vista previa de </span>servicio</h2>
                         </div>
-                        <div className="col-sm-6">
+                        <div className="col-sm-8">
                             <button onClick={this.delete} className="btn btn-danger">
                                 <i className="material-icons"> delete </i> <span>Borrar</span>
                             </button>
@@ -147,16 +187,28 @@ class detalle extends Component {
                                 </Link>
                                 : null
                             }
+                            {
+                                sc === false ?
+                                    <button onClick={this.reagendar} className="btn btn-secondary">
+                                        <i className="material-icons"> close </i> <span>Ausente</span>
+                                    </button>
+                                    : null
+                            }
                         </div>
                     </div>
                 </div>
                 {
                     sc === true ?
-                        <span className="badge badge-success">Finalizado el {moment.utc(fechaConclusion, "YYYYMMDD").local().format("DD [de] MMMM [de] YYYY") || ""}</span>
-                    : <span className="badge badge-warning">Pendiente</span>
+                        <span className="badge badge-success">Finalizado el {moment(fechaConclusion, "YYYYMMDD").local().format("DD [de] MMMM [de] YYYY") || ""}</span>
+                        : <span className="badge badge-warning">Pendiente</span>
                 }
-                <span className="badge badge-primary">Solicitado el {moment.utc(fechaSolicitud, "YYYYMMDD").local().format("DD [de] MMMM [de] YYYY") || ""}</span>
-                <span className="badge badge-primary">Se vence el {moment(fechaTentativa, "YYYYMMDD").local().format("DD [de] MMMM [de] YYYY") || ""}</span>
+                <span className="badge badge-primary">Solicitado el {moment(fechaSolicitud, "YYYYMMDD").local().format("DD [de] MMMM [de] YYYY") || ""}</span>
+                {
+                    fechaReagendado ?
+                        <span className="badge badge-info">Re-agendado el {moment(fechaReagendado, "YYYYMMDD").local().format("DD [de] MMMM [de] YYYY") || ""}</span>
+                        : null
+                }
+                <span className="badge badge-secondary">Vencimiento el {moment(fechaTentativa, "YYYYMMDD").local().format("DD [de] MMMM [de] YYYY") || ""}</span>
 
                 <div className='form-content' style={{marginTop: "20px"}}>
                     <div className='row'>

@@ -20,7 +20,7 @@ app.post("/api/servicios/listar", (req, res) => {
     Servicios.countDocuments()
         .then(_totalItems => {
             totalItems = _totalItems;
-            return Servicios.find({}).sort({ fechaSolicitud: 'desc' }).skip(Number(salto)).limit(Number(itemsToShow)).populate("cliente");
+            return Servicios.find({}).sort({ fechaTentativa: 'desc' }).skip(Number(salto)).limit(Number(itemsToShow)).populate("cliente");
         })
         .then(servicios => res.status(200).json({ servicios, totalItems }))
         .catch(err => res.sendStatus(400))
@@ -100,6 +100,32 @@ app.post("/api/servicios/eliminar", (req, res) => {
             }
             return res.sendStatus(500);
         })
+})
+
+// re agendar servicio
+app.post("/api/servicios/reagendar", (req, res) => {
+
+    const { _id, fecha, nuevaFecha } = req.body;
+
+    Servicios.findById(_id)
+        .then(service => {
+            if (!service) {
+                return Promise.reject(404);
+            }
+
+            service.fechaReagendado = fecha;
+            service.fechaTentativa = nuevaFecha;
+            return service.save();
+        })
+        .then(saved => res.status(200).json(saved))
+        .catch(err => {
+            if (err === 404 || err.name && err.name === "CastError") {
+                res.sendStatus(404);
+            }
+
+            res.sendStatus(500);
+        })
+
 })
 
 module.exports = app;

@@ -73,8 +73,8 @@ class servicios extends Component {
             return toast.warn("No tienes un cliente seleccionado")
         }
 
-        const fechaTentativa = moment(momentbussines().businessAdd(6)._d).format()
-        const fechaSolicitud = moment().format();
+        const fechaTentativa = moment.utc(momentbussines().businessAdd(6)._d).format()
+        const fechaSolicitud = moment.utc().format();
         
         const ip = isEditing === false ? "api/servicios/" + servicio + "/nuevo" : "api/servicios/" + servicio + "/editar"
 
