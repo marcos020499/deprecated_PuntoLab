@@ -9,7 +9,8 @@ const serviciosSchema = new Schema({
     fechaSolicitud: { type: String, required: [true, "La fecha de atención es requerida"]},
     fechaReagendado: { type: String },
     sc: { type: Boolean, default: false },
-    fechaConclusion: { type: Date }
+    fechaConclusion: { type: Date },
+    image: { type: String }
 });
 
 module.exports = mongoose.model("servicios", serviciosSchema);

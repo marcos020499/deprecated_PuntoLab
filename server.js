@@ -24,6 +24,7 @@ app.use(require("./routes/API/auth"));
 app.use(require("./routes/API/clientes"));
 app.use(require("./routes/API/usuarios"));
 app.use(require("./routes/API/servicios"));
+app.use(require("./routes/API/evidencias"));
 app.use(require("./routes/API/servicios/servicio0"));
 app.use(require("./routes/API/servicios/servicio1"));
 app.use(require("./routes/API/servicios/servicio2"));
