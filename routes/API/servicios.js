@@ -2,6 +2,8 @@
 const express = require("express");
 const app = express.Router();
 const permisoAdmin = require("../permisosAdministrativos");
+const fs = require("fs");
+const path = require("path");
 
 // models
 const Servicios = require("../../models/Servicios")
@@ -79,7 +81,25 @@ app.post("/api/servicios/eliminar", (req, res) => {
             admin = _admin.usuario;
             return Servicios.findByIdAndDelete(id);
         })
-        .then(done => {
+        .then(service => {
+            if (!service) {
+                return Promise.reject(404);
+            }
+
+            const filename = service.image || null;
+            if (!filename) {
+                return;
+            }
+
+            // eliminar la foto
+            try {
+                return fs.unlinkSync(path.join(__dirname + "../../../images/" + filename))
+            } catch (error) {
+                console.log(error);
+                return true;
+            }
+        })
+        .then(photo_deleted => {
             switch (type) {
                 case "0":
                     return InstInternet.findOneAndDelete({ servicio: id })
@@ -95,7 +115,7 @@ app.post("/api/servicios/eliminar", (req, res) => {
         })
         .then(deleted => res.status(200).json({ admin }))
         .catch(err => {
-            if (err == 401) {
+            if (err == 401 || err == 404) {
                 return res.sendStatus(err)
             }
             return res.sendStatus(500);
