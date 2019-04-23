@@ -19,7 +19,8 @@ class visitaTecnico extends Component {
         this.state = {
             material: "",
             mastil: "",
-            sector: ""
+            sector: "",
+            textoImagen: ""
         }
     }
 
@@ -38,28 +39,61 @@ class visitaTecnico extends Component {
             return;
         }
 
+        let data = new FormData();
+        const inputFile = document.querySelector('input[type="file"]');
+
+        if (inputFile.files && inputFile.files[0]) {
+            const imagedata = inputFile.files[0];
+            data.append("picture", imagedata);
+        }
+
         const fecha = moment().format();
         const { material, mastil, sector } = this.state;
 
-        axios.post(process.env.REACT_APP_SERVER_IP + "api/servicios/1/visita", { id, material, mastil, sector, fecha })
-            .then(res => {
-                if (res.status && res.status === 200) {
-                    this.props.history.replace("/servicios/" + res.data.tipo + "/ver/" + res.data._id);
-                    return toast.success("Se guardó la información")
-                }
-            })
-            .catch(err => {
-                if (err.response.status === 404) {
-                    return toast.warn("El registro que intentas modificar no existe")
-                }
+        data.set("id", id);
+        data.set("material", material);
+        data.set("mastil", mastil);
+        data.set("sector", sector);
+        data.set("fecha", fecha);
 
-                toast.error("No se puede realizar la acción - " + err)
-            })
+        axios({
+            method: 'post',
+            url: process.env.REACT_APP_SERVER_IP + "api/servicios/1/visita",
+            data,
+            config: { headers: { 'Content-Type': 'multipart/form-data' } }
+        })
+        .then(res => {
+            if (res.status && res.status === 200) {
+                this.props.history.replace("/servicios/" + res.data.tipo + "/ver/" + res.data._id);
+                return toast.success("Se guardó la información")
+            }
+        })
+        .catch(err => {
+            if (err.response.status === 404) {
+                return toast.warn("El registro que intentas modificar no existe")
+            }
+
+            toast.error("No se puede realizar la acción - " + err)
+        })
+    }
+
+    updateImgLabel = () => {
+        const inputFile = document.querySelector('input[type="file"]');
+
+        let textoImagen = "";
+        if (inputFile.files && inputFile.files[0]) {
+            const filename = inputFile.files[0].name;
+            textoImagen = filename.substring(0, 28);
+        }
+
+        this.setState({
+            textoImagen
+        })
     }
 
     render() {
 
-        const { material, mastil, sector } = this.state;
+        const { material, mastil, sector, textoImagen } = this.state;
 
         return (
             <Card>
@@ -85,16 +119,23 @@ class visitaTecnico extends Component {
                                     <small className="form-text text-muted">* Material utilizado</small>
                                 </div>
                             </div>
-                            <div className="col-sm-6">
+                            <div className="col-sm-4">
                                 <div className="form-group mb-2">
                                     <input onChange={this.onChange} value={mastil} type="text" required className="form-control form-control frm_field" placeholder="Mástil" name="mastil" />
                                     <small className="form-text text-muted">* Mástil</small>
                                 </div>
                             </div>
-                            <div className="col-sm-6">
+                            <div className="col-sm-4">
                                 <div className="form-group mb-2">
                                     <input onChange={this.onChange} value={sector} type="text" required className="form-control form-control frm_field" placeholder="Sector" name="sector" />
                                     <small className="form-text text-muted">* Sector</small>
+                                </div>
+                            </div>
+                            <div className="col-sm-4">
+                                <div className="custom-file form-group mb-4">
+                                    <input onChange={this.updateImgLabel} type="file" className="custom-file-input frm_field" name="picture" accept="image/*" />
+                                    <label className="custom-file-label frm_video">{textoImagen || "Evidencia opcional"}</label>
+                                    <small className="form-text text-muted">Selecciona un archivo</small>
                                 </div>
                             </div>
                         </div>

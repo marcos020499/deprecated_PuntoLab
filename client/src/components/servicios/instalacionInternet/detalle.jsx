@@ -178,9 +178,9 @@ class detalle extends Component {
                             </button>
                             {
                                 image ?
-                                <a href={process.env.REACT_APP_SERVER_IP + "api/photo/" + image} className="btn btn-info">
-                                    <i className="material-icons"> photo </i> <span>Evidencia</span>
-                                </a>
+                                    <a className="btn btn-info" href={process.env.REACT_APP_SERVER_IP + "api/photo/" + image} data-fancybox>
+                                        <i className="material-icons"> photo </i> <span>Evidencia</span>
+                                    </a>
                                 : null
                             }
                             {

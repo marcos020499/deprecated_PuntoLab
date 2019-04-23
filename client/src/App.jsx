@@ -18,6 +18,9 @@ import 'react-toastify/dist/ReactToastify.min.css'
 // alertify
 import "./components/alertify/index"
 
+// axios progress bar
+import "./components/progressBar/progress";
+
 // redux
 import { setCurrentUser, removeCurrentUser } from "./redux/actions/sessionActions";
 

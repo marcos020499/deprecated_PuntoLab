@@ -6,6 +6,12 @@ const app = express.Router();
 const Servicios = require("../../../models/Servicios")
 const SoporteInternet = require("../../../models/SoporteInternet");
 
+// middleware para subir las evidencias
+const uploadEvidencia = require("../../evidenciasMulterConf");
+const UploadEvidencia = uploadEvidencia.fields([
+    { name: "picture", maxCount: 1 }
+]);
+
 // Nuevo servicio 3 - Soporte Internet
 app.post("/api/servicios/3/nuevo", (req, res) => {
     const { cliente, tecnico, tipo, data, fechaTentativa, fechaSolicitud } = req.body;
@@ -62,7 +68,12 @@ app.post("/api/servicios/3/editar", (req, res) => {
 })
 
 // finalizar servicio
-app.post("/api/servicios/3/visita", (req, res) => {
+app.post("/api/servicios/3/visita", UploadEvidencia, (req, res) => {
+
+    let image = undefined;
+    if (req.files && req.files.picture) {
+        image = req.files.picture[0].filename
+    }
 
     const { id, problemaReal, fecha } = req.body;
     let _service;
@@ -75,6 +86,7 @@ app.post("/api/servicios/3/visita", (req, res) => {
 
             service.fechaConclusion = fecha;
             service.sc = true;
+            service.image = image;
             return service.save();
         })
         .then(saved => {

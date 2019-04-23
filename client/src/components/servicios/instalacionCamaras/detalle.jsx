@@ -38,7 +38,8 @@ class detalle extends Component {
             fechaSolicitud: undefined,
             fechaTentativa: undefined,
             fechaReagendado: undefined,
-            fechaConclusion: undefined
+            fechaConclusion: undefined,
+            image: undefined
         }
     }
 
@@ -61,7 +62,7 @@ class detalle extends Component {
                 
                 // se actualiza el estado con la info del servicio
                 const { costo, mastil, material, camaras, sector, tipoPago } = res.data.details
-                const { _id, cliente, tipo, tecnico, sc, fechaSolicitud, fechaTentativa, fechaConclusion, fechaReagendado } = res.data.service
+                const { _id, cliente, tipo, tecnico, sc, fechaSolicitud, fechaTentativa, fechaConclusion, fechaReagendado, image } = res.data.service
                 this.setState({
                     _id,
                     sc,
@@ -77,7 +78,8 @@ class detalle extends Component {
                     fechaSolicitud,
                     fechaTentativa,
                     fechaReagendado,
-                    fechaConclusion
+                    fechaConclusion,
+                    image
                 });
             })
             .catch(err => {
@@ -154,7 +156,7 @@ class detalle extends Component {
 
     render() {
 
-        const { _id, sc, cliente, tecnico, tipo, costo, mastil, material, camaras, sector, tipoPago, notFound, fechaSolicitud, fechaTentativa, fechaConclusion, fechaReagendado } = this.state;
+        const { _id, sc, cliente, tecnico, tipo, costo, mastil, material, camaras, sector, tipoPago, notFound, fechaSolicitud, fechaTentativa, fechaConclusion, fechaReagendado, image } = this.state;
         const tipoName = serviciosList.filter(item => item.id === tipo)[0]
         const tipoPagoName = tiposPagoList.filter(item => item.id === tipoPago)[0]
 
@@ -173,6 +175,13 @@ class detalle extends Component {
                             <button onClick={this.delete} className="btn btn-danger">
                                 <i className="material-icons"> delete </i> <span>Borrar</span>
                             </button>
+                            {
+                                image ?
+                                <a className="btn btn-info" href={process.env.REACT_APP_SERVER_IP + "api/photo/" + image} data-fancybox>
+                                    <i className="material-icons"> photo </i> <span>Evidencia</span>
+                                </a>
+                                : null
+                            }
                             {
                                 sc === false ?
                                 <Link to={"/servicios/editar/" + _id} className="btn btn-info">

@@ -19,7 +19,8 @@ class visitaTecnico extends Component {
         this.state = {
             material: "",
             mastil: "",
-            sector: ""
+            sector: "",
+            textoImagen: ""
         }
     }
 
@@ -41,8 +42,8 @@ class visitaTecnico extends Component {
         let data = new FormData();
         const inputFile = document.querySelector('input[type="file"]');
 
-        if (inputFile.files) {
-            var imagedata = inputFile.files[0];
+        if (inputFile.files && inputFile.files[0]) {
+            const imagedata = inputFile.files[0];
             data.append("picture", imagedata);
         }
 
@@ -61,24 +62,38 @@ class visitaTecnico extends Component {
             data,
             config: { headers: { 'Content-Type': 'multipart/form-data' } }
         })
-            .then(res => {
-                if (res.status && res.status === 200) {
-                    this.props.history.replace("/servicios/" + res.data.tipo + "/ver/" + res.data._id);
-                    return toast.success("Se guardó la información")
-                }
-            })
-            .catch(err => {
-                if (err.response.status === 404) {
-                    return toast.warn("El registro que intentas modificar no existe")
-                }
+        .then(res => {
+            if (res.status && res.status === 200) {
+                this.props.history.replace("/servicios/" + res.data.tipo + "/ver/" + res.data._id);
+                return toast.success("Se guardó la información")
+            }
+        })
+        .catch(err => {
+            if (err.response.status === 404) {
+                return toast.warn("El registro que intentas modificar no existe")
+            }
 
-                toast.error("No se puede realizar la acción - " + err)
-            })
+            toast.error("No se puede realizar la acción - " + err)
+        })
+    }
+
+    updateImgLabel = () => {
+        const inputFile = document.querySelector('input[type="file"]');
+
+        let textoImagen = "";
+        if (inputFile.files && inputFile.files[0]) {
+            const filename = inputFile.files[0].name;
+            textoImagen = filename.substring(0, 28);
+        }
+
+        this.setState({
+            textoImagen
+        })
     }
 
     render() {
 
-        const { material, mastil, sector } = this.state;
+        const { material, mastil, sector, textoImagen } = this.state;
 
         return (
             <Card>
@@ -118,8 +133,8 @@ class visitaTecnico extends Component {
                             </div>
                             <div className="col-sm-4">
                                 <div className="custom-file form-group mb-4">
-                                    <input type="file" className="custom-file-input frm_field" name="picture" accept="image/*" />
-                                    <label className="custom-file-label frm_video">Evidencia opcional</label>
+                                    <input onChange={this.updateImgLabel} type="file" className="custom-file-input frm_field" name="picture" accept="image/*" />
+                                    <label className="custom-file-label frm_video">{textoImagen || "Evidencia opcional"}</label>
                                     <small className="form-text text-muted">Selecciona un archivo</small>
                                 </div>
                             </div>

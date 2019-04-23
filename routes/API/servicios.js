@@ -66,7 +66,7 @@ app.get("/api/servicios/detallar/:id", (req, res) => {
 
 // eliminar servicios
 app.post("/api/servicios/eliminar", (req, res) => {
-
+    
     const { id, type, password } = req.body;
     let admin = {};
 
