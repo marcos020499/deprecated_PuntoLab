@@ -15,14 +15,17 @@ const SoporteInternet = require("../../models/SoporteInternet");
 // lista la tabla principal de servicios
 app.post("/api/servicios/listar", (req, res) => {
 
-    const { itemsToShow, salto } = req.body;
-
+    const { itemsToShow, salto, tecnico_id } = req.body;
     let totalItems;
+    let criterio = {}
+    if (tecnico_id) {
+        criterio = { tecnico: tecnico_id }
+    }
 
-    Servicios.countDocuments()
+    Servicios.countDocuments(criterio)
         .then(_totalItems => {
             totalItems = _totalItems;
-            return Servicios.find({}).sort({ fechaTentativa: 'desc' }).skip(Number(salto)).limit(Number(itemsToShow)).populate("cliente");
+            return Servicios.find(criterio).sort({ fechaTentativa: 'asc' }).skip(Number(salto)).limit(Number(itemsToShow)).populate("cliente");
         })
         .then(servicios => res.status(200).json({ servicios, totalItems }))
         .catch(err => res.sendStatus(400))
@@ -145,6 +148,24 @@ app.post("/api/servicios/reagendar", (req, res) => {
 
             res.sendStatus(500);
         })
+})
+
+// lista los servivios proximos a vencerse
+app.post("/api/servicios/alerta", (req, res) => {
+
+    const { _id, fechaMayor, fechaMenor } = req.body;
+
+    // falta filtrar por id tecnico
+    Servicios.find({ tecnico: _id, fechaTentativa: { $gte: String(fechaMayor), $lt: String(fechaMenor) } }).populate("cliente").sort({ fechaTentativa: "asc" })
+        .then(servicios => {
+            if (servicios) {
+                return res.status(200).json(servicios);
+            }
+
+            return res.sendStatus(500);
+        })
+        .catch(err => res.sendStatus(500))
+
 
 })
 

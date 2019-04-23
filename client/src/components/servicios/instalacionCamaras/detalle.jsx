@@ -157,6 +157,7 @@ class detalle extends Component {
     render() {
 
         const { _id, sc, cliente, tecnico, tipo, costo, mastil, material, camaras, sector, tipoPago, notFound, fechaSolicitud, fechaTentativa, fechaConclusion, fechaReagendado, image } = this.state;
+        const { permisos } = this.props.session.user;
         const tipoName = serviciosList.filter(item => item.id === tipo)[0]
         const tipoPagoName = tiposPagoList.filter(item => item.id === tipoPago)[0]
 
@@ -172,9 +173,13 @@ class detalle extends Component {
                             <h2><span>Vista previa de </span>servicio</h2>
                         </div>
                         <div className="col-sm-8">
-                            <button onClick={this.delete} className="btn btn-danger">
-                                <i className="material-icons"> delete </i> <span>Borrar</span>
-                            </button>
+                            {
+                                permisos !== 2 ?
+                                <button onClick={this.delete} className="btn btn-danger">
+                                    <i className="material-icons"> delete </i> <span>Borrar</span>
+                                </button>
+                                : null
+                            }
                             {
                                 image ?
                                 <a className="btn btn-info" href={process.env.REACT_APP_SERVER_IP + "api/photo/" + image} data-fancybox>
@@ -183,7 +188,7 @@ class detalle extends Component {
                                 : null
                             }
                             {
-                                sc === false ?
+                                sc === false && permisos !== 2 ?
                                 <Link to={"/servicios/editar/" + _id} className="btn btn-info">
                                     <i className="material-icons"> edit </i> <span>Editar</span>
                                 </Link>

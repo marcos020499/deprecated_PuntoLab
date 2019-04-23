@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { connect } from "react-redux";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet";
 import { app_name } from "../../config/strings";
@@ -17,7 +18,7 @@ import moment from "moment";
 import "moment/locale/es";
 moment.locale("es");
 
-export default class servicios extends Component {
+class servicios extends Component {
 
     constructor(props) {
         super(props)
@@ -32,8 +33,14 @@ export default class servicios extends Component {
 
     requestData = () => {
         const { itemsToShow, index } = this.state;
+        const { permisos, _id } = this.props.session.user;
 
-        axios.post(process.env.REACT_APP_SERVER_IP + "api/servicios/listar", { itemsToShow, salto: (itemsToShow * index)})
+        let tecnico_id;
+        if (permisos === 2) {
+            tecnico_id = _id
+        }
+
+        axios.post(process.env.REACT_APP_SERVER_IP + "api/servicios/listar", { tecnico_id, itemsToShow, salto: (itemsToShow * index)})
             .then(res => {
                 if (!res.data) {
                     return;
@@ -158,3 +165,11 @@ export default class servicios extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        session: state.session
+    }
+}
+
+export default connect(mapStateToProps)(servicios);

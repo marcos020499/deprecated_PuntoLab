@@ -79,7 +79,7 @@ class App extends Component {
       <Provider store={Store}>
         <BrowserRouter>
           <Switch>
-            <Route exact path="/login" component={Login} />
+            <Route exact path="/" component={Login} />
             <PrivateRoute component={Dashboard} />
           </Switch>
         </BrowserRouter>

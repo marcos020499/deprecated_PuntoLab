@@ -10,6 +10,7 @@ import menuItems from "../menu/items.json";
 
 // utls
 import "./styles.css"
+import { notificarServiciosAlerta } from "../notificaciones_servicios/notificaciones";
 
 // redux
 import { setCurrentUser } from "../../redux/actions/sessionActions";
@@ -23,6 +24,25 @@ class login extends Component {
          usuario: "",
          password: ""
       }
+   }
+
+   // se valida si existe una sesión para redireccionar a otro lado
+   componentWillMount(){
+        const { session } = this.props
+        if (!session.isAuth) {
+           return; 
+        }
+
+        const redirect = this.getRedirectUrl(session.user);
+
+        // si tiene al menos una url
+        if (redirect.length > 0) {
+            // se redirecciona a la primera url
+            return this.props.history.push(redirect[0]);
+        }
+
+        // si no se manda a 404
+        return this.props.history.push("/404");
    }
    
    onChange = (e) => {
@@ -46,17 +66,13 @@ class login extends Component {
                localStorage.setItem('jwtToken', token);
                this.props.setCurrentUser(user);
 
-               // se arma un nuevo arreglo con las URL permitidas para este usuario
-               const redirect = menuItems.menu.reduce((_acumulador, section) => {
-                  const results = section.items.reduce((acumulador, item) => {
-                     if (item.permisos.filter(i => i === user.permisos).length > 0) {
-                        return [...acumulador, item.url]
-                     }
-                     return [...acumulador];
-                  }, [])
+               // si es un tecnico se notifica sobre los servicios
+               // proximos a vencerse
+               if (user.permisos === 2) {
+                   notificarServiciosAlerta(user._id);
+               }
 
-                  return [..._acumulador, ...results]
-               }, [])
+               const redirect = this.getRedirectUrl(user);
 
                // si tiene al menos una url
                if (redirect.length > 0) {
@@ -64,8 +80,8 @@ class login extends Component {
                   return this.props.history.push(redirect[0]);
                }
                
-               // si no se manda a raiz
-               return this.props.history.push("/");
+               // si no se manda a 404
+               return this.props.history.push("/404");
             }
          })
          .catch(err => {
@@ -73,6 +89,20 @@ class login extends Component {
                return toast.error("Credenciales inválidas")
             }
          });
+   }
+
+   getRedirectUrl = (user) => {
+       // se arma un nuevo arreglo con las URL permitidas para este usuario
+       return menuItems.menu.reduce((_acumulador, section) => {
+           const results = section.items.reduce((acumulador, item) => {
+               if (item.permisos.filter(i => i === user.permisos).length > 0) {
+                   return [...acumulador, item.url]
+               }
+               return [...acumulador];
+           }, [])
+
+           return [..._acumulador, ...results]
+       }, [])
    }
 
    render(){
@@ -99,11 +129,17 @@ class login extends Component {
       )
    }
 }
- 
+
+const mapStateToProps = (state) => {
+   return {
+       session: state.session
+   }
+}
+
 const mapDispatchToProps = {
    setCurrentUser
 }
 
 export default withRouter (
-   connect(null, mapDispatchToProps)(login)
+   connect(mapStateToProps, mapDispatchToProps)(login)
 );

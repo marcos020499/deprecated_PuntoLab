@@ -13,11 +13,10 @@ export default class not_found extends Component {
     super(props)
   
     this.state = {
-      notFound: { title: "El contenido no existe", details: "La dirección que has solicitado no se encontró, asegurate que está bien escrita."},
-      unautorized: { title: "Acceso denegado", details: "No tienes permiso para ver este contenido, solicitalo al administrador." }
+      notFound: { title: "El contenido no existe", details: "La dirección que has solicitado no se encontró."},
+      unautorized: { title: "Acceso denegado", details: "No tienes permiso para ver este contenido" }
     }
   }
-  
 
   render() {
 
