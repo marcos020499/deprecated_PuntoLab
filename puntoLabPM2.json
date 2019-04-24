@@ -1,0 +1,9 @@
+{
+    "apps": [
+        {
+            "name": "PuntoLab",
+            "script": "npm",
+            "args": "start"
+        }
+    ]
+}

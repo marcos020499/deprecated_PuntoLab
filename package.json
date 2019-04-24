@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "dev": "./node_modules/.bin/env-cmd ./.env.development nodemon server.js",
-    "test": "./node_modules/.bin/env-cmd ./.env.test node server.js"
+    "test": "./node_modules/.bin/env-cmd ./.env.test node server.js",
+    "start": "./node_modules/.bin/env-cmd ./.env.production node server.js"
   },
   "repository": {
     "type": "git",

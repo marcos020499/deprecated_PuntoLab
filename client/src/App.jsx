@@ -10,6 +10,7 @@ import jwt_decode from "jwt-decode"
 import Dashboard from "./components/dashboard/layout";
 import Login from "./components/login/login"
 import PrivateRoute from "./components/common/privateRoute"
+import { setAuthToken, deleteAuthToken } from "./components/common/HTTPAuthorization";
 
 // toastify
 import { ToastContainer } from 'react-toastify';
@@ -31,6 +32,7 @@ if (localStorage.jwtToken) {
     // se manda el contenido del token a redux
     // y se crea una sesion temporal
     const decoded = jwt_decode(localStorage.jwtToken);
+    setAuthToken(localStorage.jwtToken)
     Store.dispatch(setCurrentUser(decoded.user));
 
     // se manda el token a validar al servidor
@@ -46,6 +48,7 @@ if (localStorage.jwtToken) {
       .catch(err => {
         // si el servidor retorna un estado diferente de 200
         // la sesion no es valida, la eliminamos
+        deleteAuthToken();
         Store.dispatch(removeCurrentUser());
       })
   } catch (error) {
@@ -83,7 +86,7 @@ class App extends Component {
             <PrivateRoute component={Dashboard} />
           </Switch>
         </BrowserRouter>
-        <ToastContainer draggable={false} pauseOnHover={false} pauseOnFocusLoss={false} closeOnClick={false} />
+        <ToastContainer draggable={false} pauseOnHover={false} pauseOnFocusLoss={false} closeOnClick={false} autoClose={6000} />
       </Provider>
     );
   }

@@ -4,6 +4,7 @@ import "./styles.css"
 // modules
 import React, { Component } from 'react'
 import { connect } from "react-redux";
+import { deleteAuthToken } from "../common/HTTPAuthorization";
 
 // redux
 import { removeCurrentUser } from "../../redux/actions/sessionActions";
@@ -12,6 +13,7 @@ class navbar extends Component {
 
     logout = () => {
         this.props.removeCurrentUser();
+        deleteAuthToken();
     }
 
     render() {

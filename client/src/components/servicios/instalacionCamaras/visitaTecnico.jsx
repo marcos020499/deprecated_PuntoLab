@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { withRouter } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import { app_name } from "../../../config/strings";
 
 // components
 import Card from "../../card/card";
@@ -47,7 +49,7 @@ class visitaTecnico extends Component {
             data.append("picture", imagedata);
         }
 
-        const fecha = moment().format();
+        const fecha = moment().startOf('day').format();
         const { material, mastil, sector } = this.state;
 
         data.set("id", id);
@@ -69,8 +71,10 @@ class visitaTecnico extends Component {
             }
         })
         .catch(err => {
-            if (err.response.status === 404) {
+            if (err.response && err.response.status === 404) {
                 return toast.warn("El registro que intentas modificar no existe")
+            } else if (err.response && err.response.status === 401) {
+                return toast.warn("No se puede realizar la acción porque el servicio ya se finalizó")
             }
 
             toast.error("No se puede realizar la acción - " + err)
@@ -97,6 +101,9 @@ class visitaTecnico extends Component {
 
         return (
             <Card>
+                <Helmet>
+                    <title>Finalizar servicio | {app_name}</title>
+                </Helmet>
                 <form onSubmit={this.onSubmit}>
                     <div className="header">
                         <div className="row">

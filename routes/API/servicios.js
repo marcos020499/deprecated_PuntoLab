@@ -12,8 +12,11 @@ const InstCamaras = require("../../models/instalacionCamaras");
 const Soporte = require("../../models/Soporte");
 const SoporteInternet = require("../../models/SoporteInternet");
 
+// API Request validator
+const APIAuth = require("../APIAuth");
+
 // lista la tabla principal de servicios
-app.post("/api/servicios/listar", (req, res) => {
+app.post("/api/servicios/listar", APIAuth.validate, (req, res) => {
 
     const { itemsToShow, salto, tecnico_id } = req.body;
     let totalItems;
@@ -32,7 +35,7 @@ app.post("/api/servicios/listar", (req, res) => {
 })
 
 // lista la tabla principal de servicios
-app.get("/api/servicios/detallar/:id", (req, res) => {
+app.get("/api/servicios/detallar/:id", APIAuth.validate, (req, res) => {
 
     const { id } = req.params;
     let _service;
@@ -70,7 +73,7 @@ app.get("/api/servicios/detallar/:id", (req, res) => {
 })
 
 // eliminar servicios
-app.post("/api/servicios/eliminar", (req, res) => {
+app.post("/api/servicios/eliminar", APIAuth.validate,(req, res) => {
     
     const { id, type, password } = req.body;
     let admin = {};
@@ -126,7 +129,7 @@ app.post("/api/servicios/eliminar", (req, res) => {
 })
 
 // re agendar servicio
-app.post("/api/servicios/reagendar", (req, res) => {
+app.post("/api/servicios/reagendar", APIAuth.validate, (req, res) => {
 
     const { _id, fecha, nuevaFecha } = req.body;
 
@@ -136,22 +139,28 @@ app.post("/api/servicios/reagendar", (req, res) => {
                 return Promise.reject(404);
             }
 
+            if (service.sc) {
+                return Promise.reject(401);
+            }
+
             service.fechaReagendado = fecha;
             service.fechaTentativa = nuevaFecha;
             return service.save();
         })
         .then(saved => res.status(200).json(saved))
         .catch(err => {
-            if (err === 404 || err.name && err.name === "CastError") {
-                res.sendStatus(404);
+            if (err == 404 || err.name && err.name == "CastError") {
+                return res.sendStatus(404);
+            } else if(err == 401){
+                return res.sendStatus(err);
             }
 
-            res.sendStatus(500);
+            return res.sendStatus(500);
         })
 })
 
 // lista los servivios proximos a vencerse
-app.post("/api/servicios/alerta", (req, res) => {
+app.post("/api/servicios/alerta", APIAuth.validate, (req, res) => {
 
     const { _id, fechaMayor, fechaMenor } = req.body;
 

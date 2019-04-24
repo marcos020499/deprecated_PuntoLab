@@ -12,8 +12,11 @@ const UploadEvidencia = uploadEvidencia.fields([
     { name: "picture", maxCount: 1 }
 ]);
 
+// API Request validator
+const APIAuth = require("../../APIAuth");
+
 // Nuevo servicio 1 - Instalación de camaras de seguridad
-app.post("/api/servicios/1/nuevo", (req, res) => {
+app.post("/api/servicios/1/nuevo", APIAuth.validate,  (req, res) => {
 
     const { cliente, tecnico, tipo, data, fechaTentativa, fechaSolicitud } = req.body;
 
@@ -38,7 +41,7 @@ app.post("/api/servicios/1/nuevo", (req, res) => {
 })
 
 // Editar servicio 1
-app.post("/api/servicios/1/editar", (req, res) => {
+app.post("/api/servicios/1/editar", APIAuth.validate,  (req, res) => {
 
     const { _id, tecnico, data } = req.body;
     let _service
@@ -47,6 +50,10 @@ app.post("/api/servicios/1/editar", (req, res) => {
         .then(service => {
             if (!service) {
                 return Promise.reject(404);
+            }
+
+            if (service.sc) {
+                return Promise.reject(401);
             }
 
             service.tecnico = tecnico;
@@ -67,13 +74,16 @@ app.post("/api/servicios/1/editar", (req, res) => {
         .catch(err => {
             if (err == 404) {
                 return res.sendStatus(err)
+            } else if (err == 401) {
+                return res.sendStatus(err);
             }
+
             return res.sendStatus(500);
         })
 })
 
 // finalizar servicio
-app.post("/api/servicios/1/visita", UploadEvidencia, (req, res) => {
+app.post("/api/servicios/1/visita", [APIAuth.validate, UploadEvidencia], (req, res) => {
 
     let image = undefined;
     if (req.files && req.files.picture) {
@@ -87,6 +97,10 @@ app.post("/api/servicios/1/visita", UploadEvidencia, (req, res) => {
         .then(service => {
             if (!service) {
                 return Promise.reject(404);
+            }
+
+            if (service.sc) {
+                return Promise.reject(401);
             }
 
             service.fechaConclusion = fecha;
@@ -108,10 +122,12 @@ app.post("/api/servicios/1/visita", UploadEvidencia, (req, res) => {
         .then(saved => res.status(200).json(_service))
         .catch(err => {
             if (err === 404 || err.name && err.name === "CastError") {
-                res.sendStatus(404);
+                return res.sendStatus(404);
+            } else if (err == 401) {
+                return res.sendStatus(err);
             }
 
-            res.sendStatus(500);
+            return res.sendStatus(500);
         })
 })
 

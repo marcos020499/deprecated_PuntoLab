@@ -50,14 +50,20 @@ export default class listar extends Component {
                     this.requestData()
                 })
                 .catch(err => {
-                    if (err.response.status === 404) {
-                        return toast.warn("La contraseña es incorrecta.");
+                    if (err.response && err.response.status === 404) {
+                        return toast.warn(`La contraseña es incorrecta.`)
+                    } else if (err.response && err.response.status === 302) {
+                        return toast.warn("No se puede eliminar al usuario porque tiene servicios relacionados")
+                    } else if (err.response && err.response.status === 204) {
+                        return toast.warn("No se econtró al usuario")
+                    } else if (err.response && err.response.status === 304) {
+                        return toast.warn("No se puede eliminar a todos los administradores")
                     }
 
                     return toast.error("No se pudo eliminar el cliente - " + err)
                 })
 
-        }, () => { }).set('type', 'password');
+        }, () => { }).set('type', 'password').set('labels', { ok: 'Aceptar', cancel: 'Cancelar' });
     }
     
 

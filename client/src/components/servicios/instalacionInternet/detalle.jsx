@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import { Link, withRouter } from "react-router-dom";
 import alertify from "alertifyjs";
 import { connect } from "react-redux";
+import { Helmet } from "react-helmet";
+import { app_name } from "../../../config/strings";
 
 // components
 import Card from "../../card/card";
@@ -112,15 +114,15 @@ class detalle extends Component {
                     return toast.error("No se pudo eliminar el servicio - " + err)
                 })
 
-        }, () => { }).set('type', 'password');
+        }, () => { }).set('type', 'password').set('labels', { ok: 'Aceptar', cancel: 'Cancelar' });
     }
 
     // cuando el cliente estuvo ausente
     reagendar = () => {
         alertify.prompt('Cliente ausente', "Ingresa la fecha de la próxima visita", '', (evt, value) => {
 
-            const fecha = moment.utc().format();
-            const nuevaFecha = moment.utc(value).format();
+            const fecha = moment.utc().startOf('day').format();
+            const nuevaFecha = moment.utc(value).startOf('day').format();
 
             if(nuevaFecha === "Invalid date"){
                 return;
@@ -143,14 +145,16 @@ class detalle extends Component {
                     }
                 })
                 .catch(err => {
-                    if (err && err.response.status === 404) {
+                    if (err.response && err.response.status === 404) {
                         return toast.error("El servicio no existe")
+                    } else if (err.response && err.response.status === 401) {
+                        return toast.error("No puedes realizar esta acción porque el servicio ya se concluyó")
                     }
                     
                     return toast.error("No se guardar la información - " + err)
                 })
 
-        }, () => { }).set('type', 'date');
+        }, () => { }).set('type', 'date').set('labels', { ok: 'Aceptar', cancel: 'Cancelar' });
     }
 
 
@@ -168,6 +172,9 @@ class detalle extends Component {
 
         return (
             <Card>
+                <Helmet>
+                    <title>Detalle de servicio | {app_name}</title>
+                </Helmet>
                 <div className="header">
                     <div className="row">
                         <div className="col-sm-4">

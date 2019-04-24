@@ -3,11 +3,15 @@ const express = require("express");
 const app = express.Router();
 const permisoAdmin = require("../permisosAdministrativos")
 
+// API Request validator
+const APIAuth = require("../APIAuth");
+
 // models
 const Clientes = require("../../models/Clientes")
+const Servicios = require("../../models/Servicios")
 
 // crear cliente
-app.post("/api/clientes/nuevo", (req, res) => {
+app.post("/api/clientes/nuevo", APIAuth.validate, (req, res) => {
     const { nombre, telefono, direccion, comunidad, ciudad } = req.body;
 
     const newCliente = new Clientes({
@@ -24,7 +28,7 @@ app.post("/api/clientes/nuevo", (req, res) => {
 })
 
 // listar clientes
-app.post("/api/clientes/listar", (req, res) => {
+app.post("/api/clientes/listar", APIAuth.validate, (req, res) => {
     const { itemsToShow, salto, filtro } = req.body
     let clientes = [];
     let criterio = {}
@@ -43,7 +47,7 @@ app.post("/api/clientes/listar", (req, res) => {
 })
 
 // detallar cliente
-app.get("/api/clientes/detallar/:_id", (req, res) => {
+app.get("/api/clientes/detallar/:_id", APIAuth.validate, (req, res) => {
     const { _id } = req.params
 
     Clientes.findById(_id)
@@ -63,7 +67,7 @@ app.get("/api/clientes/detallar/:_id", (req, res) => {
 })
 
 // editar cliente
-app.post("/api/clientes/editar", (req, res) => {
+app.post("/api/clientes/editar", APIAuth.validate, (req, res) => {
 
     const { _id, nombre, telefono, direccion, comunidad, ciudad } = req.body;
 
@@ -93,7 +97,7 @@ app.post("/api/clientes/editar", (req, res) => {
 })
 
 // eliminar clientes
-app.post("/api/clientes/eliminar", (req, res) => {
+app.post("/api/clientes/eliminar", APIAuth.validate, (req, res) => {
     const { password, _id } = req.body;
     let admin = {};
 
@@ -104,11 +108,18 @@ app.post("/api/clientes/eliminar", (req, res) => {
             }
             
             admin = _admin.usuario;
-            return Clientes.findOneAndDelete({ _id });
+            return Servicios.countDocuments({ cliente: _id });
+        })
+        .then(rows => {
+            if (rows > 0) {
+                return Promise.reject(302)
+            }
+
+            return Clientes.findByIdAndDelete(_id);
         })
         .then(deleted => res.status(200).json({ admin }))
         .catch(err => {
-            if (err == 401) {
+            if (err == 401 || err == 302) {
                 return res.sendStatus(err)
             }
             return res.sendStatus(500);

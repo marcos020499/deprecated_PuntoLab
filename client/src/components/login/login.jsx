@@ -11,6 +11,7 @@ import menuItems from "../menu/items.json";
 // utls
 import "./styles.css"
 import { notificarServiciosAlerta } from "../notificaciones_servicios/notificaciones";
+import { setAuthToken } from "../common/HTTPAuthorization";
 
 // redux
 import { setCurrentUser } from "../../redux/actions/sessionActions";
@@ -62,8 +63,10 @@ class login extends Component {
             if (response.status === 200) {
                const { token, user } = response.data
 
-               // guardar en local storage el token y en redux el usuario
+               // guardar en local storage y axios el token
+               // y guardar en redux el usuario
                localStorage.setItem('jwtToken', token);
+                setAuthToken(token);
                this.props.setCurrentUser(user);
 
                // si es un tecnico se notifica sobre los servicios

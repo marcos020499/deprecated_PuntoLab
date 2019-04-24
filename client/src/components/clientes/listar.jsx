@@ -102,14 +102,16 @@ class verClientes extends Component {
                     this.requestData()
                 })
                 .catch(err => {
-                    if (err.response.status === 401) {
+                    if (err.response && err.response.status === 401) {
                         return toast.warn(`La contraseña${permisos === 0 ? "" : " de administrador" } es incorrecta.`)
+                    } else if (err.response && err.response.status === 302) {
+                        return toast.warn("No se puede eliminar al cliente porque tiene servicios relacionados")
                     }
 
                     return toast.error("No se pudo eliminar el cliente - " + err)
                 })
 
-        }, () => { }).set('type', 'password');
+        }, () => { }).set('type', 'password').set('labels', { ok: 'Aceptar', cancel: 'Cancelar' });
     }
 
     render() {

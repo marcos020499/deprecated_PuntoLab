@@ -1,7 +1,7 @@
 // modules
 const express = require("express");
 const app = express.Router();
-const path = require("path")
+const path = require("path");
 
 app.get("/api/photo/:name", (req, res) => {
 
