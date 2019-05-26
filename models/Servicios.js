@@ -10,7 +10,8 @@ const serviciosSchema = new Schema({
     fechaReagendado: { type: String },
     sc: { type: Boolean, default: false },
     fechaConclusion: { type: Date },
-    image: { type: String }
+    image: { type: String },
+    pagoTecnico: { type: Number, required: [true, "El pago es requerido"] }
 });
 
 module.exports = mongoose.model("servicios", serviciosSchema);

@@ -174,8 +174,6 @@ app.post("/api/servicios/alerta", APIAuth.validate, (req, res) => {
             return res.sendStatus(500);
         })
         .catch(err => res.sendStatus(500))
-
-
 })
 
 module.exports = app;

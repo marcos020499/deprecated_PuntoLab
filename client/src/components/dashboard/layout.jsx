@@ -43,21 +43,21 @@ export default class layout extends Component {
                     <ProtectedRoute permisos={[0, 1]} exact path="/clientes/editar/:id" component={CrearEditarCliente} />
 
                     {/* Servicios */}
-                    <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios" component={VerServicios} />
+                    <ProtectedRoute permisos={[0, 1, 2, 3]} exact path="/servicios" component={VerServicios} />
                     <ProtectedRoute permisos={[0, 1]} exact path="/servicios/crear" component={CrearEditarServicios} />
                     <ProtectedRoute permisos={[0, 1]} exact path="/servicios/editar/:id" component={CrearEditarServicios} />
                     
                     {/* Ver detalle de los servicios */}
-                    <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/0/ver/:id" component={DetalleServicioInternet} />
-                    <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/1/ver/:id" component={DetalleServicioCamaras} />
-                    <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/2/ver/:id" component={DetalleServicioSoporte} />
-                    <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/3/ver/:id" component={DetalleServicioSoporte} />
+                    <ProtectedRoute permisos={[0, 1, 2, 3]} exact path="/servicios/0/ver/:id" component={DetalleServicioInternet} />
+                    <ProtectedRoute permisos={[0, 1, 2, 3]} exact path="/servicios/1/ver/:id" component={DetalleServicioCamaras} />
+                    <ProtectedRoute permisos={[0, 1, 2, 3]} exact path="/servicios/2/ver/:id" component={DetalleServicioSoporte} />
+                    <ProtectedRoute permisos={[0, 1, 2, 3]} exact path="/servicios/3/ver/:id" component={DetalleServicioSoporte} />
 
                     {/* Finalizar servicios */}
-                    <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/0/visita/:id" component={ServicioInternetVisita} />
-                    <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/1/visita/:id" component={ServicioCamarasVisita} />
-                    <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/2/visita/:id" component={ServicioSoporteVisita} />
-                    <ProtectedRoute permisos={[0, 1, 2]} exact path="/servicios/3/visita/:id" component={ServicioSoporteVisita} />
+                    <ProtectedRoute permisos={[0, 1, 2, 3]} exact path="/servicios/0/visita/:id" component={ServicioInternetVisita} />
+                    <ProtectedRoute permisos={[0, 1, 2, 3]} exact path="/servicios/1/visita/:id" component={ServicioCamarasVisita} />
+                    <ProtectedRoute permisos={[0, 1, 2, 3]} exact path="/servicios/2/visita/:id" component={ServicioSoporteVisita} />
+                    <ProtectedRoute permisos={[0, 1, 2, 3]} exact path="/servicios/3/visita/:id" component={ServicioSoporteVisita} />
                     
                     {/* Usuarios */}
                     <ProtectedRoute permisos={[0]} exact path="/usuarios" component={VerUsuarios} />
@@ -65,7 +65,7 @@ export default class layout extends Component {
                     <ProtectedRoute permisos={[0]} exact path="/usuarios/editar/:id" component={CrearEditarUsuarios} />
                     
                     {/* Configuracion */}
-                    <ProtectedRoute permisos={[0, 1, 2]} exact path="/password" component={NewPassword} />
+                    <ProtectedRoute permisos={[0, 1, 2, 3]} exact path="/password" component={NewPassword} />
                     
                     {/* Utl */}
                     <Route component={NotFound} />

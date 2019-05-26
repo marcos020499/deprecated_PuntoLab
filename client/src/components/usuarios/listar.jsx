@@ -10,6 +10,9 @@ import { app_name } from "../../config/strings";
 // components
 import Card from "../card/card";
 
+// usuarios
+import tiposUsuario from "./tiposUsuario";
+
 export default class listar extends Component {
 
 
@@ -34,8 +37,11 @@ export default class listar extends Component {
                 if (!res.data) {
                     return;
                 }
-
-                this.setState({ usuarios: res.data });
+                
+                const usuarios = res.data;
+                console.log(usuarios);
+                
+                this.setState({ usuarios });
             })
             .catch(err => toast.warn("No se puede mostrar la información - " + err))
     }
@@ -94,6 +100,8 @@ export default class listar extends Component {
                             <th scope="col">Nombre</th>
                             <th scope="col">Usuario</th>
                             <th scope="col">Permisos</th>
+                            <th scope="col">Pago servicios</th>
+                            <th scope="col">Pagar</th>
                             <th scope="col">Editar</th>
                             <th scope="col">Eliminar</th>
                         </tr>
@@ -101,12 +109,16 @@ export default class listar extends Component {
                     <tbody>
                         {
                             usuarios.map(user => {
-                                const { _id, nombre, usuario, permisos } = user
+                                const { _id, nombre, usuario, permisos, pago } = user
+                                const filteredUser = tiposUsuario.filter(item => item.id === permisos)[0]
+                                
                                 return(
                                     <tr key={_id}>
                                         <td>{nombre}</td>
                                         <td>{usuario}</td>
-                                        <td>{permisos === 0 ? "Administrador" : permisos === 1 ? "Asistente" : permisos === 2 ? "Técnico" : ""}</td>
+                                        <td>{filteredUser.descripcion}</td>
+                                        <td>{filteredUser.id === 3 ? "$" + pago : null}</td>
+                                        <td>{filteredUser.id === 3 ? <i className="material-icons">money_off</i> : null}</td>
                                         <td><Link to={"/usuarios/editar/" + _id}><i className="material-icons"> edit </i></Link></td>
                                         <td onClick={() => this.delete(_id, nombre)}><i className="material-icons"> delete </i></td>
                                     </tr>

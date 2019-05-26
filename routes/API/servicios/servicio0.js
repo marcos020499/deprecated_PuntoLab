@@ -5,6 +5,7 @@ const app = express.Router();
 // models
 const Servicios = require("../../../models/Servicios")
 const InstInternet = require("../../../models/instalacionInternet");
+const Usuarios = require("../../../models/Usuarios")
 
 // middleware para subir las evidencias
 const uploadEvidencia = require("../../evidenciasMulterConf");
@@ -18,9 +19,10 @@ const APIAuth = require("../../APIAuth");
 // Nuevo servicio 0 - Instalación de internet
 app.post("/api/servicios/0/nuevo", APIAuth.validate, (req, res) => {
 
-    const { cliente, tecnico, tipo, data, fechaTentativa, fechaSolicitud } = req.body;
+    const { cliente, tecnico, tipo, data, fechaTentativa, fechaSolicitud, pago_tecnico, show_pago_tecnico } = req.body;
+    const pagoTecnico = show_pago_tecnico == true ? pago_tecnico : 0
 
-    const servicio = new Servicios({ cliente, tecnico, tipo, fechaTentativa, fechaSolicitud })
+    const servicio = new Servicios({ cliente, tecnico, tipo, fechaTentativa, fechaSolicitud, pagoTecnico })
 
     servicio.save()
         .then(service => {
@@ -44,7 +46,8 @@ app.post("/api/servicios/0/nuevo", APIAuth.validate, (req, res) => {
 // Editar servicio 0
 app.post("/api/servicios/0/editar", APIAuth.validate, (req, res) => {
 
-    const { _id, tecnico, data } = req.body;
+    const { _id, tecnico, pago_tecnico, show_pago_tecnico, data } = req.body;
+    const pagoTecnico = show_pago_tecnico == true ? pago_tecnico : 0
     let _service
 
     Servicios.findById(_id)
@@ -57,6 +60,7 @@ app.post("/api/servicios/0/editar", APIAuth.validate, (req, res) => {
                 return Promise.reject(401);
             }
 
+            service.pagoTecnico = pagoTecnico;
             service.tecnico = tecnico;
             return service.save();
         })
@@ -119,6 +123,11 @@ app.post("/api/servicios/0/visita", [APIAuth.validate, UploadEvidencia], (req, r
             service.sector = sector
 
             return service.save();
+        })
+        .then(saved => Usuarios.findById(_service.tecnico))
+        .then(tecnico => {
+            tecnico.pago = tecnico.pago + _service.pagoTecnico;
+            return tecnico.save()
         })
         .then(saved => res.status(200).json(_service))
         .catch(err => {

@@ -9,6 +9,9 @@ import { app_name } from "../../config/strings";
 import Card from "../card/card";
 import NotFound from "../notFound/ContentNotFound"
 
+// usuarios
+import tiposUsuario from "./tiposUsuario";
+
 class crear extends Component {
 
 
@@ -141,9 +144,9 @@ class crear extends Component {
                             <div className="col-sm-4">
                                 <div className="form-group mb-2">
                                     <select onChange={this.onChange} name="permisos" className="form-control form-control frm_field" required value={permisos}>
-                                        <option value="0">Administrador</option>
-                                        <option value="1">Asistente</option>
-                                        <option value="2">Técnico</option>
+                                        {
+                                            tiposUsuario.map(user => <option value={user.id}>{user.descripcion}</option>)
+                                        }
                                     </select>
                                     <small className="form-text text-muted">* Permisos para el usuario</small>
                                 </div>

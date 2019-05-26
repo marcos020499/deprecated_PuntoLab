@@ -5,6 +5,7 @@ const app = express.Router();
 // models
 const Servicios = require("../../../models/Servicios")
 const InstCamaras = require("../../../models/instalacionCamaras");
+const Usuarios = require("../../../models/Usuarios")
 
 // middleware para subir las evidencias
 const uploadEvidencia = require("../../evidenciasMulterConf");
@@ -18,9 +19,11 @@ const APIAuth = require("../../APIAuth");
 // Nuevo servicio 1 - Instalación de camaras de seguridad
 app.post("/api/servicios/1/nuevo", APIAuth.validate,  (req, res) => {
 
-    const { cliente, tecnico, tipo, data, fechaTentativa, fechaSolicitud } = req.body;
+    const { cliente, tecnico, tipo, data, fechaTentativa, fechaSolicitud, pago_tecnico, show_pago_tecnico } = req.body;
+    const pagoTecnico = show_pago_tecnico == true ? pago_tecnico : 0
 
-    const servicio = new Servicios({ cliente, tecnico, tipo, fechaTentativa, fechaSolicitud })
+    const servicio = new Servicios({ cliente, tecnico, tipo, fechaTentativa, fechaSolicitud, pagoTecnico })
+
 
     servicio.save()
         .then(service => {
@@ -43,7 +46,8 @@ app.post("/api/servicios/1/nuevo", APIAuth.validate,  (req, res) => {
 // Editar servicio 1
 app.post("/api/servicios/1/editar", APIAuth.validate,  (req, res) => {
 
-    const { _id, tecnico, data } = req.body;
+    const { _id, tecnico, pago_tecnico, show_pago_tecnico, data } = req.body;
+    const pagoTecnico = show_pago_tecnico == true ? pago_tecnico : 0
     let _service
 
     Servicios.findById(_id)
@@ -56,6 +60,7 @@ app.post("/api/servicios/1/editar", APIAuth.validate,  (req, res) => {
                 return Promise.reject(401);
             }
 
+            service.pagoTecnico = pagoTecnico;
             service.tecnico = tecnico;
             return service.save();
         })
@@ -69,6 +74,11 @@ app.post("/api/servicios/1/editar", APIAuth.validate,  (req, res) => {
             detalle.costo = costo;
             detalle.tipoPago = tipoPago;
             return detalle.save();
+        })
+        .then(saved => Usuarios.findById(_service.tecnico))
+        .then(tecnico => {
+            tecnico.pago = tecnico.pago + _service.pagoTecnico;
+            return tecnico.save()
         })
         .then(edited => res.status(201).json(_service))
         .catch(err => {

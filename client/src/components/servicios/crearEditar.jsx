@@ -44,7 +44,9 @@ class servicios extends Component {
             servicio: "0",
             tecnico: "",
             isEditing: false,
-            notFound: false
+            notFound: false,
+            pago_tecnico: 0,
+            show_pago_tecnico: false
         }
     }
 
@@ -56,7 +58,15 @@ class servicios extends Component {
 
     // bindeo de componentes del form
     onChange = (e) => {
+
        const { name, value } = e.target;
+
+        if (name === "tecnico") {
+            const { tecnicos } = this.state;
+            const match = tecnicos.filter(item => item._id === value)[0]
+            match && match.permisos === 3 ? this.setState({ show_pago_tecnico: true }) : this.setState({ show_pago_tecnico: false });
+        }
+
        this.setState({
            [name]: value
        });
@@ -66,7 +76,7 @@ class servicios extends Component {
     onSubmit = (e) => {
         e.preventDefault();
 
-        const { _id, cliente, servicio, tecnico, isEditing } = this.state;
+        const { _id, cliente, servicio, tecnico, isEditing, pago_tecnico, show_pago_tecnico } = this.state;
         const { serviceData } = this.props;
         
         if (!cliente) {
@@ -78,7 +88,7 @@ class servicios extends Component {
         
         const ip = isEditing === false ? "api/servicios/" + servicio + "/nuevo" : "api/servicios/" + servicio + "/editar"
 
-        axios.post(process.env.REACT_APP_SERVER_IP + ip, { _id, cliente: cliente._id, data: serviceData.data, tecnico, tipo: servicio, fechaTentativa, fechaSolicitud })
+        axios.post(process.env.REACT_APP_SERVER_IP + ip, { _id, cliente: cliente._id, data: serviceData.data, tecnico, tipo: servicio, fechaTentativa, fechaSolicitud, pago_tecnico, show_pago_tecnico })
             .then(res => {
                 if (res.status === 201) {
 
@@ -109,8 +119,9 @@ class servicios extends Component {
                     return;
                 }
 
-                const tecnicos = res.data.filter(item => item.permisos === 2)
+                const tecnicos = res.data.filter(item => item.permisos === 2 || item.permisos === 3)
                 this.setState({ tecnicos, tecnico: tecnicos[0]._id });
+                tecnicos && tecnicos[0].permisos === 3 && this.setState({ show_pago_tecnico: true })
             })
             .catch(err => toast.warn("No se pueden listar los técnicos - " + err))
 
@@ -126,12 +137,16 @@ class servicios extends Component {
             .then(res => {
                 
                 // se actualiza el estado con la info del servicio
-                const { _id, cliente, tipo, tecnico } = res.data.service
+                const { _id, cliente, tipo, tecnico, pagoTecnico } = res.data.service
+                const show_pago_tecnico = tecnico.permisos === 3 ? true : false
+                
                 this.setState({
                     _id,
                     cliente,
                     servicio: tipo,
-                    tecnico: tecnico._id
+                    tecnico: tecnico._id,
+                    pago_tecnico: pagoTecnico,
+                    show_pago_tecnico
                 });
                 
                 // se manda a redux el detalle del servicio y se cambia tambien a editando
@@ -151,7 +166,7 @@ class servicios extends Component {
 
     render() {
 
-        const { cliente, servicio, tecnicos, tecnico, notFound, isEditing } = this.state;
+        const { cliente, servicio, tecnicos, tecnico, notFound, isEditing, pago_tecnico, show_pago_tecnico } = this.state;
 
         if (notFound) {
             return <NotFound />
@@ -240,7 +255,7 @@ class servicios extends Component {
                                     null
                                 }
                             </div>
-                            <div className="col-sm-5">
+                            <div className={show_pago_tecnico === true ? "col-sm-3" : "col-sm-5"}>
                                 <div className="form-group mb-2">
                                     <select className="form-control form-control frm_field" value={tecnico} onChange={this.onChange} name="tecnico" required >
                                         {
@@ -252,6 +267,14 @@ class servicios extends Component {
                                     <small className="form-text text-muted">Técnico</small>
                                 </div>
                             </div>
+                            {
+                                show_pago_tecnico === true ? <div className="col-sm-2">
+                                    <div className="form-group mb-2">
+                                        <input type="number" className="form-control form-control frm_field" min="1" value={pago_tecnico} name="pago_tecnico" onChange={this.onChange} />
+                                        <small className="form-text text-muted">Pago al técnico</small>
+                                    </div>
+                                </div> : null
+                            }
                         </div>
                     </div>
                 </form>

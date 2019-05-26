@@ -15,7 +15,7 @@ const APIAuth = require("../APIAuth");
 app.get("/api/usuarios/listar", APIAuth.validate, (req, res) => {
 
     Usuarios.find({}).select("-password")
-        .then(usuarios => res.status(201).json(usuarios))
+        .then(data => res.status(201).json(data))
         .catch(err => res.sendStatus(400))
 })
 
