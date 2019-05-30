@@ -71,6 +71,31 @@ export default class listar extends Component {
 
         }, () => { }).set('type', 'password').set('labels', { ok: 'Aceptar', cancel: 'Cancelar' });
     }
+
+    // cuando se queire eliminar un usuario
+    resetPayment = (_id) => {
+        alertify.confirm('Confirma el pago', 'Se reiniciará el contador a $0 para este técnico, ¿Está seguro?', (evt, value) => {
+
+            axios.post(process.env.REACT_APP_SERVER_IP + "api/usuarios/reset_payment", { _id })
+                .then(response => {
+                    const { usuarios } = this.state;
+                    const users = usuarios.map(value => {
+                        if (value._id === _id) {
+                            value.pago = 0;
+                            return value;
+                        }
+
+                        return value;
+                    })
+                    this.setState({ usuarios: users })
+                    return toast.info("Se reinició el contador de pago");
+                })
+                .catch(err => {
+                    return toast.error("No se pudo reiniciar el pago - " + err)
+                })
+
+        }, () => { }).set('labels', { ok: 'Aceptar', cancel: 'Cancelar' });
+    }
     
 
     render() {
@@ -118,7 +143,7 @@ export default class listar extends Component {
                                         <td>{usuario}</td>
                                         <td>{filteredUser.descripcion}</td>
                                         <td>{filteredUser.id === 3 ? "$" + pago : null}</td>
-                                        <td>{filteredUser.id === 3 ? <i className="material-icons">money_off</i> : null}</td>
+                                        <td onClick={() => this.resetPayment(_id)}>{filteredUser.id === 3 ? <i className="material-icons">money_off</i> : null}</td>
                                         <td><Link to={"/usuarios/editar/" + _id}><i className="material-icons"> edit </i></Link></td>
                                         <td onClick={() => this.delete(_id, nombre)}><i className="material-icons"> delete </i></td>
                                     </tr>

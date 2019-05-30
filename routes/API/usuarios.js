@@ -193,4 +193,25 @@ app.post("/api/password/new", APIAuth.validate, (req, res) => {
         })
 })
 
+// cambiar la contraseña
+app.post("/api/usuarios/reset_payment", APIAuth.validate, (req, res) => {
+    const { _id } = req.body;
+
+    Usuarios.findById(_id)
+        .then(user => {
+            if (!user) {
+                return res.sendStatus(500);
+            }
+
+            user.pago = 0;
+            return user.save();
+        })
+        .then(saved => {
+            return res.sendStatus(200);
+        })
+        .catch(err => {
+            return res.sendStatus(500);
+        })
+})
+
 module.exports = app;
