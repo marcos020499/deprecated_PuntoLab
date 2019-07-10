@@ -13,7 +13,7 @@ import serviciosList from "./servicios";
 import Suggestions from "./suggestions/clientes";
 import NotFound from "../notFound/ContentNotFound";
 
-// servicios
+// servicioss
 import InstalacionInternet from "./instalacionInternet/internetForm";
 import InstalacionCamaras from "./instalacionCamaras/camarasForm";
 import Soporte from "./soporte/soporte";
@@ -75,6 +75,7 @@ class servicios extends Component {
     // enviar los datos al servidor
     onSubmit = (e) => {
         e.preventDefault();
+        return;
 
         const { _id, cliente, servicio, tecnico, isEditing, pago_tecnico, show_pago_tecnico } = this.state;
         const { serviceData } = this.props;
