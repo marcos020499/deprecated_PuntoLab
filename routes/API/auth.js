@@ -1,7 +1,6 @@
 // modules
 const express = require("express");
 const app = express.Router();
-const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 
 // config
@@ -16,7 +15,7 @@ app.post("/api/auth", (req, res) => {
     Usuarios.findOne({ usuario })
         .then(user => {
 
-            if (!user || !bcrypt.compareSync(password, user.password)) {
+            if (!user || password != user.password) {
                 return Promise.reject(404);
             }
 

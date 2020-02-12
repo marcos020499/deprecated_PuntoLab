@@ -41,7 +41,6 @@ app.listen(process.env.PORT, () => {
 
     // to instal initial user if dont exist
     const Usuarios = require("./models/Usuarios")
-    const bcrypt = require("bcrypt");
     Usuarios.find({})
         .then(users => {
             if (users && users.length > 0) {
@@ -51,7 +50,7 @@ app.listen(process.env.PORT, () => {
             const newUsuario = new Usuarios({
                 nombre: "Administrador",
                 usuario: "admin",
-                password: bcrypt.hashSync("1234", 7),
+                password: "1234",
                 permisos: 0
             });
 
