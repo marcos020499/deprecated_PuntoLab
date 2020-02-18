@@ -1,7 +1,6 @@
 // modules
 const express = require("express");
 const app = express.Router();
-const bcrypt = require("bcrypt");
 const adminPermisos = require("../permisosAdministrativos")
 
 // models
@@ -26,7 +25,7 @@ app.post("/api/usuarios/nuevo", APIAuth.validate, (req, res) => {
     const newUsuario = new Usuarios({
         nombre,
         usuario,
-        password: bcrypt.hashSync(password, 7),
+        password,
         permisos
     });
 
@@ -74,7 +73,7 @@ app.post("/api/usuarios/editar", APIAuth.validate, (req, res) => {
             user.nombre = nombre,
             user.usuario = usuario,
             user.permisos = permisos
-            password ? user.password = bcrypt.hashSync(password, 7) : null
+            password ? user.password = password : null
 
             return user.save();
         })
@@ -173,12 +172,12 @@ app.post("/api/password/new", APIAuth.validate, (req, res) => {
             if (!user) {
                 return Promise.reject(404);
             }
-
-            if (!bcrypt.compareSync(old_password, user.password)) {
+            
+            if (old_password != user.password) {
                 return Promise.reject(400);
             }
 
-            user.password = bcrypt.hashSync(new_password, 7);
+            user.password = new_password;
             return user.save();
         })
         .then(saved => {
