@@ -75,7 +75,6 @@ class servicios extends Component {
     // enviar los datos al servidor
     onSubmit = (e) => {
         e.preventDefault();
-        return;
 
         const { _id, cliente, servicio, tecnico, isEditing, pago_tecnico, show_pago_tecnico } = this.state;
         const { serviceData } = this.props;
