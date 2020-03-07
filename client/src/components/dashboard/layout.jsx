@@ -63,8 +63,9 @@ export default class layout extends Component {
                     <ProtectedRoute permisos={[0, 1, 2, 3]} exact path="/servicios/3/visita/:id" component={ServicioSoporteVisita} />
                     
                     {/* Punto de venta */}
-                    <ProtectedRoute permisos={[0, 1, 2, 3]} exact path="/puntodeventa" component={PuntoDeVenta} />
-                    <ProtectedRoute permisos={[0, 1, 2, 3]} exact path="/puntodeventa/crear" component={CrearEditarPV} />
+                    <ProtectedRoute permisos={[0, 1]} exact path="/puntodeventa" component={PuntoDeVenta} />
+                    <ProtectedRoute permisos={[0, 1]} exact path="/puntodeventa/crear" component={CrearEditarPV} />
+                    <ProtectedRoute permisos={[0, 1]} exact path="/puntodeventa/editar/:id" component={CrearEditarPV} />
 
                     {/* Usuarios */}
                     <ProtectedRoute permisos={[0]} exact path="/usuarios" component={VerUsuarios} />

@@ -16,6 +16,26 @@ app.get("/api/pv/listar", APIAuth.validate, (req, res) => {
         .catch(err => res.sendStatus(500));
 });
 
+// detallar pv
+app.get("/api/pv/detallar/:_id", APIAuth.validate, (req, res) => {
+    const { _id } = req.params
+
+    PuntodeVenta.findById(_id)
+        .then(pv => {
+            if (!pv) {
+                return res.sendStatus(404);
+            }
+
+            return res.status(200).json(pv)
+        })
+        .catch(err => {
+            if (err.name && err.name == "CastError") {
+                return res.sendStatus(404)
+            }
+            return res.sendStatus(500)
+        });
+})
+
 // crear pv
 app.post("/api/pv/nuevo", APIAuth.validate, (req, res) => {
 
@@ -27,7 +47,7 @@ app.post("/api/pv/nuevo", APIAuth.validate, (req, res) => {
 });
 
 // editar pv
-app.post("/api/pv/editar", APIAuth.validate, (req, res) => {
+app.post("/api/pv/editaro", APIAuth.validate, (req, res) => {
 
     const { _id, nombre, localidad, antena, enlace, router, ip } = req.body;
 

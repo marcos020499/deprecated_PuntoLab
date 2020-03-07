@@ -25,6 +25,38 @@ export default class pv_editar_crear extends Component {
             notFound: false,
         }
     }
+
+    componentDidMount(){
+
+        const id = this.props.match.params.id
+    
+        if (!id) {
+          return;
+        }
+    
+        this.setState({ isEditing: true })
+        axios.get(process.env.REACT_APP_SERVER_IP + "api/pv/detallar/" + id)
+          .then(res => {
+                const { _id, nombre, localidad, antena, enlace, router, ip } = res.data
+        
+                this.setState({
+                    _id,
+                    nombre,
+                    localidad,
+                    antena,
+                    enlace,
+                    router,
+                    ip
+                });
+          })
+          .catch(err => {
+            if (err.response.status === 404) {
+              return this.setState({ notFound: true })
+            }
+            
+            toast.warn("No se puede mostrar la información - " + err)
+          })
+      }
     
     onChange = (e) => {
         const { name, value } = e.target;
@@ -38,7 +70,7 @@ export default class pv_editar_crear extends Component {
 
         const { isEditing } = this.state;
     
-        axios.post(process.env.REACT_APP_SERVER_IP + `api/pv${isEditing ? "/editar" : "/nuevo"}`, this.state)
+        axios.post(process.env.REACT_APP_SERVER_IP + `api/pv${isEditing ? "/editaro" : "/nuevo"}`, this.state)
           .then(res => {
                 toast.success(`PV ${isEditing ? "editado" : "creado"}`);
                 this.props.history.push("/puntodeventa");

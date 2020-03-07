@@ -19,7 +19,7 @@
                     "name": "Punto de venta",
                     "icon": "store",
                     "url": "/puntodeventa",
-                    "permisos": [0, 1, 2, 3]
+                    "permisos": [0, 1]
                 }
             ]
         },
