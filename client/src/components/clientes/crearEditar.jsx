@@ -29,7 +29,7 @@ class crearCliente extends Component {
 
   componentDidMount(){
 
-    const id = this.props.match.params.id
+    const id = this.props.match.params.type;
 
     if (!id) {
       return;

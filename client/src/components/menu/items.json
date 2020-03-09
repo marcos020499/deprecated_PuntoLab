@@ -20,6 +20,12 @@
                     "icon": "store",
                     "url": "/puntodeventa",
                     "permisos": [0, 1]
+                },
+                {
+                    "name": "Fichas",
+                    "icon": "list",
+                    "url": "/fichas",
+                    "permisos": [0, 1]
                 }
             ]
         },

@@ -15,6 +15,9 @@ import CrearEditarCliente from "../clientes/crearEditar"
 import PuntoDeVenta from "../punto_de_venta/pv";
 import CrearEditarPV from "../punto_de_venta/pv_editar_crear";
 
+import Fichas from '../fichas/fichas';
+import FichasCreateUpdate from '../fichas/CreateEdit';
+
 import VerServicios from "../servicios/listar";
 import CrearEditarServicios from "../servicios/crearEditar";
 import DetalleServicioInternet from "../servicios/instalacionInternet/detalle";
@@ -66,6 +69,10 @@ export default class layout extends Component {
                     <ProtectedRoute permisos={[0, 1]} exact path="/puntodeventa" component={PuntoDeVenta} />
                     <ProtectedRoute permisos={[0, 1]} exact path="/puntodeventa/crear" component={CrearEditarPV} />
                     <ProtectedRoute permisos={[0, 1]} exact path="/puntodeventa/editar/:id" component={CrearEditarPV} />
+
+                    {/* Fichas */}
+                    <ProtectedRoute permisos={[0, 1]} exact path="/fichas" component={Fichas} />
+                    <ProtectedRoute permisos={[0, 1]} exact path="/fichas/crear" component={FichasCreateUpdate} />
 
                     {/* Usuarios */}
                     <ProtectedRoute permisos={[0]} exact path="/usuarios" component={VerUsuarios} />
