@@ -73,6 +73,7 @@ export default class layout extends Component {
                     {/* Fichas */}
                     <ProtectedRoute permisos={[0, 1]} exact path="/fichas" component={Fichas} />
                     <ProtectedRoute permisos={[0, 1]} exact path="/fichas/crear" component={FichasCreateUpdate} />
+                    <ProtectedRoute permisos={[0, 1]} exact path="/fichas/editar/:id" component={FichasCreateUpdate} />
 
                     {/* Usuarios */}
                     <ProtectedRoute permisos={[0]} exact path="/usuarios" component={VerUsuarios} />

@@ -36,7 +36,7 @@ export default class pv_editar_crear extends Component {
     
         this.setState({ isEditing: true })
         axios.get(process.env.REACT_APP_SERVER_IP + "api/pv/detallar/" + id)
-          .then(res => {
+            .then(res => {
                 const { _id, nombre, localidad, antena, enlace, router, ip } = res.data
         
                 this.setState({
@@ -48,15 +48,15 @@ export default class pv_editar_crear extends Component {
                     router,
                     ip
                 });
-          })
-          .catch(err => {
+            })
+            .catch(err => {
             if (err.response.status === 404) {
-              return this.setState({ notFound: true })
+                return this.setState({ notFound: true })
             }
             
             toast.warn("No se puede mostrar la información - " + err)
-          })
-      }
+        })
+    }
     
     onChange = (e) => {
         const { name, value } = e.target;
@@ -136,7 +136,7 @@ export default class pv_editar_crear extends Component {
                             </div>
                             <div className="col-sm-3">
                                 <div className="form-group mb-2">
-                                <input onChange={this.onChange} value={router || ""} type="text" className="form-control form-control frm_field" placeholder="Router" name="router" />
+                                <input required onChange={this.onChange} value={router || ""} type="text" className="form-control form-control frm_field" placeholder="Router" name="router" />
                                 <small className="form-text text-muted">* Router</small>
                                 </div>
                             </div>

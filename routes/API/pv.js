@@ -8,6 +8,7 @@ const APIAuth = require("../APIAuth");
 
 // models
 const PuntodeVenta = require("../../models/PuntoDeVenta")
+const Fichas = require("../../models/Fichas")
 
 // listar pv
 app.get("/api/pv/listar", APIAuth.validate, (req, res) => {
@@ -87,7 +88,14 @@ app.post("/api/pv/eliminar", APIAuth.validate, (req, res) => {
             }
             
             admin = _admin.usuario;
-            return PuntodeVenta.findByIdAndDelete(_id);
+            return Fichas.countDocuments({ pv: _id });
+        })
+        .then(rows => {
+            if (rows > 0) {
+                return Promise.reject(302)
+            }
+
+            return PuntodeVenta.findByIdAndDelete(_id);;
         })
         .then(deleted => res.status(200).json({ admin }))
         .catch(err => {

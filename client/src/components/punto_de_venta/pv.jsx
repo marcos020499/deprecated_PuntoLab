@@ -52,6 +52,8 @@ class pv extends Component {
                 .catch(err => {
                     if (err.response && err.response.status === 401) {
                         return toast.warn(`La contraseña${permisos === 0 ? "" : " de administrador" } es incorrecta.`)
+                    } else if (err.response && err.response.status === 302) {
+                        return toast.error("No se puede eliminar el PV porque tiene fichas relacionadas")
                     }
                     return toast.error("No se pudo eliminar el pv - " + err)
                 })
