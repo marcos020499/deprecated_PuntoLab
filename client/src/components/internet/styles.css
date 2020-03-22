@@ -1,0 +1,12 @@
+.statusIcon:hover {
+    cursor: default !important;
+    color: #4b5366 !important;
+}
+
+.internet.in {
+    color: green !important;
+}
+
+.internet.ac {
+    color: red !important;
+}

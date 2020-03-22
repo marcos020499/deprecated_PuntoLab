@@ -25,7 +25,6 @@ export default class CreateEdit extends Component {
             total_cobrado: 0,
             comision: 5,
             ganancia_neta: 0,
-            error: false,
             folio_error: "",
             isEditing: false,
             notFound: false
@@ -95,13 +94,13 @@ export default class CreateEdit extends Component {
     onSubmit = (e) => {
         e.preventDefault();
 
-        const { _id, pv, cantidad, prefijo, costo, plan, vendidas, total_cobrado, comision, ganancia_neta, error, folio_error, isEditing } = this.state
+        const { _id, pv, cantidad, prefijo, costo, plan, vendidas, total_cobrado, comision, ganancia_neta, folio_error, isEditing } = this.state
 
         if(!pv) {
             return toast.warn("Completa el campo de nombre");
         }
 
-        axios.post(process.env.REACT_APP_SERVER_IP + `api/fichas${isEditing ? "/editar" : "/nuevo"}`, { _id, pv: pv._id, cantidad, prefijo, costo, plan, vendidas, total_cobrado, comision, ganancia_neta, error, folio_error })
+        axios.post(process.env.REACT_APP_SERVER_IP + `api/fichas${isEditing ? "/editar" : "/nuevo"}`, { _id, pv: pv._id, cantidad, prefijo, costo, plan, vendidas, total_cobrado, comision, ganancia_neta, folio_error })
             .then(res => {
                 toast.success(`Ficha ${isEditing ? "editada" : "creada"}`);
                 this.props.history.push("/fichas");
@@ -111,7 +110,7 @@ export default class CreateEdit extends Component {
     
     render() {
 
-        const { pv, cantidad, prefijo, costo, plan, vendidas, total_cobrado, comision, ganancia_neta, error, folio_error, isEditing, notFound  } = this.state
+        const { pv, cantidad, prefijo, costo, plan, vendidas, total_cobrado, comision, ganancia_neta, folio_error, isEditing, notFound } = this.state
     
         if (notFound) {
           return <NotFound/>
@@ -158,69 +157,69 @@ export default class CreateEdit extends Component {
                         </div>
                     </div>
                     <div className="col-sm-3">
-                        <div className="form-group mb-2">
+                        <div className="form-group mb-4">
                             <input disabled value={pv ? (pv.antena ? pv.antena : "") : ""} type="text" className="form-control form-control frm_field" placeholder="Antena" />
                             <small className="form-text text-muted">* Antena</small>
                         </div>
                     </div>
                     <div className="col-sm-3">
-                        <div className="form-group mb-2">
+                        <div className="form-group mb-4">
                             <input disabled value={pv ? (pv.enlace ? pv.enlace : "") : ""} type="text" className="form-control form-control frm_field" placeholder="Enlace" />
                             <small className="form-text text-muted">* Enlace</small>
                         </div>
                     </div>
                     <div className="col-sm-3">
-                        <div className="form-group mb-2">
+                        <div className="form-group mb-4">
                             <input disabled value={pv ? (pv.router ? pv.router : "") : ""} type="text" className="form-control form-control frm_field" placeholder="Router" />
                             <small className="form-text text-muted">* Router</small>
                         </div>
                     </div>
                     <div className="col-sm-3">
-                        <div className="form-group mb-2">
+                        <div className="form-group mb-4">
                             <input disabled value={pv ? (pv.ip ? pv.ip : "") : ""} type="text" className="form-control form-control frm_field" placeholder="IP" />
                             <small className="form-text text-muted">* IP</small>
                         </div>
                     </div>
                   <div className="col-sm-2">
-                    <div className="form-group mb-2">
+                    <div className="form-group mb-4">
                       <input required onChange={this.onChange} value={cantidad || ""} type="number" className="form-control form-control frm_field" placeholder="$0.00" name="cantidad" />
                       <small className="form-text text-muted">* Cantidad entregada</small>
                     </div>
                   </div>
                   <div className="col-sm-3">
-                    <div className="form-group mb-2">
+                    <div className="form-group mb-4">
                       <input onChange={this.onChange} value={prefijo || ""} type="text" className="form-control form-control frm_field" placeholder="Prefijo" name="prefijo"
                         required />
                       <small className="form-text text-muted">* Prefijo</small>
                     </div>
                   </div>
                   <div className="col-sm-2">
-                    <div className="form-group mb-2">
+                    <div className="form-group mb-4">
                       <input onChange={this.onChange} value={costo || ""} type="number" className="form-control form-control frm_field" placeholder="0" name="costo"
                         required />
                       <small className="form-text text-muted">* Costo</small>
                     </div>
                   </div>
                   <div className="col-sm-5">
-                    <div className="form-group mb-2">
+                    <div className="form-group mb-4">
                       <input required onChange={this.onChange} value={plan || ""} type="text" className="form-control form-control frm_field" placeholder="Plan" name="plan" />
                       <small className="form-text text-muted">* Plan</small>
                     </div>
                   </div>
-                  <div className="col-sm-3">
-                    <div className="form-group mb-2">
+                  <div className="col-sm-2">
+                    <div className="form-group mb-4">
                       <input required onChange={this.onChange} value={vendidas || ""} type="number" className="form-control form-control frm_field" placeholder="0" name="vendidas" />
                       <small className="form-text text-muted">* Vendidas</small>
                     </div>
                   </div>
                   <div className="col-sm-3">
-                    <div className="form-group mb-2">
+                    <div className="form-group mb-4">
                       <input disabled onChange={this.onChange} value={total_cobrado || ""} type="number" className="form-control form-control frm_field" placeholder="0.00" name="total_cobrado" />
                       <small className="form-text text-muted">Total cobrado</small>
                     </div>
                   </div>
-                    <div className="col-sm-3">
-                        <div className="form-group mb-2">
+                    <div className="col-sm-2">
+                        <div className="form-group mb-4">
                             <select className="form-control form-control frm_field" value={comision} onChange={this.onChange} name="comision" required >
                                 <option key="5" value="5">5%</option>
                                 <option key="10" value="10">10%</option>
@@ -230,9 +229,15 @@ export default class CreateEdit extends Component {
                         </div>
                     </div>
                   <div className="col-sm-3">
-                    <div className="form-group mb-2">
+                    <div className="form-group mb-4">
                       <input disabled onChange={this.onChange} value={ganancia_neta || ""} type="number" className="form-control form-control frm_field" placeholder="0.00" name="ganancia_neta" />
                       <small className="form-text text-muted">Ganancia neta</small>
+                    </div>
+                  </div>
+                  <div className="col-sm-2">
+                    <div className="form-group mb-4">
+                      <input onChange={this.onChange} value={folio_error || ""} type="text" className="form-control form-control frm_field" placeholder="Folio" name="folio_error" />
+                      <small className="form-text text-muted">Folio del error</small>
                     </div>
                   </div>
                 </div>

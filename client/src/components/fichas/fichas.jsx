@@ -6,6 +6,7 @@ import axios from "axios";
 import alertify from 'alertifyjs';
 import { toast } from "react-toastify";
 import { connect } from "react-redux";
+import "./styles.css"
 
 // components
 import Card from "../card/card";
@@ -84,7 +85,7 @@ class fichas extends Component {
                     <thead className="thead-light">
                         <tr>
                             <th scope="col">Nombre</th>
-                            <th scope="col">Cantidad</th>
+                            <th scope="col">Entregado</th>
                             <th scope="col">Prefijo</th>
                             <th scope="col">Vendidas</th>
                             <th scope="col">Costo</th>
@@ -98,11 +99,11 @@ class fichas extends Component {
                     <tbody>
                     {
                             fichas.map(ficha => {
-                                const { _id, pv, cantidad, prefijo, costo, vendidas, comision, ganancia_neta, total_cobrado } = ficha
+                                const { _id, pv, cantidad, prefijo, costo, vendidas, comision, ganancia_neta, total_cobrado, folio_error } = ficha
                                 return (
-                                    <tr key={_id}>
+                                    <tr key={_id} className={folio_error !== "" ? "rowError" : null}>
                                         <td>{pv.nombre}</td>
-                                        <td>{cantidad}</td>
+                                        <td>${cantidad}</td>
                                         <td>{prefijo}</td>
                                         <td>{vendidas}</td>
                                         <td>${costo}</td>

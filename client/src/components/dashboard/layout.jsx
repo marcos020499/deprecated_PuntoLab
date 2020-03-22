@@ -28,6 +28,8 @@ import ServicioInternetVisita from "../servicios/instalacionInternet/visitaTecni
 import ServicioCamarasVisita from "../servicios/instalacionCamaras/visitaTecnico";
 import ServicioSoporteVisita from "../servicios/soporte/visitaTecnico";
 
+import Internet from "../internet/list"
+
 import VerUsuarios from "../usuarios/listar";
 import CrearEditarUsuarios from "../usuarios/crearEditar";
 import NewPassword from "../nuevo_password/password"
@@ -79,6 +81,9 @@ export default class layout extends Component {
                     <ProtectedRoute permisos={[0]} exact path="/usuarios" component={VerUsuarios} />
                     <ProtectedRoute permisos={[0]} exact path="/usuarios/crear" component={CrearEditarUsuarios} />
                     <ProtectedRoute permisos={[0]} exact path="/usuarios/editar/:id" component={CrearEditarUsuarios} />
+                    
+                    {/* Internet */}
+                    <ProtectedRoute permisos={[0, 1]} exact path="/internet" component={Internet} />
                     
                     {/* Configuracion */}
                     <ProtectedRoute permisos={[0, 1, 2, 3]} exact path="/password" component={NewPassword} />

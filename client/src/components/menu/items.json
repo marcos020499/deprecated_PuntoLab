@@ -26,6 +26,12 @@
                     "icon": "list",
                     "url": "/fichas",
                     "permisos": [0, 1]
+                },
+                {
+                    "name": "Internet",
+                    "icon": "language",
+                    "url": "/internet",
+                    "permisos": [0, 1]
                 }
             ]
         },

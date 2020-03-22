@@ -16,6 +16,29 @@ const UploadEvidencia = uploadEvidencia.fields([
 // API Request validator
 const APIAuth = require("../../APIAuth");
 
+// cambiar estado de una instalación de internet
+app.post("/api/servicios/internet/change_status", APIAuth.validate, (req, res) => {
+    const { _id } = req.body;
+
+    InstInternet.findById(_id)
+        .then(servicio => {
+            if (!servicio) {
+                return Promise.reject(404);
+            }
+
+            servicio.internetActivo = !servicio.internetActivo;
+            return servicio.save()
+        })
+        .then(saved => res.sendStatus(200))
+        .catch(err => {
+            if (err == 404) {
+                return res.sendStatus(err)
+            }
+            
+            return res.sendStatus(500);
+        });
+});
+
 // Nuevo servicio 0 - Instalación de internet
 app.post("/api/servicios/0/nuevo", APIAuth.validate, (req, res) => {
 

@@ -34,6 +34,22 @@ app.post("/api/servicios/listar", APIAuth.validate, (req, res) => {
         .catch(err => res.sendStatus(400))
 })
 
+// lista los clientes con servicio de internet contratado
+app.get("/api/servicios/internet/listar", APIAuth.validate, (req, res) => {
+
+    InstInternet
+        .find()
+        .populate({ 
+            path: 'servicio',
+            populate: {
+            path: 'cliente',
+            model: 'clientes'
+            } 
+        })
+        .then(servicios => res.status(200).json(servicios))
+        .catch(err => res.sendStatus(400))
+})
+
 // lista la tabla principal de servicios
 app.get("/api/servicios/detallar/:id", APIAuth.validate, (req, res) => {
 

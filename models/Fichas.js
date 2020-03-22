@@ -11,7 +11,6 @@ const fichasSchema = new Schema({
     total_cobrado: { type: Number, required: [true, "El totalCobrado es requerida"] },
     comision: { type: Number, required: [true, "La comision es requerida"] },
     ganancia_neta: { type: Number, required: [true, "La gananciaNeta es requerida"] },
-    error: { type: Boolean, default: false },
     folio_error: { type: String } 
 });
 

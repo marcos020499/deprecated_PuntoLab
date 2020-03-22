@@ -37,18 +37,6 @@ app.get("/api/fichas/detallar/:_id", APIAuth.validate, (req, res) => {
             }
             return res.sendStatus(500)
         });
-})
-
-// crear fichas
-app.post("/api/fichas/nuevo", APIAuth.validate, (req, res) => {
-
-    console.log(req.body);
-
-    const newFicha = new Fichas(req.body);
-
-    newFicha.save()
-        .then(ficha => res.status(201).json(ficha))
-        .catch(err => res.sendStatus(400))
 });
 
 // eliminar ficha
@@ -77,7 +65,7 @@ app.post("/api/fichas/eliminar", APIAuth.validate, (req, res) => {
 // editar ficha ------------
 app.post("/api/fichas/editar", APIAuth.validate, (req, res) => {
 
-    const { _id, pv, cantidad, prefijo, costo, plan, vendidas, total_cobrado, comision, ganancia_neta, error, folio_error } = req.body;
+    const { _id, pv, cantidad, prefijo, costo, plan, vendidas, total_cobrado, comision, ganancia_neta, folio_error } = req.body;
 
     Fichas.findById(_id)
         .then(ficha => {
@@ -94,7 +82,6 @@ app.post("/api/fichas/editar", APIAuth.validate, (req, res) => {
             ficha.total_cobrado = total_cobrado;
             ficha.comision = comision;
             ficha.ganancia_neta = ganancia_neta;
-            ficha.error = error;
             ficha.folio_error = folio_error;
 
             return ficha.save()

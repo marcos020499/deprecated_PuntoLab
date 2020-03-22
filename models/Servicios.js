@@ -14,4 +14,6 @@ const serviciosSchema = new Schema({
     pagoTecnico: { type: Number, required: [true, "El pago es requerido"] }
 });
 
+// sc: Servicio concluido (Cuando el tecnico realiza el trabajo este valor cambia a verdadero)
+
 module.exports = mongoose.model("servicios", serviciosSchema);
